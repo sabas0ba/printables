@@ -2,6 +2,5 @@
 set -eu
 
 environment=${PRINTABLES_VENV:-.venv}
-uv venv --python python3.12 "$environment"
-uv pip install --python "$environment/bin/python" --no-deps --require-hashes -r requirements.lock
+UV_PROJECT_ENVIRONMENT="$environment" uv sync --locked --no-dev --python python3.12
 uv pip check --python "$environment/bin/python"

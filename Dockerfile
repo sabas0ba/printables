@@ -8,7 +8,7 @@ RUN mkdir -p /etc/nix \
       'sandbox = false' 'filter-syscalls = false' >> /etc/nix/nix.conf
 
 WORKDIR /workspace
-COPY flake.nix flake.lock requirements.in requirements.lock ./
+COPY flake.nix flake.lock pyproject.toml uv.lock ./
 COPY scripts/setup-env.sh ./scripts/setup-env.sh
 
 # Keep the Python environment outside /workspace so bind mounts do not hide it.
