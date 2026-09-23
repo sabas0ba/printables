@@ -23,6 +23,8 @@
             pkgs.libice
             pkgs.fontconfig
             pkgs.freetype
+            pkgs.expat
+            pkgs.zlib
           ];
           LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
             pkgs.libGL
@@ -34,6 +36,8 @@
             pkgs.libice
             pkgs.fontconfig
             pkgs.freetype
+            pkgs.expat
+            pkgs.zlib
             pkgs.stdenv.cc.cc.lib
           ];
         };
