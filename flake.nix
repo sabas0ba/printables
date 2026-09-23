@@ -11,10 +11,29 @@
     in {
       devShells = forEachSystem (pkgs: {
         default = pkgs.mkShell {
-          packages = [ pkgs.python312 pkgs.uv pkgs.libGL pkgs.xorg.libX11 ];
+          packages = [
+            pkgs.python312
+            pkgs.uv
+            pkgs.libGL
+            pkgs.libx11
+            pkgs.libxext
+            pkgs.libxrender
+            pkgs.libxi
+            pkgs.libsm
+            pkgs.libice
+            pkgs.fontconfig
+            pkgs.freetype
+          ];
           LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
             pkgs.libGL
-            pkgs.xorg.libX11
+            pkgs.libx11
+            pkgs.libxext
+            pkgs.libxrender
+            pkgs.libxi
+            pkgs.libsm
+            pkgs.libice
+            pkgs.fontconfig
+            pkgs.freetype
             pkgs.stdenv.cc.cc.lib
           ];
         };
