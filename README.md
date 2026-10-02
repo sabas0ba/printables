@@ -5,6 +5,7 @@
 | Design | Files | Notes |
 | --- | --- | --- |
 | [Mi Vacuum Cleaner Mini holder](mi-vacuum-cleaner-mini/README.md) | STL, CadQuery source, three views and preview | Horizontal cradle with nozzle and charging-port access |
+| [Stackable chili drying basket](chili-drying-rack/README.md) | STL, CadQuery source, dimensioned views and assembly preview | Sliding baskets, V supports, harvest-date wheels and removable drip tray; all printed |
 
 ## Reproducing the outputs
 
