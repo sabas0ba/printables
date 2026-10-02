@@ -10,7 +10,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 MODELS = {
     "mi-vacuum-cleaner-mini": ("holder.stl", "views.png", "preview.png"),
-    "chili-drying-rack": ("rack.stl", "views.png", "preview.png"),
+    "chili-drying-rack": ("rack.stl", "views.png", "preview.png", "assembly.png"),
 }
 OUTPUTS = [ROOT / model / name for model, names in MODELS.items() for name in names]
 
