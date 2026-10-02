@@ -5,6 +5,7 @@
 | Design | Files | Notes |
 | --- | --- | --- |
 | [Mi Vacuum Cleaner Mini holder](mi-vacuum-cleaner-mini/README.md) | STL, CadQuery source, three views and preview | Horizontal cradle with nozzle and charging-port access |
+| [Chili drying rack](chili-drying-rack/README.md) | STL, CadQuery source, three views and preview | Eight cord positions; flat PLA print; 220 × 35 × 5 mm |
 
 ## Reproducing the outputs
 

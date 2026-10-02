@@ -8,8 +8,11 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MODEL = ROOT / "mi-vacuum-cleaner-mini"
-OUTPUTS = [MODEL / name for name in ("holder.stl", "views.png", "preview.png")]
+MODELS = {
+    "mi-vacuum-cleaner-mini": ("holder.stl", "views.png", "preview.png"),
+    "chili-drying-rack": ("rack.stl", "views.png", "preview.png"),
+}
+OUTPUTS = [ROOT / model / name for model, names in MODELS.items() for name in names]
 
 
 def main():
@@ -18,8 +21,9 @@ def main():
     args = parser.parse_args()
     previous = {path: path.read_bytes() for path in OUTPUTS} if args.check else {}
 
-    for script in (MODEL / "generate.py", MODEL / "render.py"):
-        subprocess.run([sys.executable, str(script)], cwd=ROOT, check=True)
+    for model in MODELS:
+        for name in ("generate.py", "render.py"):
+            subprocess.run([sys.executable, str(ROOT / model / name)], cwd=ROOT, check=True)
 
     for path in OUTPUTS:
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
