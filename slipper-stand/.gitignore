@@ -1,0 +1,7 @@
+.work/
+__pycache__/
+output/*.zip
+output/assembly.stl
+output/frame.stl
+output/hardware.stl
+output/shoes.stl

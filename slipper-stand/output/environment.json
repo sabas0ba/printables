@@ -1,0 +1,8 @@
+{
+  "openscad_version": "OpenSCAD version 2021.01",
+  "openscad_sha256": "ca63bba23a3186003603895e2aba8baaebfc56d4153351cdf08c06205a155865",
+  "python_version": "3.12.14",
+  "numpy_version": "2.3.5",
+  "matplotlib_version": "3.10.8",
+  "nix_environment_verified": false
+}
