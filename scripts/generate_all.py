@@ -28,6 +28,8 @@ def main():
         for name in ("generate.py", "render.py"):
             subprocess.run([sys.executable, str(ROOT / model / name)], cwd=ROOT, check=True)
 
+    subprocess.run([sys.executable, str(ROOT / "slipper-stand/scripts/check.py")],
+                   cwd=ROOT, check=True)
     for path in OUTPUTS:
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         print(f"{path.relative_to(ROOT)}  sha256:{digest}")
@@ -37,3 +39,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

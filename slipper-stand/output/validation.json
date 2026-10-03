@@ -1,0 +1,178 @@
+{
+  "base": {
+    "quantity": 1,
+    "print_z_shift_mm": -0.0,
+    "size_mm": [
+      279.808,
+      249.808,
+      85.846
+    ],
+    "solid_volume_cm3": 1014.48,
+    "triangles": 1908,
+    "watertight": true,
+    "components": 1,
+    "sha256": "190d2e8432a203cdc8345950d786fafe0c7e80936fd52f11ff5189235316880c"
+  },
+  "mast": {
+    "quantity": 2,
+    "print_z_shift_mm": -0.0,
+    "size_mm": [
+      49.923,
+      309.924,
+      19.923
+    ],
+    "solid_volume_cm3": 298.16,
+    "triangles": 2260,
+    "watertight": true,
+    "components": 1,
+    "sha256": "238de0219e8efbd48cf9a470d600942b4dafd40600e9a4ffd66632ae6213f3d5"
+  },
+  "splice": {
+    "quantity": 1,
+    "print_z_shift_mm": -0.0,
+    "size_mm": [
+      49.923,
+      119.924,
+      7.923
+    ],
+    "solid_volume_cm3": 44.5,
+    "triangles": 1612,
+    "watertight": true,
+    "components": 1,
+    "sha256": "1f6ea9a29d2c2944a5c219cc1a83eb014867499e38fa93668059a71d9fc81961"
+  },
+  "rail": {
+    "quantity": 4,
+    "print_z_shift_mm": -0.0,
+    "size_mm": [
+      259.924,
+      39.923,
+      15.923
+    ],
+    "solid_volume_cm3": 157.22,
+    "triangles": 2260,
+    "watertight": true,
+    "components": 1,
+    "sha256": "d883f34d22d847ffce94585babf2197e6dfc47e3b92e57baf03e7dd8e46b5c7e"
+  },
+  "holder": {
+    "quantity": 8,
+    "print_z_shift_mm": -0.0,
+    "size_mm": [
+      279.89,
+      55.923,
+      49.923
+    ],
+    "solid_volume_cm3": 265.6,
+    "triangles": 1708,
+    "watertight": true,
+    "components": 1,
+    "sha256": "ff1586e1d665ed92a26b27673da84b704f407a8bbc95463c14b52f702ef97b4f"
+  },
+  "pin26": {
+    "quantity": 16,
+    "print_z_shift_mm": -0.0153341,
+    "size_mm": [
+      15.969,
+      37.969,
+      7.969
+    ],
+    "solid_volume_cm3": 2.26,
+    "triangles": 1040,
+    "watertight": true,
+    "components": 1,
+    "sha256": "3a2b57d4f7ad409c79a1c0b07e82011af4eb5dcdc7eac2631114a273294e83e9"
+  },
+  "pin28": {
+    "quantity": 4,
+    "print_z_shift_mm": -0.0153341,
+    "size_mm": [
+      15.969,
+      39.969,
+      7.969
+    ],
+    "solid_volume_cm3": 2.39,
+    "triangles": 1040,
+    "watertight": true,
+    "components": 1,
+    "sha256": "287cfe78dfc223f3b0d3fe471aa3fe4003b11ad08bc606feb6c2c37df06b942a"
+  },
+  "pin40": {
+    "quantity": 2,
+    "print_z_shift_mm": -0.0153341,
+    "size_mm": [
+      15.969,
+      51.969,
+      7.969
+    ],
+    "solid_volume_cm3": 3.15,
+    "triangles": 1040,
+    "watertight": true,
+    "components": 1,
+    "sha256": "204bbc9a09bceb9044ca945e9d193234d81653954cad2ed62d66a1480e067436"
+  },
+  "pin52": {
+    "quantity": 4,
+    "print_z_shift_mm": -0.0153341,
+    "size_mm": [
+      15.969,
+      63.969,
+      7.969
+    ],
+    "solid_volume_cm3": 3.91,
+    "triangles": 1040,
+    "watertight": true,
+    "components": 1,
+    "sha256": "c64fb9658fc08820b6ad7bddac0b89f0e9db78c4d8566103d5030de872c243b2"
+  },
+  "coupon04": {
+    "quantity": 1,
+    "print_z_shift_mm": -0.0,
+    "size_mm": [
+      25.923,
+      25.923,
+      15.923
+    ],
+    "solid_volume_cm3": 8.68,
+    "triangles": 640,
+    "watertight": true,
+    "components": 1,
+    "sha256": "66c0d31e0039c311858a2011e92dc8d58d391da18e2ed27e3f0bec910e4639c2"
+  },
+  "coupon06": {
+    "quantity": 1,
+    "print_z_shift_mm": -0.0,
+    "size_mm": [
+      25.923,
+      25.923,
+      15.923
+    ],
+    "solid_volume_cm3": 8.59,
+    "triangles": 640,
+    "watertight": true,
+    "components": 1,
+    "sha256": "44a8e9aa97640e0f1ee387f35c71a77bd9bc28ccca335dce0cb4d59b79ab175f"
+  },
+  "coupon08": {
+    "quantity": 1,
+    "print_z_shift_mm": -0.0,
+    "size_mm": [
+      25.923,
+      25.923,
+      15.923
+    ],
+    "solid_volume_cm3": 8.5,
+    "triangles": 640,
+    "watertight": true,
+    "components": 1,
+    "sha256": "b1a9be9c135585ff16bf1dadb4ede39105baadf638853ab2a16fc06b47605e15"
+  },
+  "assembly_checks": {
+    "sole_interference": false,
+    "installed_pin_interference": false,
+    "nominal_hole_clearance_mm": 0.6,
+    "vertical_shoe_gap_mm": 10,
+    "sole_inner_face_separation_mm": 90,
+    "loaded_height_mm": 650
+  }
+}
