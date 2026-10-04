@@ -6,8 +6,8 @@
 | --- | --- | --- |
 | [Mi Vacuum Cleaner Mini holder](mi-vacuum-cleaner-mini/README.md) | STL, CadQuery source, three views and preview | Horizontal cradle with nozzle and charging-port access |
 | [Stackable chili drying basket](chili-drying-rack/README.md) | STL, CadQuery source, dimensioned views and assembly preview | Sliding baskets, V supports, harvest-date wheels and removable drip tray; all printed |
-
 | [Tool-free slipper stand](slipper-stand/README.md) | STL, OpenSCAD source, assembly and joint previews | Four pairs; inward-facing soles; rounded edges and printed locking pins; prototype |
+| [M5Stack StackChan hats](stackchan-hats/README.md) | STL, CadQuery source, catalogue and part previews | Push-on cap for the K151 head and 25 plug-in decoration sets (animal ears, horns, hats, ...); support-free; not yet test-printed |
 
 ## Reproducing the outputs
 
@@ -36,8 +36,9 @@ docker run --rm -v "$PWD:/workspace" printables-check \
   nix develop --offline --command /opt/printables-venv/bin/python scripts/generate_all.py
 ```
 
-For the CadQuery designs, `--check` compares STL and PNG files byte-for-byte
-with the committed artifacts. CI performs that check inside the container with
+For the CadQuery designs, `--check` compares STL, PNG and report files
+byte-for-byte with the committed artifacts, and fails if files are added or
+missing. CI performs that check inside the container with
 networking disabled. The OpenSCAD slipper stand is a v0.3 snapshot: the same
 command validates its committed printable meshes and report, without regenerating
 its geometry or previews. See its README for separate regeneration commands.
