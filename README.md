@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | [Mi Vacuum Cleaner Mini holder](mi-vacuum-cleaner-mini/README.md) | STL, CadQuery source, three views and preview | Horizontal cradle with nozzle and charging-port access |
 | [Stackable chili drying basket](chili-drying-rack/README.md) | STL, CadQuery source, dimensioned views and assembly preview | Sliding baskets, V supports, harvest-date wheels and removable drip tray; all printed |
-
+| [ThinkPad E14 stand](thinkpad-e14-stand/README.md) | STL, CadQuery source, three views, preview and usage views | One reclined slot for closed storage or display-only open use; trays for the AC adapter and a mouse |
 | [Tool-free slipper stand](slipper-stand/README.md) | STL, OpenSCAD source, assembly and joint previews | Four pairs; inward-facing soles; rounded edges and printed locking pins; prototype |
 
 ## Reproducing the outputs

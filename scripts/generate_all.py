@@ -14,6 +14,7 @@ MODELS = {
                          "month-dial.stl", "day-dial.stl", "dial-clip.stl",
                          "basket-detail.png", "views.png",
                          "preview.png", "assembly.png", "drawer.png", "accessories.png"),
+    "thinkpad-e14-stand": ("stand.stl", "views.png", "preview.png", "usage.png"),
 }
 OUTPUTS = [ROOT / model / name for model, names in MODELS.items() for name in names]
 
