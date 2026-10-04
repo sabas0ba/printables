@@ -9,6 +9,10 @@ z up. The tray floor underside is z = 0.
 The M.2 HAT+ officially supports 2230 and 2242 only. A 2280 drive overhangs
 the HAT and the USB/Ethernet ports, so the tray carries its end on a ledge and
 a spring tongue in the lid presses the end onto it.
+
+No screws beyond the M.2 HAT+ kit: the heads of the kit's spacer screws sit in
+cups on the tray floor, four spring tongues in the lid press the HAT corners
+down, and four snap hooks hold the lid.
 """
 
 from pathlib import Path
@@ -39,6 +43,9 @@ M2_COMPONENT_HEIGHT = 1.5
 M2_2242_END_X = 61.1
 M2_CARD_Y = (17.5, 39.5)
 M2_CARD_END_X = M2_2242_END_X + 80.0 - 42.0
+GPIO_HEADER_X = (7.2, 58.2)  # header body, scaled from the Pi 5 top view
+SCREW_HEAD_HEIGHT = 2.0  # M.2 HAT+ kit spacer screws, above and below the stack
+SCREW_HEAD_DIAMETER = 5.0
 
 # Stack heights.
 FLOOR = 2.0
@@ -54,7 +61,7 @@ WALL = 2.4
 LID = 2.0
 CORNER_RADIUS = 3.0
 INNER_X = (-6.5, 101.5)
-INNER_Y = (-2.2, 57.5)
+INNER_Y = (-2.2, 58.8)
 WALL_TOP = 31.0
 OUTER_X = (INNER_X[0] - WALL, INNER_X[1] + WALL)
 OUTER_Y = (INNER_Y[0] - WALL, INNER_Y[1] + WALL)
@@ -68,12 +75,35 @@ PORTAL_Y = (1.8, 55.8)
 PORTAL_Z = (4.0, LEDGE_TOP - LEDGE_THICKNESS)
 TONGUE_PRELOAD = 0.4
 
-SCREW_PILOT = 2.5  # M3 self-tapping
-SCREW_CLEARANCE = 3.4
-SCREWS = [(-5.0, 1.2), (-5.0, 54.5), (99.9, -1.4), (99.9, 57.85)]
-COLUMNS = [((INNER_X[0], -1.2), (INNER_Y[0], 7.0)),
-           ((INNER_X[0], -1.2), (50.0, INNER_Y[1])),
-           ((96.0, INNER_X[1]), (INNER_Y[0], PORTAL_Y[0])),
+# Screw-head cups in the tray; the PCB clears the cup rim.
+CUP_OUTER_RADIUS = 3.5
+CUP_INNER_RADIUS = 2.8
+CUP_RIM_GAP = 0.3
+
+# Lid spring tongues pressing the HAT corner screw heads.
+CLAMP_PRELOAD = 0.5
+CLAMP_POST_RADIUS = 2.0
+TONGUE_THICKNESS = 1.4
+TONGUE_GAP = 1.0
+# (post x, post y, tongue x range, tongue y range, root at the low or high x end)
+CLAMPS = [(3.5, 3.5, (INNER_X[0], 6.5), (0.5, 6.5), "low"),
+          (3.5, 52.5, (INNER_X[0], 6.5), (49.5, 55.5), "low"),
+          (61.5, 3.5, (58.5, 75.0), (0.5, 6.5), "high"),
+          (61.5, 52.5, (58.5, 75.0), (49.5, 55.5), "high")]
+
+# Snap hooks on the lid, latching into windows in the long walls.
+HOOK_X = (20.0, 84.0)
+HOOK_WIDTH = 8.0
+HOOK_ARM = 1.4
+HOOK_NUB = 0.6
+HOOK_CLEARANCE = 0.1
+NUB_Z = (22.7, 23.9)
+WINDOW_Z = (22.0, 24.0)
+WINDOW_WIDTH = 9.0
+MAX_HOOK_STRAIN = 0.02
+
+# Jambs of the right portal.
+COLUMNS = [((96.0, INNER_X[1]), (INNER_Y[0], PORTAL_Y[0])),
            ((96.0, INNER_X[1]), (PORTAL_Y[1], INNER_Y[1]))]
 FEET = [(-2.5, 12.0), (-2.5, 44.0), (97.0, 8.0), (97.0, 48.0)]
 
@@ -129,7 +159,8 @@ def cut(shape, others):
 
 def make_tray():
     tray = outline((0.0, WALL_TOP)).cut(box(INNER_X, INNER_Y, (FLOOR, WALL_TOP + 1)))
-    additions = [cylinder(x, y, (FLOOR - 0.1, PCB_BOTTOM), 3.0) for x, y in PI_HOLES]
+    additions = [cylinder(x, y, (FLOOR - 0.1, PCB_BOTTOM - CUP_RIM_GAP), CUP_OUTER_RADIUS)
+                 for x, y in PI_HOLES]
     additions += [box(x, y, (FLOOR - 0.1, WALL_TOP)) for x, y in COLUMNS]
     # Thick block that brings the left wall within 1.2 mm of the power button.
     additions.append(box((INNER_X[0] - 0.1, -1.2), (9.4, 22.0), (FLOOR - 0.1, WALL_TOP)))
@@ -137,15 +168,13 @@ def make_tray():
     additions.append(box(LEDGE_X, LEDGE_Y, (PORTAL_Z[1], LEDGE_TOP)))
     tray = fuse(tray, additions)
 
-    hex_diameter = 5.3 / math.cos(math.pi / 6)
-    removals = []
-    for x, y in PI_HOLES:
-        removals.append(cylinder(x, y, (-1, PCB_BOTTOM + 1), 1.4))
-        removals.append(cq.Workplane("XY", origin=(x, y, -1))
-                        .polygon(6, hex_diameter).extrude(4.0).val())
-    removals += [cylinder(x, y, (WALL_TOP - 10, WALL_TOP + 1), SCREW_PILOT / 2)
-                 for x, y in SCREWS]
+    removals = [cylinder(x, y, (PCB_BOTTOM - SCREW_HEAD_HEIGHT, PCB_BOTTOM), CUP_INNER_RADIUS)
+                for x, y in PI_HOLES]
     removals += [cylinder(x, y, (-1, 0.6), 5.25) for x, y in FEET]
+    # Release windows for the lid snap hooks.
+    removals += [box((x - WINDOW_WIDTH / 2, x + WINDOW_WIDTH / 2), y, WINDOW_Z)
+                 for x in HOOK_X
+                 for y in ((OUTER_Y[0] - 1, INNER_Y[0] + 0.5), (INNER_Y[1] - 0.5, OUTER_Y[1] + 1))]
 
     # Front wall: USB-C power and two micro HDMI.
     port_z = PCB_TOP + 1.65
@@ -164,9 +193,9 @@ def make_tray():
     # Ventilation for passive cooling: floor intake, side slots.
     removals += [rounded_slot((x, 28.0, FLOOR / 2), (2.0, 34.0), "z", FLOOR + 2)
                  for x in range(12, 80, 5)]
-    removals += [rounded_slot((x, INNER_Y[0], 17.0), (2.0, 10.0), "y", 8)
+    removals += [rounded_slot((x, INNER_Y[0], 16.0), (2.0, 8.0), "y", 8)
                  for x in range(50, 86, 5)]
-    removals += [rounded_slot((x, INNER_Y[1], 16.0), (2.0, 12.0), "y", 8)
+    removals += [rounded_slot((x, INNER_Y[1], 15.5), (2.0, 9.0), "y", 8)
                  for x in range(6, 86, 5)]
     tray = cut(tray, removals).clean()
     if not tray.isValid() or len(tray.Solids()) != 1:
@@ -174,28 +203,70 @@ def make_tray():
     return tray
 
 
+def spring_tongue(x, y, root, gap):
+    """Slot that frees a lid tongue on three sides and the underside thinning."""
+    lid_z = (WALL_TOP - 1, WALL_TOP + LID + 1)
+    if root == "low":
+        ring = box((x[0], x[1] + gap), (y[0] - gap, y[1] + gap), lid_z)
+        tongue = box((x[0] - 1, x[1]), y, (lid_z[0] - 1, lid_z[1] + 1))
+    else:
+        ring = box((x[0] - gap, x[1]), (y[0] - gap, y[1] + gap), lid_z)
+        tongue = box((x[0], x[1] + 1), y, (lid_z[0] - 1, lid_z[1] + 1))
+    thinning = box(x, y, (WALL_TOP - 1, WALL_TOP + LID - TONGUE_THICKNESS))
+    return [ring.cut(tongue), thinning]
+
+
+def hook(x, side):
+    """Snap hook arm and nub; side is -1 for the front wall, +1 for the back wall."""
+    wall = INNER_Y[0] if side < 0 else INNER_Y[1]
+    face = wall - side * HOOK_CLEARANCE
+    arm_y = sorted((face, face - side * HOOK_ARM))
+    arm = box((x - HOOK_WIDTH / 2, x + HOOK_WIDTH / 2), arm_y, (NUB_Z[0], WALL_TOP + 0.1))
+    chamfer = HOOK_NUB
+    profile = [(face, NUB_Z[0]), (face + side * HOOK_NUB, NUB_Z[0] + chamfer),
+               (face + side * HOOK_NUB, NUB_Z[1]), (face, NUB_Z[1])]
+    nub = (cq.Workplane("YZ", origin=(x - HOOK_WIDTH / 2, 0, 0))
+           .polyline(profile).close().extrude(HOOK_WIDTH).val())
+    return arm.fuse(nub)
+
+
+def hook_strain():
+    """Peak bending strain of a hook arm while its nub passes the wall."""
+    deflection = HOOK_NUB - HOOK_CLEARANCE
+    length = WALL_TOP - NUB_Z[0]
+    return 3 * HOOK_ARM * deflection / (2 * length ** 2)
+
+
 def make_lid():
     lid = outline((WALL_TOP, WALL_TOP + LID))
-    removals = [cylinder(x, y, (WALL_TOP - 1, WALL_TOP + LID + 1), SCREW_CLEARANCE / 2)
-                for x, y in SCREWS]
-    removals += [rounded_slot((x, 26.0, WALL_TOP + LID / 2), (2.0, 36.0), "z", LID + 2)
-                 for x in range(10, 80, 5)]
+    removals = [rounded_slot((x, 27.0, WALL_TOP + LID / 2), (2.0, 35.0), "z", LID + 2)
+                for x in range(10, 80, 5)]
     # GPIO stacking header and camera/display FFC route through the HAT notch.
-    removals.append(box((2.0, 56.0), (49.2, 55.8), (WALL_TOP - 1, WALL_TOP + LID + 1)))
-    removals.append(box((48.0, 57.0), (1.0, 15.0), (WALL_TOP - 1, WALL_TOP + LID + 1)))
+    removals.append(box((GPIO_HEADER_X[0] - 1.0, GPIO_HEADER_X[1] + 0.2), (49.2, 55.8),
+                        (WALL_TOP - 1, WALL_TOP + LID + 1)))
+    removals.append(box((47.0, 56.0), (1.0, 15.0), (WALL_TOP - 1, WALL_TOP + LID + 1)))
 
-    # Spring tongue: U-shaped slot, thinned from below, root at low x.
+    # Spring tongue for the SSD end, root at low x.
     tongue_x, tongue_y = (80.8, M2_CARD_END_X + 0.1), (20.0, 37.0)
     slot = box((tongue_x[0], tongue_x[1] + 1.2), (tongue_y[0] - 1.2, tongue_y[1] + 1.2),
                (WALL_TOP - 1, WALL_TOP + LID + 1)).cut(
         box((tongue_x[0] - 1, tongue_x[1]), tongue_y, (WALL_TOP - 2, WALL_TOP + LID + 2)))
     removals.append(slot)
-    removals.append(box((82.0, tongue_x[1] + 0.1), tongue_y, (WALL_TOP - 1, WALL_TOP + 0.6)))
+    removals.append(box((82.0, tongue_x[1] + 0.1), tongue_y,
+                        (WALL_TOP - 1, WALL_TOP + LID - TONGUE_THICKNESS)))
+    # Spring tongues for the four HAT corners.
+    for _, _, x, y, root in CLAMPS:
+        removals += spring_tongue(x, y, root, TONGUE_GAP)
     lid = cut(lid, removals)
 
     card_top = LEDGE_TOP + M2_CARD_THICKNESS
-    lid = lid.fuse(box((M2_CARD_END_X - 2.7, M2_CARD_END_X - 0.5), tongue_y,
-                       (card_top - TONGUE_PRELOAD, WALL_TOP + 0.7))).clean()
+    additions = [box((M2_CARD_END_X - 2.7, M2_CARD_END_X - 0.5), tongue_y,
+                     (card_top - TONGUE_PRELOAD, WALL_TOP + 0.7))]
+    head_top = HAT_TOP + SCREW_HEAD_HEIGHT
+    additions += [cylinder(x, y, (head_top - CLAMP_PRELOAD, WALL_TOP + 0.7), CLAMP_POST_RADIUS)
+                  for x, y, *_ in CLAMPS]
+    additions += [hook(x, side) for x in HOOK_X for side in (-1, 1)]
+    lid = fuse(lid, additions).clean()
     if not lid.isValid() or len(lid.Solids()) != 1:
         raise ValueError("Lid is not a valid single solid")
     return lid
@@ -220,7 +291,7 @@ def envelopes():
                              (PCB_TOP, PCB_TOP + 2.0)), True),
         ("pcie-ffc-loop", box((-5.5, 10.5), (25.0, 35.0), (PCB_TOP, HAT_TOP)), True),
         ("hat", box((0, HAT_LENGTH), (0, HAT_WIDTH), (HAT_BOTTOM, HAT_TOP)), True),
-        ("gpio-header", box((3.6, 54.4), (49.9, 55.1), (PCB_TOP, HAT_TOP + 8.5)), True),
+        ("gpio-header", box(GPIO_HEADER_X, (49.9, 55.1), (PCB_TOP, HAT_TOP + 8.5)), True),
         ("ssd", box((M2_2242_END_X - 42.0, M2_CARD_END_X), M2_CARD_Y,
                     (LEDGE_TOP, LEDGE_TOP + M2_CARD_THICKNESS)), False),
         ("ssd-components", box((M2_2242_END_X - 39.0, M2_CARD_END_X - 4.0), M2_CARD_Y,
@@ -232,6 +303,12 @@ def envelopes():
     items += [(f"hdmi-{x}", box((x - 3.5, x + 3.5), (-1.5, 7.0), (PCB_TOP, PCB_TOP + 3.5)), True)
               for x in HDMI_X]
     items += [(f"spacer-{x}-{y}", cylinder(x, y, (PCB_TOP, HAT_BOTTOM), 2.5), True)
+              for x, y in PI_HOLES]
+    head = SCREW_HEAD_DIAMETER / 2
+    items += [(f"head-bottom-{x}-{y}", cylinder(x, y, (PCB_BOTTOM - SCREW_HEAD_HEIGHT, PCB_BOTTOM),
+                                                head), True)
+              for x, y in PI_HOLES]
+    items += [(f"head-top-{x}-{y}", cylinder(x, y, (HAT_TOP, HAT_TOP + SCREW_HEAD_HEIGHT), head), True)
               for x, y in PI_HOLES]
     # Cable plugs: overmolds assumed up to 2 mm larger than the receptacle.
     plug_x = (PI_LENGTH + PORT_OVERHANG, OUTER_X[1] + 10)
@@ -250,27 +327,48 @@ def envelopes():
 
 
 def verify(tray, lid):
-    """Check clearances of the keep-out volumes and the tongue preload."""
+    """Check clearances, insertion paths, preloads and hook strain."""
     items = envelopes()
+    preloaded = lambda name: name == "ssd" or name.startswith("head-top")
     for name, solid, insertion in items:
         for part_name, part in (("tray", tray), ("lid", lid)):
-            if name == "ssd" and part_name == "lid":
+            if preloaded(name) and part_name == "lid":
                 continue
             volume = solid.intersect(part).Volume()
             if volume > 1e-3:
                 raise ValueError(f"{name} intersects {part_name}: {volume:.3f} mm3")
         if insertion:
-            # Bounding box swept upward: the assembly is lowered in vertically.
-            bounds = solid.BoundingBox()
-            path = box((bounds.xmin, bounds.xmax), (bounds.ymin, bounds.ymax),
-                       (bounds.zmin, WALL_TOP + 1))
+            # Every board volume is a vertical prism; sweep its footprint upward,
+            # since the assembly is lowered into the tray vertically.
+            bottom = solid.BoundingBox().zmin
+            footprint = cq.Workplane("XY").add(solid).faces("<Z").val()
+            path = cq.Solid.extrudeLinear(footprint, cq.Vector(0, 0, WALL_TOP + 1 - bottom))
             if path.intersect(tray).Volume() > 1e-3:
                 raise ValueError(f"{name} cannot be lowered into the tray")
-    ssd = next(solid for name, solid, _ in items if name == "ssd")
-    overlap = ssd.intersect(lid).Volume()
+
+    if lid.intersect(tray).Volume() > 1e-3:
+        raise ValueError("Lid intersects the tray")
+    # Hook arms bent inward while snapping must still clear the boards.
+    boards = [solid for name, solid, _ in items if "plug" not in name]
+    for x in HOOK_X:
+        for side in (-1, 1):
+            bent = hook(x, side).translate(cq.Vector(0, -side * (HOOK_NUB - HOOK_CLEARANCE), 0))
+            for solid in boards:
+                if bent.intersect(solid).Volume() > 1e-3:
+                    raise ValueError(f"Hook at x = {x} hits the boards while snapping")
+    if hook_strain() > MAX_HOOK_STRAIN:
+        raise ValueError(f"Hook strain {hook_strain():.3f} exceeds {MAX_HOOK_STRAIN}")
+
+    named = dict((name, solid) for name, solid, _ in items)
+    overlap = named["ssd"].intersect(lid).Volume()
     expected = 2.2 * 17.0 * TONGUE_PRELOAD
     if abs(overlap - expected) > 0.05:
-        raise ValueError(f"Unexpected tongue preload volume {overlap:.2f} mm3")
+        raise ValueError(f"Unexpected SSD tongue preload volume {overlap:.2f} mm3")
+    expected = math.pi * CLAMP_POST_RADIUS ** 2 * CLAMP_PRELOAD
+    for x, y in PI_HOLES:
+        overlap = named[f"head-top-{x}-{y}"].intersect(lid).Volume()
+        if abs(overlap - expected) > 0.05:
+            raise ValueError(f"Unexpected clamp preload at ({x}, {y}): {overlap:.2f} mm3")
 
 
 def export(shape, name):

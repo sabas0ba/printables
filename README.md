@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | [Mi Vacuum Cleaner Mini holder](mi-vacuum-cleaner-mini/README.md) | STL, CadQuery source, three views and preview | Horizontal cradle with nozzle and charging-port access |
 | [Stackable chili drying basket](chili-drying-rack/README.md) | STL, CadQuery source, dimensioned views and assembly preview | Sliding baskets, V supports, harvest-date wheels and removable drip tray; all printed |
-| [Raspberry Pi 5 NVMe case](raspberry-pi-5-nvme-case/README.md) | STL, CadQuery source, views, section and assembly preview | Pi 5 + M.2 HAT+ + 2280 SSD; passive; port, button and microSD access; prototype |
+| [Raspberry Pi 5 NVMe case](raspberry-pi-5-nvme-case/README.md) | STL, CadQuery source, views, section and assembly preview | Pi 5 + M.2 HAT+ + 2280 SSD; snap-fit lid, no extra screws; passive; port, button and microSD access; prototype |
 
 | [Tool-free slipper stand](slipper-stand/README.md) | STL, OpenSCAD source, assembly and joint previews | Four pairs; inward-facing soles; rounded edges and printed locking pins; prototype |
 

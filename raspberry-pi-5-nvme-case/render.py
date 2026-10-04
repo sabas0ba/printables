@@ -96,13 +96,13 @@ def render_views():
     lid = lid_in_place()
     canvas = Image.new("RGB", (1600, 1180), "#e9eef0")
     draw_view(canvas, [tray], (24, 24, 760, 520), (1, 0, 0), (0, 1, 0), (0, 0, 1),
-              "TRAY TOP  ·  112.8 x 64.5 mm")
+              "TRAY TOP  ·  112.8 x 65.8 mm, screw-head cups")
     draw_view(canvas, [lid], (816, 24, 760, 520), (1, 0, 0), (0, 1, 0), (0, 0, 1),
-              "LID TOP  ·  spring tongue at right")
+              "LID TOP  ·  spring tongues: HAT corners and SSD end")
     draw_view(canvas, [tray], (24, 568, 760, 290), (1, 0, 0), (0, 0, 1), (0, -1, 0),
-              "FRONT  ·  USB-C, 2x micro HDMI")
+              "FRONT  ·  USB-C, 2x micro HDMI, hook windows")
     draw_view(canvas, [tray], (816, 568, 760, 290), (-1, 0, 0), (0, 0, 1), (0, 1, 0),
-              "BACK  ·  vents")
+              "BACK  ·  vents, hook windows")
     draw_view(canvas, [tray], (24, 882, 760, 274), (0, 1, 0), (0, 0, 1), (1, 0, 0),
               "RIGHT  ·  USB/Ethernet portal, SSD ledge")
     draw_view(canvas, [tray], (816, 882, 760, 274), (0, -1, 0), (0, 0, 1), (-1, 0, 0),

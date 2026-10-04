@@ -1,11 +1,11 @@
 # Raspberry Pi 5 NVMe case
 
-A two-part, passively ventilated case for Raspberry Pi 5 with the Raspberry Pi M.2 HAT+ (standard variant) and an M.2 2280 NVMe SSD. The tray holds the boards on four bosses; the lid closes the top with four screws. All external ports, the power button, the status LED and the microSD slot remain accessible.
+A two-part, passively ventilated case for Raspberry Pi 5 with the Raspberry Pi M.2 HAT+ (standard variant) and an M.2 2280 NVMe SSD. The case needs no screws beyond those supplied with the M.2 HAT+: the boards sit in four cups on the tray floor, and the lid snaps on, pressing the boards down with spring tongues. All external ports, the power button, the status LED and the microSD slot remain accessible.
 
 Status: prototype. The geometry has been checked against simplified keep-out volumes only; it has not been printed or fitted.
 
-- [`tray.stl`](tray.stl): 112.8 × 64.5 × 31.0 mm, printed floor down.
-- [`lid.stl`](lid.stl): 112.8 × 64.5 × 5.45 mm, exported upside down in its printing orientation.
+- [`tray.stl`](tray.stl): 112.8 × 65.8 × 31.0 mm, printed floor down.
+- [`lid.stl`](lid.stl): 112.8 × 65.8 × 10.3 mm including the snap hooks, exported upside down in its printing orientation.
 - [`reference-assembly.stl`](reference-assembly.stl): simplified keep-out volumes of the boards and SSD used for checks and images; not for printing.
 - [`generate.py`](generate.py): parametric CadQuery source and clearance checks, dimensions in mm.
 - [`render.py`](render.py): deterministic offline rendering of the images below.
@@ -24,25 +24,31 @@ The M.2 HAT+ officially supports 2230 and 2242 devices only. A 2280 drive insert
 - A spring tongue cut into the lid presses the drive end onto the ledge with an estimated 0.4 mm preload. The drive is not screwed at its end. Leave the HAT's knurled 2242 screw out; it would lift the 2280 drive at that position.
 - Below the ledge, the right wall is a single open portal for the USB and Ethernet plugs. Plug overmolds may extend up to 2.2 mm above the upper USB receptacles.
 
+## Screwless retention
+
+- **Board location**: the heads of the four M.2 HAT+ kit screws under the Pi sit in Ø5.6 mm cups on the tray floor. The cups locate the stack sideways; the Pi PCB stays 0.3 mm above the cup rims, so only the screw heads carry load.
+- **Board clamping**: four spring tongues in the lid press on the kit screw heads above the HAT corners with a 0.5 mm nominal preload (about 3 to 7 N each, estimated for PLA). The force passes through the spacers, so neither board is bent.
+- **Lid**: four snap hooks, two on each long side, latch into 9 × 2 mm windows in the walls. The calculated peak strain of the hook arms while snapping is 1.5 %. To open, push each hook nub inward through its window with a fingernail or a small flat screwdriver and lift the lid.
+- **Tolerance**: the clamp preload depends on the kit screw-head height (`SCREW_HEAD_HEIGHT`, assumed 2.0 mm) and the stack heights. The tongues absorb roughly ±0.5 mm. The lid can lift by up to 0.1 mm against the hooks, which reduces both preloads by that amount.
+- **PLA creep**: PLA relaxes under constant stress at 40 to 50 °C. The tongue preload and hook engagement may loosen over time in a warm case. If the boards become loose, print the lid in PETG.
+
 ## Hardware
 
 - Raspberry Pi 5, M.2 HAT+ with its 16 mm stacking header and spacers, and an M.2 2280 M key NVMe SSD.
-- 4 × M2.5 screws from below through the tray bosses into the HAT spacers. The head seats 3 mm above the tray underside, so the length is 4.6 mm to the Pi's top surface plus the thread engagement in the spacer: M2.5 × 8 to × 10. If the spacers have a male thread at the bottom, use M2.5 nuts in the hex pockets instead.
-- 4 × M3 × 8 self-tapping screws for the lid, in Ø2.5 mm pilot holes.
+- The spacer screws supplied with the M.2 HAT+, above and below the stack. Heads up to Ø5.0 mm and 2.0 mm high fit the cups and the lid tongues.
 - 4 × adhesive rubber feet, Ø10 mm and at least 3 mm tall, in the 0.6 mm recesses. They provide the gap for the floor intake vents.
 
 ## Assembly
 
 1. Assemble the Pi, the HAT, the PCIe ribbon cable and the SSD outside the case, following the M.2 HAT+ instructions, but without the knurled drive screw.
-2. Lower the assembly vertically into the tray. The microSD card, power button and ribbon-cable loop pass the left wall; the SSD end lands on the right ledge.
-3. Fix the Pi from below with the M2.5 screws through the hex pockets.
-4. Fit the lid. The GPIO stacking header passes through the rear slot, and the camera/display FFC can leave through the slot above the HAT notch. Tighten the M3 screws until the lid sits on the walls.
+2. Lower the assembly vertically into the tray until the lower screw heads drop into the floor cups. The microSD card, power button and ribbon-cable loop pass the left wall; the SSD end lands on the right ledge.
+3. Fit the lid and press it down until all four hooks click into their windows. The GPIO stacking header passes through the rear slot, and the camera/display FFC can leave through the slot above the HAT notch.
 
 ## Printing
 
 - Material as requested: PLA. Layer height 0.2 mm, 3 walls.
 - Tray: floor on the bed. The lintel above the right portal is a 54 mm bridge. The SSD ledge is a 6 mm overhang from that bridge; enable support for the ledge only (painted or enforced support in the slicer) and remove it through the portal.
-- Lid: top face on the bed, as exported. No support.
+- Lid: top face on the bed, as exported. No support. The hook arms stand 8.3 mm tall; print them with at least 3 walls so that they are solid.
 
 ## Cooling and material limits
 
@@ -64,9 +70,11 @@ Values read off the drawings or assumed, which must be checked on the physical p
 | `M2_2242_END_X` | 61.1 mm | scaled from the HAT drawing; the 2280 end follows at 99.1 mm |
 | `M2_CARD_Y` | 17.5 to 39.5 mm | scaled from the HAT drawing |
 | `MICROSD_Y` | 22.5 to 33.5 mm | scaled from the top view |
+| `GPIO_HEADER_X` | 7.2 to 58.2 mm | header body, scaled from the top view |
+| `SCREW_HEAD_HEIGHT` | 2.0 mm | assumed for the HAT kit screws; sets the cup depth and clamp preload |
 | ribbon-cable loop | to x = −5.5 mm | estimated from the product photograph |
 
-`generate.py` refuses to export if any keep-out volume (boards, ports, ribbon-cable loop, GPIO header, SSD, spacers and the assumed cable plugs) intersects the tray or lid, if any board volume cannot be lowered vertically into the tray, or if the tongue preload differs from the intended value. If a measurement differs, change the constant, regenerate, and inspect the images.
+`generate.py` refuses to export if any keep-out volume (boards, ports, ribbon-cable loop, GPIO header, SSD, spacers and the assumed cable plugs) intersects the tray or lid, if any board volume cannot be lowered vertically into the tray, if the lid intersects the tray, if a hook arm bent inward while snapping would hit the boards, if the hook strain exceeds 2 %, or if a tongue preload differs from the intended value. If a measurement differs, change the constant, regenerate, and inspect the images.
 
 The STL files were generated with Python 3.12 and CadQuery 2.7.0; the images use NumPy 2.3.5 and Pillow 12.3.0. Use the pinned Nix and container commands in the [repository README](../README.md) to regenerate and check all outputs.
 
