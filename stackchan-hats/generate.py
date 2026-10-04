@@ -182,6 +182,10 @@ def compatibility(built: dict[str, list[tuple[toppers.Piece, cq.Shape, cq.Shape]
 
 def main() -> None:
     OUTPUT.mkdir(exist_ok=True)
+    # Remove previous exports so that a renamed or dropped set leaves no
+    # stale file behind for the regeneration check to accept.
+    for stale in OUTPUT.glob("*.stl"):
+        stale.unlink()
     cap_solid = cap.make_cap()
     report: dict[str, Any] = {"cap": check_cap(cap_solid)}
     report["cap"] |= export(cap.to_print(cap_solid), "cap")

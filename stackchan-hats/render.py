@@ -215,6 +215,8 @@ def render_parts() -> None:
 
 def main() -> None:
     IMAGES.mkdir(exist_ok=True)
+    for stale in IMAGES.glob("*.png"):
+        stale.unlink()
     proxy = head_proxy()
     cap_solid = cap.make_cap()
     render_cap(proxy, cap_solid)
