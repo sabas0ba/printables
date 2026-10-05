@@ -1,0 +1,22 @@
+title = "Raspberry Pi 5 NVMe case"
+summary = "Pi 5 + M.2 HAT+ + 2280 SSD; snap-fit lid without extra screws; passive cooling; port, button and microSD access."
+prototype = true
+added = 2026-10-04
+lang = "en"
+source = "CadQuery"
+cover = "preview.png"
+
+[[parts]]
+file = "tray.stl"
+quantity = 1
+description = "Tray, printed floor down"
+
+[[parts]]
+file = "lid.stl"
+quantity = 1
+description = "Lid with snap hooks, exported in printing orientation"
+
+[[parts]]
+file = "reference-assembly.stl"
+quantity = 0
+description = "Keep-out volumes of the boards and SSD; reference only, not for printing"

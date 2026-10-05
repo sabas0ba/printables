@@ -1,0 +1,43 @@
+title = "Stackable chili drying basket"
+summary = "Sliding baskets, V supports, harvest-date wheels and a removable drip tray; all parts printed."
+prototype = false
+added = 2026-10-02
+lang = "ja"
+source = "CadQuery"
+cover = "assembly.png"
+
+# Quantities are for the three-tier configuration.
+[[parts]]
+file = "rack.stl"
+quantity = 3
+description = "Stacking frame with rails and rear stop"
+
+[[parts]]
+file = "basket.stl"
+quantity = 3
+description = "Sliding basket with mesh floor, V supports and date dial axles"
+
+[[parts]]
+file = "month-dial.stl"
+quantity = 3
+description = "Month dial, 1 to 12"
+
+[[parts]]
+file = "day-dial.stl"
+quantity = 3
+description = "Day dial, 1 to 31"
+
+[[parts]]
+file = "dial-clip.stl"
+quantity = 6
+description = "C-clip retaining a dial on its axle"
+
+[[parts]]
+file = "base.stl"
+quantity = 1
+description = "Base for the bottom tier"
+
+[[parts]]
+file = "drip-tray.stl"
+quantity = 1
+description = "Drip tray"

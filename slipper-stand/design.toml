@@ -1,0 +1,68 @@
+title = "Tool-free slipper stand"
+summary = "Holds four pairs with the soles facing inward; rounded edges and printed locking pins."
+prototype = true
+added = 2026-10-03
+lang = "ja"
+source = "OpenSCAD"
+cover = "output/preview.png"
+pages = ["docs/prototype.md"]
+
+[[parts]]
+file = "output/base.stl"
+quantity = 1
+description = "Base"
+
+[[parts]]
+file = "output/mast.stl"
+quantity = 2
+description = "Mast"
+
+[[parts]]
+file = "output/splice.stl"
+quantity = 1
+description = "Splice plate"
+
+[[parts]]
+file = "output/rail.stl"
+quantity = 4
+description = "Rail"
+
+[[parts]]
+file = "output/holder.stl"
+quantity = 8
+description = "Slipper holder"
+
+[[parts]]
+file = "output/pin26.stl"
+quantity = 16
+description = "Locking pin, 26 mm"
+
+[[parts]]
+file = "output/pin28.stl"
+quantity = 4
+description = "Locking pin, 28 mm"
+
+[[parts]]
+file = "output/pin40.stl"
+quantity = 2
+description = "Locking pin, 40 mm"
+
+[[parts]]
+file = "output/pin52.stl"
+quantity = 4
+description = "Locking pin, 52 mm"
+
+[[parts]]
+file = "output/coupon06.stl"
+quantity = 1
+description = "Fit test coupon; print first with one pin26"
+
+[[parts]]
+file = "output/coupon04.stl"
+quantity = 0
+description = "Optional fit test coupon, tighter"
+
+[[parts]]
+file = "output/coupon08.stl"
+quantity = 0
+description = "Optional fit test coupon, looser"
