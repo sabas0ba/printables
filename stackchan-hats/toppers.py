@@ -247,7 +247,14 @@ def build_body(piece: Piece) -> cq.Shape:
     outline.rect((limit - 200, -50), 400, 100, mode="s")
     t = piece.thickness
     body = extrude(outline, t, fillet=piece.fillet, single=True, blend=piece.blend)
-    body = body.faces(">Z").edges().fillet(EDGE_RADIUS)
+    # Round the upper face outline except the straight base edge on v = 0:
+    # the tab joins there, and a rounded edge would leave the tab corners
+    # poking through it as slivers whose meshing is not reproducible.
+    solid = body.val()
+    top = body.faces(">Z").edges().vals()
+    rounded = [e for e in top
+               if not (abs(e.startPoint().y) < 1e-6 and abs(e.endPoint().y) < 1e-6)]
+    body = cq.Workplane("XY").add(solid.fillet(EDGE_RADIUS, rounded))
     if piece.raised:
         relief = extrude(piece.raised(), DETAIL + 0.5, t - 0.5,
                          fillet=DETAIL_OUTLINE_RADIUS)
@@ -262,7 +269,10 @@ def build_body(piece: Piece) -> cq.Shape:
 def build_piece(piece: Piece) -> tuple[cq.Shape, cq.Shape]:
     """Return (piece with tab, body only) in print orientation."""
     body = build_body(piece)
-    full = body.fuse(tab())
+    # The tab shares the plate's top and bottom planes; unifying those faces
+    # makes the topology, and so the exported mesh, independent of the order
+    # in which the boolean happened to split them.
+    full = body.fuse(tab()).clean()
     if not full.isValid() or len(full.Solids()) != 1:
         raise ValueError(f"{piece.name}: not a valid single solid")
     return full, body
