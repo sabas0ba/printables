@@ -1,5 +1,5 @@
 title = "M5Stack StackChan hats"
-summary = "Push-on cap for the K151 head, 32 plug-in decoration sets, 4 one-piece cap variants and 10 house and food shells; support-free; clear of body and base over the full pitch range (shells: up to a per-shell look-up angle)."
+summary = "Push-on cap for the K151 head, 35 plug-in decoration sets, 4 one-piece cap variants, 6 food drapes that dress the head itself as tofu, pudding or onigiri, and 11 house and food shells; support-free; clear of body and base over the full pitch range (shells: up to a per-shell look-up angle)."
 prototype = true
 added = 2026-10-04
 lang = "ja"
@@ -32,6 +32,36 @@ description = "Cap variant: lion mane; replaces the cap"
 file = "stl/cap-petal-frame.stl"
 quantity = 0
 description = "Cap variant: petal frame; replaces the cap"
+
+[[parts]]
+file = "stl/drape-soy-sauce.stl"
+quantity = 0
+description = "Drape: Soy sauce, head as tofu; replaces the cap"
+
+[[parts]]
+file = "stl/drape-caramel.stl"
+quantity = 0
+description = "Drape: Caramel, head as pudding; replaces the cap"
+
+[[parts]]
+file = "stl/drape-nori-band.stl"
+quantity = 0
+description = "Drape: Nori band, head as onigiri; replaces the cap"
+
+[[parts]]
+file = "stl/drape-nori-wrap.stl"
+quantity = 0
+description = "Drape: Nori wrap, head as norimaki; replaces the cap"
+
+[[parts]]
+file = "stl/drape-sakura-leaf.stl"
+quantity = 0
+description = "Drape: Cherry leaf, head as sakuramochi; replaces the cap"
+
+[[parts]]
+file = "stl/drape-crust.stl"
+quantity = 0
+description = "Drape: Crust, head as sliced bread; replaces the cap"
 
 [[parts]]
 file = "stl/cat-ears.stl"
@@ -159,6 +189,21 @@ quantity = 0
 description = "Decoration: Halo"
 
 [[parts]]
+file = "stl/yakumi.stl"
+quantity = 0
+description = "Decoration: Ginger and spring onion"
+
+[[parts]]
+file = "stl/cherry.stl"
+quantity = 0
+description = "Decoration: Cherry"
+
+[[parts]]
+file = "stl/umeboshi.stl"
+quantity = 0
+description = "Decoration: Umeboshi"
+
+[[parts]]
 file = "stl/palm-tree.stl"
 quantity = 0
 description = "Decoration: Palm tree"
@@ -197,6 +242,11 @@ description = "Decoration: Dragon tail"
 file = "stl/shell-house.stl"
 quantity = 0
 description = "Shell: House; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-house-roof.stl"
+quantity = 0
+description = "Shell: House roof, head as house; replaces the cap, no decorations"
 
 [[parts]]
 file = "stl/shell-tofu.stl"

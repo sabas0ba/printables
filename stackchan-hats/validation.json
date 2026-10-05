@@ -373,6 +373,456 @@
     "max_pitch_moment_g_cm": 37.1,
     "own_pitch_moment_g_cm": 37.1
   },
+  "drape-soy-sauce": {
+    "title": "Soy sauce (head as tofu)",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.64,
+    "radial_clearance_mm": 0.3,
+    "slot_mm": [
+      12.3,
+      3.4000000000000004,
+      3.0
+    ],
+    "slots": {
+      "front-left": [
+        -16.0,
+        12.0,
+        0.0
+      ],
+      "front-centre": [
+        0.0,
+        12.0,
+        0.0
+      ],
+      "front-right": [
+        16.0,
+        12.0,
+        0.0
+      ],
+      "rear-left": [
+        -16.0,
+        32.0,
+        0.0
+      ],
+      "rear-centre": [
+        0.0,
+        32.0,
+        0.0
+      ],
+      "rear-right": [
+        16.0,
+        32.0,
+        0.0
+      ],
+      "wing-left": [
+        -16.0,
+        44.0,
+        0.0
+      ],
+      "wing-right": [
+        16.0,
+        44.0,
+        0.0
+      ],
+      "tail-centre": [
+        0.0,
+        40.7,
+        90.0
+      ]
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 12.29,
+    "mass_g": 15.2,
+    "triangles": 4412,
+    "size_mm": [
+      59.8,
+      60.6,
+      37.29
+    ],
+    "min_z_mm": -0.0,
+    "bed_contact_mm2": 2863.4,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -56.85,
+    "worn_mass_g": 15.2,
+    "max_pitch_moment_g_cm": 39.4,
+    "own_pitch_moment_g_cm": 39.4
+  },
+  "drape-caramel": {
+    "title": "Caramel (head as pudding)",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.64,
+    "radial_clearance_mm": 0.3,
+    "slot_mm": [
+      12.3,
+      3.4000000000000004,
+      3.0
+    ],
+    "slots": {
+      "front-left": [
+        -16.0,
+        12.0,
+        0.0
+      ],
+      "front-centre": [
+        0.0,
+        12.0,
+        0.0
+      ],
+      "front-right": [
+        16.0,
+        12.0,
+        0.0
+      ],
+      "rear-left": [
+        -16.0,
+        32.0,
+        0.0
+      ],
+      "rear-centre": [
+        0.0,
+        32.0,
+        0.0
+      ],
+      "rear-right": [
+        16.0,
+        32.0,
+        0.0
+      ],
+      "wing-left": [
+        -16.0,
+        44.0,
+        0.0
+      ],
+      "wing-right": [
+        16.0,
+        44.0,
+        0.0
+      ],
+      "tail-centre": [
+        0.0,
+        40.7,
+        90.0
+      ]
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 11.75,
+    "mass_g": 14.6,
+    "triangles": 4928,
+    "size_mm": [
+      59.8,
+      60.6,
+      19.29
+    ],
+    "min_z_mm": -0.0,
+    "bed_contact_mm2": 2863.4,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -56.85,
+    "worn_mass_g": 14.6,
+    "max_pitch_moment_g_cm": 39.3,
+    "own_pitch_moment_g_cm": 39.3
+  },
+  "drape-nori-band": {
+    "title": "Nori band (head as onigiri)",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.64,
+    "radial_clearance_mm": 0.3,
+    "slot_mm": [
+      12.3,
+      3.4000000000000004,
+      3.0
+    ],
+    "slots": {
+      "front-left": [
+        -16.0,
+        12.0,
+        0.0
+      ],
+      "front-centre": [
+        0.0,
+        12.0,
+        0.0
+      ],
+      "front-right": [
+        16.0,
+        12.0,
+        0.0
+      ],
+      "rear-left": [
+        -16.0,
+        32.0,
+        0.0
+      ],
+      "rear-centre": [
+        0.0,
+        32.0,
+        0.0
+      ],
+      "rear-right": [
+        16.0,
+        32.0,
+        0.0
+      ],
+      "wing-left": [
+        -16.0,
+        44.0,
+        0.0
+      ],
+      "wing-right": [
+        16.0,
+        44.0,
+        0.0
+      ],
+      "tail-centre": [
+        0.0,
+        40.7,
+        90.0
+      ]
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 15.01,
+    "mass_g": 18.6,
+    "triangles": 2060,
+    "size_mm": [
+      65.0,
+      59.6,
+      43.3
+    ],
+    "min_z_mm": -0.0,
+    "bed_contact_mm2": 2822.5,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 18.6,
+    "max_pitch_moment_g_cm": 40.6,
+    "own_pitch_moment_g_cm": 40.6
+  },
+  "drape-nori-wrap": {
+    "title": "Nori wrap (head as norimaki)",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.64,
+    "radial_clearance_mm": 0.3,
+    "slot_mm": [
+      12.3,
+      3.4000000000000004,
+      3.0
+    ],
+    "slots": {
+      "front-left": [
+        -16.0,
+        12.0,
+        0.0
+      ],
+      "front-centre": [
+        0.0,
+        12.0,
+        0.0
+      ],
+      "front-right": [
+        16.0,
+        12.0,
+        0.0
+      ],
+      "rear-left": [
+        -16.0,
+        32.0,
+        0.0
+      ],
+      "rear-centre": [
+        0.0,
+        32.0,
+        0.0
+      ],
+      "rear-right": [
+        16.0,
+        32.0,
+        0.0
+      ],
+      "wing-left": [
+        -16.0,
+        44.0,
+        0.0
+      ],
+      "wing-right": [
+        16.0,
+        44.0,
+        0.0
+      ],
+      "tail-centre": [
+        0.0,
+        40.7,
+        90.0
+      ]
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 20.22,
+    "mass_g": 25.1,
+    "triangles": 2076,
+    "size_mm": [
+      65.0,
+      59.6,
+      55.3
+    ],
+    "min_z_mm": -0.0,
+    "bed_contact_mm2": 3009.5,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -58.5,
+    "worn_mass_g": 25.1,
+    "max_pitch_moment_g_cm": 40.5,
+    "own_pitch_moment_g_cm": 40.5
+  },
+  "drape-sakura-leaf": {
+    "title": "Cherry leaf (head as sakuramochi)",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.64,
+    "radial_clearance_mm": 0.3,
+    "slot_mm": [
+      12.3,
+      3.4000000000000004,
+      3.0
+    ],
+    "slots": {
+      "front-left": [
+        -16.0,
+        12.0,
+        0.0
+      ],
+      "front-centre": [
+        0.0,
+        12.0,
+        0.0
+      ],
+      "front-right": [
+        16.0,
+        12.0,
+        0.0
+      ],
+      "rear-left": [
+        -16.0,
+        32.0,
+        0.0
+      ],
+      "rear-centre": [
+        0.0,
+        32.0,
+        0.0
+      ],
+      "rear-right": [
+        16.0,
+        32.0,
+        0.0
+      ],
+      "wing-left": [
+        -16.0,
+        44.0,
+        0.0
+      ],
+      "wing-right": [
+        16.0,
+        44.0,
+        0.0
+      ],
+      "tail-centre": [
+        0.0,
+        40.7,
+        90.0
+      ]
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 13.46,
+    "mass_g": 16.7,
+    "triangles": 2122,
+    "size_mm": [
+      61.4,
+      59.6,
+      50.0
+    ],
+    "min_z_mm": -0.0,
+    "bed_contact_mm2": 2758.1,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 16.7,
+    "max_pitch_moment_g_cm": 39.0,
+    "own_pitch_moment_g_cm": 39.0
+  },
+  "drape-crust": {
+    "title": "Crust (head as sliced bread)",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.64,
+    "radial_clearance_mm": 0.3,
+    "slot_mm": [
+      12.3,
+      3.4000000000000004,
+      3.0
+    ],
+    "slots": {
+      "front-left": [
+        -16.0,
+        12.0,
+        0.0
+      ],
+      "front-centre": [
+        0.0,
+        12.0,
+        0.0
+      ],
+      "front-right": [
+        16.0,
+        12.0,
+        0.0
+      ],
+      "rear-left": [
+        -16.0,
+        32.0,
+        0.0
+      ],
+      "rear-centre": [
+        0.0,
+        32.0,
+        0.0
+      ],
+      "rear-right": [
+        16.0,
+        32.0,
+        0.0
+      ],
+      "wing-left": [
+        -16.0,
+        44.0,
+        0.0
+      ],
+      "wing-right": [
+        16.0,
+        44.0,
+        0.0
+      ],
+      "tail-centre": [
+        0.0,
+        40.7,
+        90.0
+      ]
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 13.31,
+    "mass_g": 16.5,
+    "triangles": 2048,
+    "size_mm": [
+      66.0,
+      66.4,
+      58.3
+    ],
+    "min_z_mm": -0.0,
+    "bed_contact_mm2": 3175.5,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 16.5,
+    "max_pitch_moment_g_cm": 39.0,
+    "own_pitch_moment_g_cm": 39.0
+  },
   "cat-ears": {
     "title": "Cat ears",
     "pieces": {
@@ -1079,6 +1529,84 @@
     "max_pitch_moment_g_cm": 38.5,
     "own_pitch_moment_g_cm": 4.4
   },
+  "yakumi": {
+    "title": "Ginger and spring onion",
+    "pieces": {
+      "yakumi": {
+        "slot": "front-centre",
+        "tab_press_fit_mm3": 0.15
+      }
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 0.85,
+    "mass_g": 1.1,
+    "triangles": 4774,
+    "size_mm": [
+      22.4,
+      18.09,
+      3.2
+    ],
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 278.0,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 13.6,
+    "max_pitch_moment_g_cm": 38.0,
+    "own_pitch_moment_g_cm": 3.8
+  },
+  "cherry": {
+    "title": "Cherry",
+    "pieces": {
+      "cherry": {
+        "slot": "front-centre",
+        "tab_press_fit_mm3": 0.15
+      }
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 0.84,
+    "mass_g": 1.0,
+    "triangles": 5204,
+    "size_mm": [
+      20.67,
+      26.85,
+      4.0
+    ],
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 265.6,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 13.6,
+    "max_pitch_moment_g_cm": 38.2,
+    "own_pitch_moment_g_cm": 4.0
+  },
+  "umeboshi": {
+    "title": "Umeboshi",
+    "pieces": {
+      "umeboshi": {
+        "slot": "front-centre",
+        "tab_press_fit_mm3": 0.15
+      }
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 0.73,
+    "mass_g": 0.9,
+    "triangles": 2000,
+    "size_mm": [
+      15.98,
+      17.18,
+      3.2
+    ],
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 232.0,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 13.4,
+    "max_pitch_moment_g_cm": 37.4,
+    "own_pitch_moment_g_cm": 3.2
+  },
   "palm-tree": {
     "title": "Palm tree",
     "pieces": {
@@ -1291,6 +1819,29 @@
     "printed_mass_g": 40.5,
     "max_pitch_moment_g_cm": 149.3,
     "lowest_z_in_motion_mm": -49.26
+  },
+  "shell-house-roof": {
+    "title": "House roof (head as house)",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.22,
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 111.37,
+    "mass_g": 138.1,
+    "triangles": 2802,
+    "size_mm": [
+      75.79,
+      52.27,
+      65.2
+    ],
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 1957.1,
+    "overhang_mm2": 0.07,
+    "allowed_pitch_deg": 87.0,
+    "pitch_limited_by": "full range",
+    "printed_mass_g": 32.5,
+    "max_pitch_moment_g_cm": 123.2,
+    "lowest_z_in_motion_mm": -56.83
   },
   "shell-tofu": {
     "title": "Tofu with soy sauce",
@@ -1513,6 +2064,38 @@
       "dog-ears"
     ],
     [
+      "drape-soy-sauce",
+      "dog-ears"
+    ],
+    [
+      "drape-soy-sauce",
+      "dragon-wings"
+    ],
+    [
+      "drape-caramel",
+      "dog-ears"
+    ],
+    [
+      "drape-caramel",
+      "dragon-wings"
+    ],
+    [
+      "drape-nori-band",
+      "dog-ears"
+    ],
+    [
+      "drape-nori-wrap",
+      "dog-ears"
+    ],
+    [
+      "drape-nori-wrap",
+      "dragon-wings"
+    ],
+    [
+      "drape-sakura-leaf",
+      "dog-ears"
+    ],
+    [
       "cat-ears",
       "ribbon"
     ],
@@ -1535,6 +2118,18 @@
     [
       "cat-ears",
       "chick"
+    ],
+    [
+      "cat-ears",
+      "yakumi"
+    ],
+    [
+      "cat-ears",
+      "cherry"
+    ],
+    [
+      "cat-ears",
+      "umeboshi"
     ],
     [
       "cat-ears",
@@ -1563,6 +2158,10 @@
     [
       "dog-ears",
       "chick"
+    ],
+    [
+      "dog-ears",
+      "yakumi"
     ],
     [
       "rabbit-ears",
@@ -1598,6 +2197,14 @@
     ],
     [
       "rabbit-ears",
+      "yakumi"
+    ],
+    [
+      "rabbit-ears",
+      "cherry"
+    ],
+    [
+      "rabbit-ears",
       "palm-tree"
     ],
     [
@@ -1629,6 +2236,10 @@
       "chick"
     ],
     [
+      "bear-ears",
+      "yakumi"
+    ],
+    [
       "fox-ears",
       "ribbon"
     ],
@@ -1655,6 +2266,18 @@
     [
       "fox-ears",
       "chick"
+    ],
+    [
+      "fox-ears",
+      "yakumi"
+    ],
+    [
+      "fox-ears",
+      "cherry"
+    ],
+    [
+      "fox-ears",
+      "umeboshi"
     ],
     [
       "fox-ears",
@@ -1694,6 +2317,10 @@
     ],
     [
       "mouse-ears",
+      "yakumi"
+    ],
+    [
+      "mouse-ears",
       "palm-tree"
     ],
     [
@@ -1719,6 +2346,10 @@
     [
       "panda-ears",
       "chick"
+    ],
+    [
+      "panda-ears",
+      "yakumi"
     ],
     [
       "frog-eyes",
@@ -1758,6 +2389,18 @@
     ],
     [
       "frog-eyes",
+      "yakumi"
+    ],
+    [
+      "frog-eyes",
+      "cherry"
+    ],
+    [
+      "frog-eyes",
+      "umeboshi"
+    ],
+    [
+      "frog-eyes",
       "palm-tree"
     ],
     [
@@ -1785,6 +2428,10 @@
       "chick"
     ],
     [
+      "pig-ears",
+      "yakumi"
+    ],
+    [
       "sheep-horns",
       "ribbon"
     ],
@@ -1809,6 +2456,10 @@
       "chick"
     ],
     [
+      "sheep-horns",
+      "yakumi"
+    ],
+    [
       "devil-horns",
       "ribbon"
     ],
@@ -1833,6 +2484,10 @@
       "chick"
     ],
     [
+      "devil-horns",
+      "yakumi"
+    ],
+    [
       "heart-antennae",
       "ribbon"
     ],
@@ -1855,6 +2510,10 @@
     [
       "heart-antennae",
       "chick"
+    ],
+    [
+      "heart-antennae",
+      "yakumi"
     ],
     [
       "heart-antennae",
@@ -1883,6 +2542,10 @@
     [
       "ball-antennae",
       "chick"
+    ],
+    [
+      "ball-antennae",
+      "yakumi"
     ],
     [
       "ball-antennae",

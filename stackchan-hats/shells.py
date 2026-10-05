@@ -237,6 +237,23 @@ def house_engraved() -> Shape2D:
     return s
 
 
+def roof() -> Shape2D:
+    """Gable roof only; the head below is the house."""
+    return Shape2D().polygon([(-41.0, 2.0), (41.0, 2.0), (0.0, 40.0)])
+
+
+def roof_raised() -> Shape2D:
+    s = Shape2D()
+    # Eaves along the roof edges and a gable vent, inside the rounded outline.
+    s.bar((-37.5, 0.5), (2.0, 37.0), 3.0)
+    s.bar((37.5, 0.5), (-2.0, 37.0), 3.0)
+    return s.circle((0.0, 20.0), 5.0)
+
+
+def roof_engraved() -> Shape2D:
+    return Shape2D().circle((0.0, 20.0), 3.4)
+
+
 def tofu() -> Shape2D:
     return Shape2D().rect((0, 6.5), 72.0, 39.0)
 
@@ -382,6 +399,8 @@ def bread_raised() -> Shape2D:
 
 SHELLS = [
     Shell("shell-house", "House", house, house_raised, house_engraved),
+    Shell("shell-house-roof", "House roof (head as house)", roof, roof_raised,
+          roof_engraved),
     Shell("shell-tofu", "Tofu with soy sauce", tofu, tofu_raised, tofu_engraved),
     Shell("shell-pudding", "Pudding", pudding, pudding_raised),
     Shell("shell-norimaki", "Norimaki", norimaki, norimaki_raised, norimaki_engraved,

@@ -14,6 +14,7 @@ from OCP.OSD import OSD_ThreadPool
 import numpy as np
 
 import cap
+import drapes
 import head
 import integral
 import shells
@@ -287,12 +288,21 @@ def shell_motion(name: str, solid: cq.Shape) -> dict[str, Any]:
             "lowest_z_in_motion_mm": round(lowest, 2)}
 
 
+def cap_variants():
+    """(key, title, solid) of every part that replaces the cap and keeps its slots."""
+    for variant in integral.VARIANTS:
+        yield variant.key, variant.title, integral.build(variant)
+    for drape in drapes.DRAPES:
+        yield drape.key, drape.title, drapes.build(drape)
+
+
 def worst_combination(report: dict[str, Any], groups: dict[str, str]) -> dict[str, Any]:
     """Upper bound for any combination: one cap and one set per slot group.
 
     The moment of a sum never exceeds the sum of the parts' largest moments.
     """
-    caps = ["cap"] + [v.key for v in integral.VARIANTS]
+    caps = (["cap"] + [v.key for v in integral.VARIANTS]
+            + [d.key for d in drapes.DRAPES])
     heaviest_cap = max(caps, key=lambda k: report[k]["own_pitch_moment_g_cm"])
     chosen: dict[str, str] = {}
     for key, group in groups.items():
@@ -353,14 +363,12 @@ def main() -> None:
     # Integral parts of a variant, for overlap checks with plug-in sets.
     worn: dict[str, list[cq.Shape]] = {}
     slots: dict[str, set[str]] = {}
-    for variant in integral.VARIANTS:
-        solid = integral.build(variant)
-        facts = check_cap(solid) | export(cap.to_print(solid), variant.key)
-        report[variant.key] = {"title": variant.title} | facts | motion_facts(
-            variant.key, [solid], [solid])
-        worn[variant.key] = [solid.cut(cap_solid)]
-        slots[variant.key] = {"variant"}
-        print(f"{variant.key}: ok")
+    for key, title, solid in cap_variants():
+        facts = check_cap(solid) | export(cap.to_print(solid), key)
+        report[key] = {"title": title} | facts | motion_facts(key, [solid], [solid])
+        worn[key] = [solid.cut(cap_solid)]
+        slots[key] = {"variant"}
+        print(f"{key}: ok")
 
     keepout = head.envelope(HEAD_GAP, holes=False)
     for topper in toppers.SETS:

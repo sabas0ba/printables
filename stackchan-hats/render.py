@@ -14,6 +14,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 import cap
+import drapes
 import head
 import integral
 import shells
@@ -185,7 +186,8 @@ def worn_meshes(topper: toppers.TopperSet, colour: tuple[int, int, int],
 SMALL_ROWS = ("front", "rear")
 LARGE_KEYS = ("palm-tree",)         # front-row sets too tall for the catalogue grid
 SHELL_COLOURS = {
-    "shell-house": (232, 190, 168), "shell-tofu": (246, 244, 236),
+    "shell-house": (232, 190, 168), "shell-house-roof": (176, 84, 64),
+    "shell-tofu": (246, 244, 236),
     "shell-pudding": (247, 222, 150), "shell-norimaki": (96, 104, 96),
     "shell-sakuramochi": (244, 190, 204), "shell-omurice": (248, 214, 110),
     "shell-onigiri-triangle": (244, 244, 240), "shell-onigiri-round": (244, 244, 240),
@@ -193,12 +195,24 @@ SHELL_COLOURS = {
 }
 # Preview colour of the raised front details; the parts print in one colour.
 RELIEF_COLOURS = {
-    "shell-house": (150, 96, 80), "shell-tofu": (120, 72, 40),
+    "shell-house": (150, 96, 80), "shell-house-roof": (120, 56, 44),
+    "shell-tofu": (120, 72, 40),
     "shell-pudding": (150, 90, 40), "shell-norimaki": (60, 66, 60),
     "shell-sakuramochi": (120, 170, 110), "shell-omurice": (210, 60, 50),
     "shell-onigiri-triangle": (52, 60, 56), "shell-onigiri-round": (52, 60, 56),
     "shell-bread": (196, 140, 80),
 }
+DRAPE_COLOURS = {
+    "drape-soy-sauce": (92, 54, 34), "drape-caramel": (164, 96, 40),
+    "drape-nori-band": (46, 54, 48), "drape-nori-wrap": (46, 54, 48),
+    "drape-sakura-leaf": (122, 168, 98), "drape-crust": (196, 128, 66),
+}
+# Toppings shown with a drape, and their colours.
+DRAPE_TOPPINGS = {"drape-soy-sauce": "yakumi", "drape-caramel": "cherry",
+                  "drape-nori-band": "umeboshi"}
+TOPPING_COLOURS = {"yakumi": (214, 200, 120), "cherry": (198, 40, 52),
+                   "umeboshi": (186, 52, 64)}
+ROOF_KEY = "shell-house-roof"
 RELIEF_SHIFT = cq.Vector(0, -0.05, 0)   # in front of the coincident shell faces
 
 
@@ -326,6 +340,41 @@ def render_shells(proxy: list[Mesh]) -> None:
     canvas.save(IMAGES / "shells.png", optimize=True)
 
 
+def render_drapes(proxy: list[Mesh]) -> None:
+    """Food drapes on the head, with their toppings, and the house roof."""
+    items: list[tuple[str, list[Mesh]]] = []
+    by_key = {t.key: t for t in toppers.SETS}
+    for drape in drapes.DRAPES:
+        meshes = [tessellate(drapes.build(drape), DRAPE_COLOURS[drape.key])]
+        topping = DRAPE_TOPPINGS.get(drape.key)
+        if topping:
+            meshes += [tessellate(full.moved(toppers.placement(piece)),
+                                  TOPPING_COLOURS[topping])
+                       for piece, full, _ in toppers.build_set(by_key[topping])]
+        items.append((drape.title, meshes))
+    roof = next(s for s in shells.SHELLS if s.key == ROOF_KEY)
+    outline = shells.outline_face(roof.silhouette())
+    meshes = [tessellate(shells.build(roof), SHELL_COLOURS[ROOF_KEY])]
+    meshes += [tessellate(r.translate(RELIEF_SHIFT), RELIEF_COLOURS[ROOF_KEY])
+               for r in shells.reliefs(roof, outline)]
+    items.append((roof.title, meshes))
+    columns, size = 4, 400
+    rows = -(-len(items) // columns)
+    canvas = Image.new("RGB", (columns * (size + 12) + 12, rows * (size + 12) + 12),
+                       BACKGROUND)
+    view = (0.55, -1.0, 0.3)
+    right, up, _ = camera(view)
+    corners = np.array([[x, y, z] for x in (-42, 42) for y in (-18, 50)
+                        for z in (-60, 44)])
+    bounds = (np.array([corners @ right, corners @ up]).min(1),
+              np.array([corners @ right, corners @ up]).max(1))
+    for index, (title, meshes) in enumerate(items):
+        x = 12 + (index % columns) * (size + 12)
+        y = 12 + (index // columns) * (size + 12)
+        draw(canvas, proxy + meshes, (x, y, size, size), view, title, bounds, 12)
+    canvas.save(IMAGES / "drapes.png", optimize=True)
+
+
 def render_motion(head_meshes: list[Mesh], body: list[Mesh], cap_solid: cq.Shape) -> None:
     """Side views over the pitch range with large pieces worn."""
     colour = PALETTE[4]
@@ -362,6 +411,7 @@ def main() -> None:
     render_catalogue(proxy, cap_solid)
     render_large(proxy, cap_solid)
     render_shells(proxy)
+    render_drapes(proxy)
     render_motion(head_meshes, body, cap_solid)
 
 

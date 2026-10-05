@@ -820,6 +820,52 @@ def palm_grooves() -> Shape2D:
     return s
 
 
+# Toppings for the food drapes (drapes.py).
+
+def yakumi() -> Shape2D:
+    """Grated ginger and sliced spring onion for the soy sauce drape."""
+    s = Shape2D().mound(16, 3.4)
+    s.ellipse((-4.0, 6.0), 7.5, 5.0)
+    for centre in YAKUMI_ONIONS:
+        s.circle(centre, 3.4)
+    return s
+
+
+YAKUMI_ONIONS = ((4.0, 6.5), (7.5, 11.5), (0.5, 12.0))
+
+
+def yakumi_rings() -> Shape2D:
+    """Engraved onion rings; concentric raised rings defeat the 2D rounding."""
+    s = Shape2D()
+    for centre in YAKUMI_ONIONS:
+        s.circle(centre, 2.4).circle(centre, 1.4, mode="s")
+    return s
+
+
+def cherry() -> Shape2D:
+    """Cherry with its stem and a leaf, for the caramel drape."""
+    s = Shape2D().mound(16, 3.4)
+    s.circle((-1.0, 8.0), 6.4)
+    s.bar((0.0, 12.0), (4.0, 24.0), 2.6)
+    return s.ellipse((8.0, 21.0), 5.0, 2.6, 25.0)
+
+
+def cherry_shine() -> Shape2D:
+    return Shape2D().ellipse((-3.6, 10.0), 1.6, 1.0, 40.0)
+
+
+def umeboshi() -> Shape2D:
+    """Pickled plum for the nori band drape."""
+    return Shape2D().mound(16, 3.4).ellipse((0.0, 7.5), 8.0, 7.0)
+
+
+def umeboshi_creases() -> Shape2D:
+    s = Shape2D()
+    s.bar((-4.5, 9.5), (-1.5, 11.0), 0.8)
+    s.bar((1.0, 4.5), (4.0, 6.5), 0.8)
+    return s
+
+
 # --------------------------------------------------------------------------
 
 def pair(name: str, outline, raised=None, engraved=None, row: str = "front",
@@ -886,6 +932,12 @@ SETS: list[TopperSet] = [
                                                      engraved=unicorn_grooves,
                                                      fillet=1.2)),
     TopperSet("halo", "Halo", centre("halo", halo, row="rear", fillet=1.0)),
+    TopperSet("yakumi", "Ginger and spring onion",
+              centre("yakumi", yakumi, engraved=yakumi_rings, fillet=1.0, blend=1.2)),
+    TopperSet("cherry", "Cherry", centre("cherry", cherry, raised=cherry_shine,
+                                         fillet=1.0, blend=1.2)),
+    TopperSet("umeboshi", "Umeboshi", centre("umeboshi", umeboshi,
+                                             engraved=umeboshi_creases, fillet=1.2)),
     TopperSet("palm-tree", "Palm tree", centre("palm-tree", palm_tree,
                                                raised=palm_coconuts,
                                                engraved=palm_grooves, fillet=1.0,
