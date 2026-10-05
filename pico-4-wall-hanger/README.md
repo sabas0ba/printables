@@ -7,11 +7,14 @@ Two independent panels that hang on L- or J-shaped wall hooks, two hooks per pan
 - [`generate.py`](generate.py): parametric CadQuery source, dimensions in mm.
 - [`views.png`](views.png): front and side views in use, and each part in print orientation.
 - [`preview.png`](preview.png): both modules on a wall, with schematic hooks.
+- [`usage.png`](usage.png): both modules with simplified stand-ins for the headset, the controllers and five trackers, in an oblique view and side views. The stand-ins are boxes, ellipsoids and tori sized from the sources and assumptions below; they show the intended placement, not the product shapes.
 - [`render.py`](render.py): deterministic offline rendering script.
 
 ![Both modules hanging on wall hooks](preview.png)
 
 ![Front, side and print-orientation views](views.png)
+
+![Modules in use with simplified device stand-ins](usage.png)
 
 ## Hooks and mounting
 

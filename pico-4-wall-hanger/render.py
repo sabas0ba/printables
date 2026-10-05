@@ -3,7 +3,9 @@
 The STLs are stored in print orientation. They are turned back into the use
 orientation of generate.py (x along the wall, y toward the user, z up,
 panel top edge at z=0, panel back face at y=0) and shown on a wall with
-schematic L-shaped hooks.
+schematic L-shaped hooks. usage.png adds simplified stand-ins for the headset,
+the controllers and the trackers, built from boxes, ellipsoids and tori; they
+show the intended placement, not the product shapes.
 """
 
 from pathlib import Path
@@ -28,6 +30,17 @@ SLOT_WIDTHS = (8.0, 14.0)
 HOOK_SIZE = 6.0
 HOOK_SHANK = 10.0
 HOOK_TIP = 12.0
+# Must match generate.py: arm top, controller and tracker pegs.
+ARM_TOP = -70.0
+CONTROLLER_PEG_X = (-55.0, 55.0)
+CONTROLLER_PEG_TOP = -63.0
+TRACKER_PEG_X = (-88.0, -44.0, 0.0, 44.0, 88.0)
+TRACKER_PEG_TOP = -200.0
+PEG_SLOPE = np.tan(np.radians(12.0))
+PANEL_THICKNESS = 6.0
+DEVICE_COLOR = (64, 69, 76)
+VISOR_COLOR = (238, 240, 242)
+STRAP_COLOR = (96, 102, 110)
 WALL_THICKNESS = 12.0
 WALL_MARGIN = 60.0
 MODULE_GAP = 40.0
@@ -69,6 +82,143 @@ def box_mesh(x0, x1, y0, y1, z0, z1):
         triangles += [corners[[a, b, c]], corners[[a, c, d]]]
         normals += [normal, normal]
     return np.array(triangles, dtype=np.float64), np.array(normals, dtype=np.float64)
+
+
+def oriented_box(center, axes, color):
+    """Box with the given centre and three orthogonal half-axis vectors."""
+    center = np.asarray(center, dtype=np.float64)
+    axes = [np.asarray(a, dtype=np.float64) for a in axes]
+    triangles, normals = [], []
+    for i in range(3):
+        a, b, c = axes[i], axes[(i + 1) % 3], axes[(i + 2) % 3]
+        for sign in (1.0, -1.0):
+            face = center + sign * a
+            p = [face - b - c, face + b - c, face + b + c, face - b + c]
+            if sign < 0:
+                p = p[::-1]
+            normal = sign * a / np.linalg.norm(a)
+            if np.dot(np.cross(p[1] - p[0], p[2] - p[0]), normal) < 0:
+                p = p[::-1]
+            triangles += [[p[0], p[1], p[2]], [p[0], p[2], p[3]]]
+            normals += [normal, normal]
+    return np.array(triangles), np.array(normals), np.array(color)
+
+
+def parametric_mesh(point, normal, u_range, v_range, color, nu=36, nv=18):
+    """Triangulate point(u, v) with analytic outward normals normal(u, v)."""
+    us = np.linspace(*u_range, nu + 1)
+    vs = np.linspace(*v_range, nv + 1)
+    grid = np.array([[point(u, v) for v in vs] for u in us])
+    triangles, normals = [], []
+    for i in range(nu):
+        for j in range(nv):
+            a, b = grid[i, j], grid[i + 1, j]
+            c, d = grid[i + 1, j + 1], grid[i, j + 1]
+            n = np.asarray(normal((us[i] + us[i + 1]) / 2, (vs[j] + vs[j + 1]) / 2))
+            n = n / np.linalg.norm(n)
+            triangles += [[a, b, c], [a, c, d]]
+            normals += [n, n]
+    return np.array(triangles), np.array(normals), np.array(color)
+
+
+def ellipsoid(center, semi_axes, color, frame=np.eye(3)):
+    center = np.asarray(center, dtype=np.float64)
+    a, b, c = semi_axes
+    e1, e2, e3 = frame
+
+    def point(u, v):
+        return center + a * np.cos(v) * np.cos(u) * e1 + b * np.cos(v) * np.sin(u) * e2 \
+            + c * np.sin(v) * e3
+
+    def normal(u, v):
+        return np.cos(v) * np.cos(u) / a * e1 + np.cos(v) * np.sin(u) / b * e2 \
+            + np.sin(v) / c * e3
+
+    return parametric_mesh(point, normal, (0, 2 * np.pi), (-np.pi / 2, np.pi / 2), color)
+
+
+def torus(center, major, minor, color):
+    """Ring in the x-z plane, parallel to the wall."""
+    center = np.asarray(center, dtype=np.float64)
+    e1, e2, n = np.eye(3)[0], np.eye(3)[2], np.eye(3)[1]
+
+    def radial(u):
+        return np.cos(u) * e1 + np.sin(u) * e2
+
+    def point(u, v):
+        return center + (major + minor * np.cos(v)) * radial(u) + minor * np.sin(v) * n
+
+    def normal(u, v):
+        return np.cos(v) * radial(u) + np.sin(v) * n
+
+    return parametric_mesh(point, normal, (0, 2 * np.pi), (0, 2 * np.pi), color, 48, 12)
+
+
+def strap(start, end, width, thickness, across, color):
+    """Flat band from start to end; across is the direction of its width."""
+    start, end = np.asarray(start, dtype=np.float64), np.asarray(end, dtype=np.float64)
+    along = (end - start) / 2
+    across = np.asarray(across, dtype=np.float64)
+    across = across - np.dot(across, along) / np.dot(along, along) * along
+    across = across / np.linalg.norm(across)
+    through = np.cross(along, across)
+    through = through / np.linalg.norm(through)
+    return oriented_box((start + end) / 2,
+                        (along, across * width / 2, through * thickness / 2), color)
+
+
+def headset_stand_in(x_offset):
+    """Battery pack on the arm, side straps and the visor leaning on the rib.
+
+    The visor is 195 mm wide (PICO 4 Enterprise specification); the strap
+    run from the battery pack to the visor is assumed to be 150 mm.
+    """
+    x = x_offset
+    battery = ellipsoid((x, 38.0, ARM_TOP + 18.0), (45.0, 20.0, 18.0), DEVICE_COLOR)
+    visor = oriented_box((x, 71.0, -250.0),
+                         ((97.5, 0, 0), (0, 49.0, 0), (0, 0, 50.0)), VISOR_COLOR)
+    meshes = [battery, visor]
+    for side in (-1.0, 1.0):
+        meshes.append(strap((x + side * 40.0, 38.0, ARM_TOP + 14.0),
+                            (x + side * 88.0, 60.0, -200.0),
+                            30.0, 4.0, (0, 1, 0), STRAP_COLOR))
+    return meshes
+
+
+def controller_stand_ins(x_offset):
+    """Tracking ring hanging on each peg, grip below; 134.7 mm tall in total."""
+    meshes = []
+    ring_y = 30.0
+    peg_top = CONTROLLER_PEG_TOP + (ring_y - PANEL_THICKNESS) * PEG_SLOPE
+    major, minor = 32.0, 4.5
+    for x_peg in CONTROLLER_PEG_X:
+        x = x_offset + x_peg
+        ring_z = peg_top - (major - minor)
+        meshes.append(torus((x, ring_y, ring_z), major, minor, DEVICE_COLOR))
+        top = ring_z + major + minor
+        grip_semi = (134.7 - (top - (ring_z - major))) / 2 + 10.0
+        grip_z = top - 134.7 + grip_semi
+        meshes.append(ellipsoid((x, ring_y + 4.0, grip_z), (20.0, 22.0, grip_semi),
+                                DEVICE_COLOR))
+    return meshes
+
+
+def tracker_stand_ins(x_offset):
+    """Strap loop over each peg and an assumed 38 x 38 x 14 mm tracker below."""
+    meshes = []
+    for x_peg in TRACKER_PEG_X:
+        x = x_offset + x_peg
+        top = TRACKER_PEG_TOP + (18.0 - PANEL_THICKNESS) * PEG_SLOPE + 1.0
+        meshes.append(oriented_box((x, 18.0, top), ((8.0, 0, 0), (0, 8.0, 0), (0, 0, 1.0)),
+                                   STRAP_COLOR))
+        for side in (-1.0, 1.0):
+            meshes.append(oriented_box((x + side * 7.0, 18.0, top - 13.0),
+                                       ((1.0, 0, 0), (0, 8.0, 0), (0, 0, 13.0)),
+                                       STRAP_COLOR))
+        meshes.append(oriented_box((x, 18.0, top - 26.0 - 19.0),
+                                   ((19.0, 0, 0), (0, 7.0, 0), (0, 0, 19.0)),
+                                   DEVICE_COLOR))
+    return meshes
 
 
 def font(size):
@@ -202,6 +352,30 @@ def render_preview(headset, accessories):
     canvas.save(DIRECTORY / "preview.png", optimize=True)
 
 
+def render_usage(headset, accessories):
+    left_width, right_width = headset[2], accessories[2]
+    left_center = -(right_width + MODULE_GAP) / 2
+    right_center = (left_width + MODULE_GAP) / 2
+    left = [part_mesh(headset[0], headset[1], left_center),
+            *hook_meshes(left_center), *headset_stand_in(left_center)]
+    right = [part_mesh(accessories[0], accessories[1], right_center),
+             *hook_meshes(right_center), *controller_stand_ins(right_center),
+             *tracker_stand_ins(right_center)]
+    wall = wall_mesh(left_center - left_width / 2 - WALL_MARGIN,
+                     right_center + right_width / 2 + WALL_MARGIN,
+                     -300.0 - WALL_MARGIN, WALL_MARGIN)
+    canvas = Image.new("RGB", (1600, 1560), "#e9eef0")
+    draw_view(canvas, [*left, *right, wall], (25, 25, 1550, 950),
+              *oblique((-0.45, 0.80, 0.50)),
+              "IN USE  ·  SIMPLIFIED STAND-INS FOR HEADSET, CONTROLLERS AND TRACKERS",
+              padding=70)
+    for column, (name, meshes) in enumerate((("HEADSET MODULE", left),
+                                             ("ACCESSORY MODULE", right))):
+        draw_view(canvas, meshes, (25 + column * 787, 1000, 763, 535),
+                  (0, 1, 0), (0, 0, 1), (1, 0, 0), f"{name}  ·  SIDE", padding=36)
+    canvas.save(DIRECTORY / "usage.png", optimize=True)
+
+
 if __name__ == "__main__":
     loaded = {name: read_binary_stl(DIRECTORY / name)
               for name in ("headset.stl", "accessories.stl")}
@@ -210,3 +384,4 @@ if __name__ == "__main__":
     accessories = to_use_orientation(*loaded["accessories.stl"])
     render_views(headset, accessories, printed)
     render_preview(headset, accessories)
+    render_usage(headset, accessories)

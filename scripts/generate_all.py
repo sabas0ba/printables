@@ -17,7 +17,8 @@ MODELS = {
     "raspberry-pi-5-nvme-case": ("tray.stl", "lid.stl", "reference-assembly.stl",
                                  "views.png", "preview.png", "section.png"),
     "thinkpad-e14-stand": ("stand.stl", "views.png", "preview.png", "usage.png"),
-    "pico-4-wall-hanger": ("headset.stl", "accessories.stl", "views.png", "preview.png"),
+    "pico-4-wall-hanger": ("headset.stl", "accessories.stl", "views.png", "preview.png",
+                           "usage.png"),
 }
 OUTPUTS = [ROOT / model / name for model, names in MODELS.items() for name in names]
 
