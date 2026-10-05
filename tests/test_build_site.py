@@ -126,6 +126,9 @@ class DesignTest(FixtureRepository):
         self.assertEqual(design.slug, "example")
         self.assertEqual(design.printed_parts, 2)
         self.assertEqual(design.printed_files, 1)
+        self.assertEqual(design.optional_files, 1)
+        self.assertEqual(build_site.parts_summary(design),
+                         "2 printed parts from 1 STL file, 1 optional or reference")
 
     def test_missing_part_file_is_an_error(self) -> None:
         (self.root / "example/part.stl").unlink()
@@ -135,7 +138,7 @@ class DesignTest(FixtureRepository):
     def test_readme_table(self) -> None:
         design = build_site.load_design(self.root / "example")
         table = build_site.readme_table([design])
-        self.assertIn("| [Example](example/README.md) | 1 STL (2 prints), CadQuery source "
+        self.assertIn("| [Example](example/README.md) | 1 STL (2 prints) + 1 optional or reference, CadQuery source "
                       "| Example design; prototype |", table)
         readme = f"before\n{build_site.README_START}\nold\n{build_site.README_END}\nafter\n"
         self.assertEqual(build_site.replace_readme_table(readme, table),
