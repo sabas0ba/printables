@@ -2,7 +2,8 @@
 
 The cap is modelled in head coordinates (see head.py) and exported upside
 down: its top surface is the print bed, so it needs no supports. Decorations
-plug into the six through-slots in the top plate.
+plug into the nine through-slots in the top plate. Variants add integral
+features through ``make_cap(extras)``.
 """
 
 import math
@@ -42,8 +43,13 @@ TAB_THICKNESS = 3.2          # equals the topper plate thickness
 TAB_DEPTH = PLATE - 0.3      # tab stops short of the head surface
 SLOT_LENGTH = TAB_LENGTH + 0.3
 SLOT_WIDTH = TAB_THICKNESS + 0.2
-SLOT_X = {"left": -16.0, "centre": 0.0, "right": 16.0}
-SLOT_Y = {"front": 12.0, "rear": 32.0}
+# (row, position) -> (x, y, rotation about z in degrees). Rotation 0 puts
+# the slot length along x; the tail slot runs along y.
+SLOTS = {(row, position): (x, y, 0.0)
+         for row, y in (("front", 12.0), ("rear", 32.0))
+         for position, x in (("left", -16.0), ("centre", 0.0), ("right", 16.0))}
+SLOTS |= {("wing", "left"): (-16.0, 44.0, 0.0), ("wing", "right"): (16.0, 44.0, 0.0),
+          ("tail", "centre"): (0.0, 40.7, 90.0)}
 
 INNER_HALF = head.HEAD_WIDTH / 2 + CLEARANCE      # 27.3
 OUTER_HALF = INNER_HALF + SKIRT                   # 28.9
@@ -91,7 +97,8 @@ def prism_y(points: list[tuple[float, float]], y0: float, y1: float) -> cq.Solid
     return head.extrude_y(cq.Workplane("XZ").polyline(points).close(), y0, y1)
 
 
-def make_cap() -> cq.Solid:
+def make_cap(extras: list[cq.Shape] | None = None) -> cq.Solid:
+    """Build the cap; extras are fused before slots and windows are cut."""
     cap = head.extrude_y(outer_profile(), FRONT, REAR)
 
     # Plan-view rounding of the four corners.
@@ -116,6 +123,11 @@ def make_cap() -> cq.Solid:
     cap = cap.cut(prism_x([(REAR + 1, TOP + 1), (REAR - e - 1, TOP + 1),
                            (REAR + 1, TOP - e - 1)]))
 
+    for extra in extras or []:
+        cap = cap.fuse(extra)
+    if extras:
+        cap = cap.cut(head.envelope(CLEARANCE, holes=False))
+
     for side in (-1, 1):
         inner = side * INNER_HALF
         # Lead-in chamfer along the skirt's inner lower edge.
@@ -127,11 +139,11 @@ def make_cap() -> cq.Solid:
         hole_y = head.SIDE_HOLE_Y[1]
         for dy in (-FLEX_HALF_WIDTH, FLEX_HALF_WIDTH):
             y = hole_y + dy
-            cap = cap.cut(box(*span(inner - side * 1, inner + side * 3),
+            cap = cap.cut(box(*span(inner - side * 1, inner + side * (SKIRT + 0.4)),
                               y - FLEX_SLIT / 2, y + FLEX_SLIT / 2,
                               SKIRT_BOTTOM - 1, FLEX_TOP))
             cap = cap.cut(cq.Solid.makeCylinder(
-                FLEX_SLIT / 2, 6, cq.Vector(inner - side * 1.5, y, FLEX_TOP),
+                FLEX_SLIT / 2, SKIRT + 1.9, cq.Vector(inner - side * 1.5, y, FLEX_TOP),
                 cq.Vector(side, 0, 0)))
         # Spherical detent on the inner skirt face.
         centre = cq.Vector(inner + side * (DETENT_SPHERE - DETENT_HEIGHT),
@@ -149,10 +161,11 @@ def make_cap() -> cq.Solid:
                   .extrude(10).val())
         cap = cap.cut(window)
 
-    for y in SLOT_Y.values():
-        for x in SLOT_X.values():
-            cap = cap.cut(box(x - SLOT_LENGTH / 2, x + SLOT_LENGTH / 2,
-                              y - SLOT_WIDTH / 2, y + SLOT_WIDTH / 2, -1, TOP + 1))
+    for x, y, angle in SLOTS.values():
+        slot = box(-SLOT_LENGTH / 2, SLOT_LENGTH / 2, -SLOT_WIDTH / 2, SLOT_WIDTH / 2,
+                   -1, TOP + 1)
+        slot = slot.rotate(cq.Vector(0, 0, 0), cq.Vector(0, 0, 1), angle)
+        cap = cap.cut(slot.translate(cq.Vector(x, y, 0)))
     if not cap.isValid() or len(cap.Solids()) != 1:
         raise ValueError("The cap is not a valid single solid")
     return cap

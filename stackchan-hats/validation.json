@@ -8,28 +8,370 @@
       3.4000000000000004,
       3.0
     ],
-    "slot_x_mm": [
-      -16.0,
-      0.0,
-      16.0
-    ],
-    "slot_y_mm": [
-      12.0,
-      32.0
-    ],
+    "slots": {
+      "front-left": [
+        -16.0,
+        12.0,
+        0.0
+      ],
+      "front-centre": [
+        0.0,
+        12.0,
+        0.0
+      ],
+      "front-right": [
+        16.0,
+        12.0,
+        0.0
+      ],
+      "rear-left": [
+        -16.0,
+        32.0,
+        0.0
+      ],
+      "rear-centre": [
+        0.0,
+        32.0,
+        0.0
+      ],
+      "rear-right": [
+        16.0,
+        32.0,
+        0.0
+      ],
+      "wing-left": [
+        -16.0,
+        44.0,
+        0.0
+      ],
+      "wing-right": [
+        16.0,
+        44.0,
+        0.0
+      ],
+      "tail-centre": [
+        0.0,
+        40.7,
+        90.0
+      ]
+    },
     "solids": 1,
     "valid": true,
-    "volume_cm3": 10.47,
-    "mass_g": 13.0,
-    "triangles": 1708,
+    "volume_cm3": 10.1,
+    "mass_g": 12.5,
+    "triangles": 1780,
     "size_mm": [
       57.8,
       59.6,
       16.3
     ],
     "min_z_mm": -0.0,
-    "bed_contact_mm2": 2662.0,
-    "overhang_mm2": 0.0
+    "bed_contact_mm2": 2536.5,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 12.5,
+    "max_pitch_moment_g_cm": 34.2,
+    "own_pitch_moment_g_cm": 34.2
+  },
+  "cap-bat-wings": {
+    "title": "Cap with folded bat wings",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.64,
+    "radial_clearance_mm": 0.3,
+    "slot_mm": [
+      12.3,
+      3.4000000000000004,
+      3.0
+    ],
+    "slots": {
+      "front-left": [
+        -16.0,
+        12.0,
+        0.0
+      ],
+      "front-centre": [
+        0.0,
+        12.0,
+        0.0
+      ],
+      "front-right": [
+        16.0,
+        12.0,
+        0.0
+      ],
+      "rear-left": [
+        -16.0,
+        32.0,
+        0.0
+      ],
+      "rear-centre": [
+        0.0,
+        32.0,
+        0.0
+      ],
+      "rear-right": [
+        16.0,
+        32.0,
+        0.0
+      ],
+      "wing-left": [
+        -16.0,
+        44.0,
+        0.0
+      ],
+      "wing-right": [
+        16.0,
+        44.0,
+        0.0
+      ],
+      "tail-centre": [
+        0.0,
+        40.7,
+        90.0
+      ]
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 22.19,
+    "mass_g": 27.5,
+    "triangles": 2932,
+    "size_mm": [
+      67.0,
+      59.6,
+      53.71
+    ],
+    "min_z_mm": -0.0,
+    "bed_contact_mm2": 3056.6,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 27.5,
+    "max_pitch_moment_g_cm": 46.1,
+    "own_pitch_moment_g_cm": 46.1
+  },
+  "cap-lop-ears": {
+    "title": "Cap with lop ears",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.64,
+    "radial_clearance_mm": 0.3,
+    "slot_mm": [
+      12.3,
+      3.4000000000000004,
+      3.0
+    ],
+    "slots": {
+      "front-left": [
+        -16.0,
+        12.0,
+        0.0
+      ],
+      "front-centre": [
+        0.0,
+        12.0,
+        0.0
+      ],
+      "front-right": [
+        16.0,
+        12.0,
+        0.0
+      ],
+      "rear-left": [
+        -16.0,
+        32.0,
+        0.0
+      ],
+      "rear-centre": [
+        0.0,
+        32.0,
+        0.0
+      ],
+      "rear-right": [
+        16.0,
+        32.0,
+        0.0
+      ],
+      "wing-left": [
+        -16.0,
+        44.0,
+        0.0
+      ],
+      "wing-right": [
+        16.0,
+        44.0,
+        0.0
+      ],
+      "tail-centre": [
+        0.0,
+        40.7,
+        90.0
+      ]
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 14.29,
+    "mass_g": 17.7,
+    "triangles": 2132,
+    "size_mm": [
+      67.0,
+      59.6,
+      48.29
+    ],
+    "min_z_mm": -0.0,
+    "bed_contact_mm2": 2718.5,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 17.7,
+    "max_pitch_moment_g_cm": 38.5,
+    "own_pitch_moment_g_cm": 38.5
+  },
+  "cap-lion-mane": {
+    "title": "Cap with lion mane",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.64,
+    "radial_clearance_mm": 0.3,
+    "slot_mm": [
+      12.3,
+      3.4000000000000004,
+      3.0
+    ],
+    "slots": {
+      "front-left": [
+        -16.0,
+        12.0,
+        0.0
+      ],
+      "front-centre": [
+        0.0,
+        12.0,
+        0.0
+      ],
+      "front-right": [
+        16.0,
+        12.0,
+        0.0
+      ],
+      "rear-left": [
+        -16.0,
+        32.0,
+        0.0
+      ],
+      "rear-centre": [
+        0.0,
+        32.0,
+        0.0
+      ],
+      "rear-right": [
+        16.0,
+        32.0,
+        0.0
+      ],
+      "wing-left": [
+        -16.0,
+        44.0,
+        0.0
+      ],
+      "wing-right": [
+        16.0,
+        44.0,
+        0.0
+      ],
+      "tail-centre": [
+        0.0,
+        40.7,
+        90.0
+      ]
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 18.55,
+    "mass_g": 23.0,
+    "triangles": 2952,
+    "size_mm": [
+      105.23,
+      66.4,
+      64.18
+    ],
+    "min_z_mm": -0.0,
+    "bed_contact_mm2": 3248.0,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -60.88,
+    "worn_mass_g": 23.0,
+    "max_pitch_moment_g_cm": 36.8,
+    "own_pitch_moment_g_cm": 36.8
+  },
+  "cap-petal-frame": {
+    "title": "Cap with petal frame",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.64,
+    "radial_clearance_mm": 0.3,
+    "slot_mm": [
+      12.3,
+      3.4000000000000004,
+      3.0
+    ],
+    "slots": {
+      "front-left": [
+        -16.0,
+        12.0,
+        0.0
+      ],
+      "front-centre": [
+        0.0,
+        12.0,
+        0.0
+      ],
+      "front-right": [
+        16.0,
+        12.0,
+        0.0
+      ],
+      "rear-left": [
+        -16.0,
+        32.0,
+        0.0
+      ],
+      "rear-centre": [
+        0.0,
+        32.0,
+        0.0
+      ],
+      "rear-right": [
+        16.0,
+        32.0,
+        0.0
+      ],
+      "wing-left": [
+        -16.0,
+        44.0,
+        0.0
+      ],
+      "wing-right": [
+        16.0,
+        44.0,
+        0.0
+      ],
+      "tail-centre": [
+        0.0,
+        40.7,
+        90.0
+      ]
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 18.75,
+    "mass_g": 23.3,
+    "triangles": 2712,
+    "size_mm": [
+      105.26,
+      66.4,
+      63.8
+    ],
+    "min_z_mm": -0.0,
+    "bed_contact_mm2": 3254.5,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -60.5,
+    "worn_mass_g": 23.3,
+    "max_pitch_moment_g_cm": 37.1,
+    "own_pitch_moment_g_cm": 37.1
   },
   "cat-ears": {
     "title": "Cat ears",
@@ -55,7 +397,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 346.1,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 13.8,
+    "max_pitch_moment_g_cm": 38.6,
+    "own_pitch_moment_g_cm": 4.4
   },
   "dog-ears": {
     "title": "Dog ears (floppy)",
@@ -81,7 +427,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 724.1,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 15.3,
+    "max_pitch_moment_g_cm": 42.7,
+    "own_pitch_moment_g_cm": 8.5
   },
   "rabbit-ears": {
     "title": "Rabbit ears",
@@ -107,7 +457,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 915.4,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 15.9,
+    "max_pitch_moment_g_cm": 50.0,
+    "own_pitch_moment_g_cm": 15.8
   },
   "bear-ears": {
     "title": "Bear ears",
@@ -133,7 +487,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 550.8,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 14.6,
+    "max_pitch_moment_g_cm": 41.6,
+    "own_pitch_moment_g_cm": 7.4
   },
   "fox-ears": {
     "title": "Fox ears",
@@ -159,7 +517,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 504.3,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 14.4,
+    "max_pitch_moment_g_cm": 40.9,
+    "own_pitch_moment_g_cm": 6.7
   },
   "mouse-ears": {
     "title": "Mouse ears",
@@ -185,7 +547,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 892.9,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 15.7,
+    "max_pitch_moment_g_cm": 46.8,
+    "own_pitch_moment_g_cm": 12.6
   },
   "panda-ears": {
     "title": "Panda ears",
@@ -211,7 +577,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 439.1,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 14.4,
+    "max_pitch_moment_g_cm": 40.6,
+    "own_pitch_moment_g_cm": 6.4
   },
   "frog-eyes": {
     "title": "Frog eyes",
@@ -237,7 +607,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 552.7,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 14.8,
+    "max_pitch_moment_g_cm": 42.4,
+    "own_pitch_moment_g_cm": 8.2
   },
   "pig-ears": {
     "title": "Pig ears",
@@ -263,7 +637,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 319.7,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 13.7,
+    "max_pitch_moment_g_cm": 38.1,
+    "own_pitch_moment_g_cm": 3.9
   },
   "sheep-horns": {
     "title": "Sheep horns",
@@ -289,7 +667,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 598.7,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 14.8,
+    "max_pitch_moment_g_cm": 42.5,
+    "own_pitch_moment_g_cm": 8.3
   },
   "devil-horns": {
     "title": "Devil horns",
@@ -315,7 +697,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 263.3,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 13.5,
+    "max_pitch_moment_g_cm": 37.6,
+    "own_pitch_moment_g_cm": 3.4
   },
   "heart-antennae": {
     "title": "Heart antennae",
@@ -341,7 +727,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 409.6,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 14.1,
+    "max_pitch_moment_g_cm": 40.4,
+    "own_pitch_moment_g_cm": 6.2
   },
   "ball-antennae": {
     "title": "Ball antennae",
@@ -367,7 +757,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 352.2,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 13.9,
+    "max_pitch_moment_g_cm": 39.4,
+    "own_pitch_moment_g_cm": 5.2
   },
   "angel-wings": {
     "title": "Angel wings",
@@ -393,7 +787,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 542.5,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 14.6,
+    "max_pitch_moment_g_cm": 42.0,
+    "own_pitch_moment_g_cm": 8.1
   },
   "ribbon": {
     "title": "Ribbon",
@@ -415,7 +813,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 395.4,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 14.1,
+    "max_pitch_moment_g_cm": 39.8,
+    "own_pitch_moment_g_cm": 5.6
   },
   "crown": {
     "title": "Crown",
@@ -437,7 +839,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 426.8,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 14.2,
+    "max_pitch_moment_g_cm": 40.4,
+    "own_pitch_moment_g_cm": 6.2
   },
   "flower": {
     "title": "Flower",
@@ -459,7 +865,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 453.1,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 14.3,
+    "max_pitch_moment_g_cm": 42.0,
+    "own_pitch_moment_g_cm": 7.8
   },
   "sprout": {
     "title": "Sprout",
@@ -481,7 +891,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 248.6,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 13.5,
+    "max_pitch_moment_g_cm": 37.9,
+    "own_pitch_moment_g_cm": 3.7
   },
   "ahoge": {
     "title": "Hair curl",
@@ -503,7 +917,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 189.2,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 13.2,
+    "max_pitch_moment_g_cm": 37.0,
+    "own_pitch_moment_g_cm": 2.8
   },
   "star-wand": {
     "title": "Star antenna",
@@ -525,7 +943,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 237.3,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 13.5,
+    "max_pitch_moment_g_cm": 38.2,
+    "own_pitch_moment_g_cm": 4.0
   },
   "witch-hat": {
     "title": "Witch hat",
@@ -547,7 +969,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 384.8,
-    "overhang_mm2": 0.04
+    "overhang_mm2": 0.04,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 14.1,
+    "max_pitch_moment_g_cm": 39.9,
+    "own_pitch_moment_g_cm": 5.7
   },
   "santa-hat": {
     "title": "Santa hat",
@@ -569,7 +995,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 585.3,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 14.9,
+    "max_pitch_moment_g_cm": 43.7,
+    "own_pitch_moment_g_cm": 9.5
   },
   "chick": {
     "title": "Chick",
@@ -591,7 +1021,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 398.6,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 14.1,
+    "max_pitch_moment_g_cm": 40.4,
+    "own_pitch_moment_g_cm": 6.2
   },
   "unicorn-horn": {
     "title": "Unicorn horn",
@@ -613,7 +1047,11 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 173.2,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 13.2,
+    "max_pitch_moment_g_cm": 36.5,
+    "own_pitch_moment_g_cm": 2.3
   },
   "halo": {
     "title": "Halo",
@@ -635,104 +1073,561 @@
     ],
     "min_z_mm": 0.0,
     "bed_contact_mm2": 264.6,
-    "overhang_mm2": 0.0
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 13.5,
+    "max_pitch_moment_g_cm": 38.5,
+    "own_pitch_moment_g_cm": 4.4
   },
-  "compatible_centre_pieces": {
-    "cat-ears": [
-      "sprout",
-      "ahoge",
-      "star-wand",
-      "chick",
-      "unicorn-horn",
-      "halo"
+  "large-angel-wings": {
+    "title": "Large angel wings",
+    "pieces": {
+      "large-wing-left": {
+        "slot": "wing-left",
+        "tab_press_fit_mm3": 0.15
+      },
+      "large-wing-right": {
+        "slot": "wing-right",
+        "tab_press_fit_mm3": 0.15
+      }
+    },
+    "solids": 2,
+    "valid": true,
+    "volume_cm3": 6.34,
+    "mass_g": 7.9,
+    "triangles": 17288,
+    "size_mm": [
+      121.57,
+      53.89,
+      3.2
     ],
-    "dog-ears": [
-      "sprout",
-      "ahoge",
-      "star-wand",
-      "unicorn-horn",
-      "halo"
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 3230.3,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 20.4,
+    "max_pitch_moment_g_cm": 70.8,
+    "own_pitch_moment_g_cm": 38.9
+  },
+  "dragon-wings": {
+    "title": "Dragon wings",
+    "pieces": {
+      "dragon-wing-left": {
+        "slot": "wing-left",
+        "tab_press_fit_mm3": 0.15
+      },
+      "dragon-wing-right": {
+        "slot": "wing-right",
+        "tab_press_fit_mm3": 0.15
+      }
+    },
+    "solids": 2,
+    "valid": true,
+    "volume_cm3": 6.05,
+    "mass_g": 7.5,
+    "triangles": 10594,
+    "size_mm": [
+      125.79,
+      47.28,
+      3.2
     ],
-    "rabbit-ears": [
-      "star-wand",
-      "unicorn-horn",
-      "halo"
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 2573.6,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 20.0,
+    "max_pitch_moment_g_cm": 69.9,
+    "own_pitch_moment_g_cm": 37.8
+  },
+  "cat-tail": {
+    "title": "Cat tail",
+    "pieces": {
+      "cat-tail": {
+        "slot": "tail-centre",
+        "tab_press_fit_mm3": 0.15
+      }
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 1.41,
+    "mass_g": 1.7,
+    "triangles": 4400,
+    "size_mm": [
+      26.7,
+      34.2,
+      4.8
     ],
-    "bear-ears": [
-      "sprout",
-      "star-wand",
-      "unicorn-horn",
-      "halo"
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 311.7,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 14.3,
+    "max_pitch_moment_g_cm": 42.6,
+    "own_pitch_moment_g_cm": 8.8
+  },
+  "fox-tail": {
+    "title": "Fox tail",
+    "pieces": {
+      "fox-tail": {
+        "slot": "tail-centre",
+        "tab_press_fit_mm3": 0.15
+      }
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 3.26,
+    "mass_g": 4.0,
+    "triangles": 2716,
+    "size_mm": [
+      22.47,
+      44.22,
+      4.8
     ],
-    "fox-ears": [
-      "sprout",
-      "ahoge",
-      "unicorn-horn",
-      "halo"
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 694.1,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 16.6,
+    "max_pitch_moment_g_cm": 55.1,
+    "own_pitch_moment_g_cm": 21.6
+  },
+  "devil-tail": {
+    "title": "Devil tail",
+    "pieces": {
+      "devil-tail": {
+        "slot": "tail-centre",
+        "tab_press_fit_mm3": 0.15
+      }
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 1.23,
+    "mass_g": 1.5,
+    "triangles": 4243,
+    "size_mm": [
+      28.16,
+      35.61,
+      4.8
     ],
-    "mouse-ears": [
-      "star-wand",
-      "unicorn-horn",
-      "halo"
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 273.4,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 14.0,
+    "max_pitch_moment_g_cm": 41.6,
+    "own_pitch_moment_g_cm": 7.7
+  },
+  "dragon-tail": {
+    "title": "Dragon tail",
+    "pieces": {
+      "dragon-tail": {
+        "slot": "tail-centre",
+        "tab_press_fit_mm3": 0.15
+      }
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 1.68,
+    "mass_g": 2.1,
+    "triangles": 6204,
+    "size_mm": [
+      29.91,
+      34.21,
+      4.8
     ],
-    "panda-ears": [
-      "sprout",
-      "ahoge",
-      "star-wand",
-      "unicorn-horn",
-      "halo"
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 366.2,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -56.24,
+    "worn_mass_g": 14.6,
+    "max_pitch_moment_g_cm": 43.9,
+    "own_pitch_moment_g_cm": 10.3
+  },
+  "conflicting_pairs": [
+    [
+      "cap-bat-wings",
+      "dog-ears"
     ],
-    "frog-eyes": [
-      "unicorn-horn",
-      "halo"
+    [
+      "cap-bat-wings",
+      "dragon-wings"
     ],
-    "pig-ears": [
-      "sprout",
-      "ahoge",
-      "star-wand",
-      "unicorn-horn",
-      "halo"
+    [
+      "cap-lop-ears",
+      "dog-ears"
     ],
-    "sheep-horns": [
-      "sprout",
-      "ahoge",
-      "star-wand",
-      "unicorn-horn",
-      "halo"
+    [
+      "cat-ears",
+      "ribbon"
     ],
-    "devil-horns": [
-      "sprout",
-      "ahoge",
-      "star-wand",
-      "unicorn-horn",
-      "halo"
+    [
+      "cat-ears",
+      "crown"
     ],
-    "heart-antennae": [
-      "sprout",
-      "ahoge",
-      "star-wand",
-      "unicorn-horn",
-      "halo"
+    [
+      "cat-ears",
+      "flower"
     ],
-    "ball-antennae": [
-      "sprout",
-      "ahoge",
-      "star-wand",
-      "unicorn-horn",
-      "halo"
+    [
+      "cat-ears",
+      "witch-hat"
     ],
-    "angel-wings": [
-      "ribbon",
-      "crown",
-      "flower",
-      "sprout",
-      "ahoge",
-      "star-wand",
-      "witch-hat",
-      "santa-hat",
-      "chick",
-      "unicorn-horn",
-      "halo"
+    [
+      "cat-ears",
+      "santa-hat"
+    ],
+    [
+      "dog-ears",
+      "ribbon"
+    ],
+    [
+      "dog-ears",
+      "crown"
+    ],
+    [
+      "dog-ears",
+      "flower"
+    ],
+    [
+      "dog-ears",
+      "witch-hat"
+    ],
+    [
+      "dog-ears",
+      "santa-hat"
+    ],
+    [
+      "dog-ears",
+      "chick"
+    ],
+    [
+      "rabbit-ears",
+      "ribbon"
+    ],
+    [
+      "rabbit-ears",
+      "crown"
+    ],
+    [
+      "rabbit-ears",
+      "flower"
+    ],
+    [
+      "rabbit-ears",
+      "sprout"
+    ],
+    [
+      "rabbit-ears",
+      "ahoge"
+    ],
+    [
+      "rabbit-ears",
+      "witch-hat"
+    ],
+    [
+      "rabbit-ears",
+      "santa-hat"
+    ],
+    [
+      "rabbit-ears",
+      "chick"
+    ],
+    [
+      "bear-ears",
+      "ribbon"
+    ],
+    [
+      "bear-ears",
+      "crown"
+    ],
+    [
+      "bear-ears",
+      "flower"
+    ],
+    [
+      "bear-ears",
+      "ahoge"
+    ],
+    [
+      "bear-ears",
+      "witch-hat"
+    ],
+    [
+      "bear-ears",
+      "santa-hat"
+    ],
+    [
+      "bear-ears",
+      "chick"
+    ],
+    [
+      "fox-ears",
+      "ribbon"
+    ],
+    [
+      "fox-ears",
+      "crown"
+    ],
+    [
+      "fox-ears",
+      "flower"
+    ],
+    [
+      "fox-ears",
+      "star-wand"
+    ],
+    [
+      "fox-ears",
+      "witch-hat"
+    ],
+    [
+      "fox-ears",
+      "santa-hat"
+    ],
+    [
+      "fox-ears",
+      "chick"
+    ],
+    [
+      "mouse-ears",
+      "ribbon"
+    ],
+    [
+      "mouse-ears",
+      "crown"
+    ],
+    [
+      "mouse-ears",
+      "flower"
+    ],
+    [
+      "mouse-ears",
+      "sprout"
+    ],
+    [
+      "mouse-ears",
+      "ahoge"
+    ],
+    [
+      "mouse-ears",
+      "witch-hat"
+    ],
+    [
+      "mouse-ears",
+      "santa-hat"
+    ],
+    [
+      "mouse-ears",
+      "chick"
+    ],
+    [
+      "panda-ears",
+      "ribbon"
+    ],
+    [
+      "panda-ears",
+      "crown"
+    ],
+    [
+      "panda-ears",
+      "flower"
+    ],
+    [
+      "panda-ears",
+      "witch-hat"
+    ],
+    [
+      "panda-ears",
+      "santa-hat"
+    ],
+    [
+      "panda-ears",
+      "chick"
+    ],
+    [
+      "frog-eyes",
+      "ribbon"
+    ],
+    [
+      "frog-eyes",
+      "crown"
+    ],
+    [
+      "frog-eyes",
+      "flower"
+    ],
+    [
+      "frog-eyes",
+      "sprout"
+    ],
+    [
+      "frog-eyes",
+      "ahoge"
+    ],
+    [
+      "frog-eyes",
+      "star-wand"
+    ],
+    [
+      "frog-eyes",
+      "witch-hat"
+    ],
+    [
+      "frog-eyes",
+      "santa-hat"
+    ],
+    [
+      "frog-eyes",
+      "chick"
+    ],
+    [
+      "pig-ears",
+      "ribbon"
+    ],
+    [
+      "pig-ears",
+      "crown"
+    ],
+    [
+      "pig-ears",
+      "flower"
+    ],
+    [
+      "pig-ears",
+      "witch-hat"
+    ],
+    [
+      "pig-ears",
+      "santa-hat"
+    ],
+    [
+      "pig-ears",
+      "chick"
+    ],
+    [
+      "sheep-horns",
+      "ribbon"
+    ],
+    [
+      "sheep-horns",
+      "crown"
+    ],
+    [
+      "sheep-horns",
+      "flower"
+    ],
+    [
+      "sheep-horns",
+      "witch-hat"
+    ],
+    [
+      "sheep-horns",
+      "santa-hat"
+    ],
+    [
+      "sheep-horns",
+      "chick"
+    ],
+    [
+      "devil-horns",
+      "ribbon"
+    ],
+    [
+      "devil-horns",
+      "crown"
+    ],
+    [
+      "devil-horns",
+      "flower"
+    ],
+    [
+      "devil-horns",
+      "witch-hat"
+    ],
+    [
+      "devil-horns",
+      "santa-hat"
+    ],
+    [
+      "devil-horns",
+      "chick"
+    ],
+    [
+      "heart-antennae",
+      "ribbon"
+    ],
+    [
+      "heart-antennae",
+      "crown"
+    ],
+    [
+      "heart-antennae",
+      "flower"
+    ],
+    [
+      "heart-antennae",
+      "witch-hat"
+    ],
+    [
+      "heart-antennae",
+      "santa-hat"
+    ],
+    [
+      "heart-antennae",
+      "chick"
+    ],
+    [
+      "ball-antennae",
+      "ribbon"
+    ],
+    [
+      "ball-antennae",
+      "crown"
+    ],
+    [
+      "ball-antennae",
+      "flower"
+    ],
+    [
+      "ball-antennae",
+      "witch-hat"
+    ],
+    [
+      "ball-antennae",
+      "santa-hat"
+    ],
+    [
+      "ball-antennae",
+      "chick"
+    ],
+    [
+      "halo",
+      "cat-tail"
+    ],
+    [
+      "halo",
+      "fox-tail"
+    ],
+    [
+      "halo",
+      "devil-tail"
+    ],
+    [
+      "halo",
+      "dragon-tail"
     ]
+  ],
+  "worst_combination": {
+    "items": [
+      "cap-bat-wings",
+      "angel-wings",
+      "fox-tail",
+      "halo",
+      "large-angel-wings",
+      "rabbit-ears",
+      "santa-hat"
+    ],
+    "moment_bound_g_cm": 144.4,
+    "limit_g_cm": 150.0
   }
 }

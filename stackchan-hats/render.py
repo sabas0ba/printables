@@ -13,6 +13,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 import cap
 import head
+import integral
 import toppers
 
 
@@ -51,7 +52,7 @@ def tessellate(shape: cq.Shape, colour: tuple[int, int, int],
 
 
 def head_proxy() -> list[Mesh]:
-    """Simplified StackChan head and base for context, not a printable part."""
+    """Simplified StackChan head for context, not a printable part."""
     shell = head.envelope(0.0, holes=False)
     for side in (-1, 1):
         for y in head.SIDE_HOLE_Y:
@@ -62,11 +63,29 @@ def head_proxy() -> list[Mesh]:
     eyes = [cq.Solid.makeCylinder(2.2, 0.6, cq.Vector(x, head.CORE_FRONT - 0.6, -24),
                                   cq.Vector(0, 1, 0)) for x in (-11, 11)]
     mouth = cq.Solid.makeBox(12, 0.6, 1.6, cq.Vector(-6, head.CORE_FRONT - 0.7, -34))
-    neck = cq.Solid.makeBox(40, 40, 8, cq.Vector(-20, 4, -62))
-    base = cq.Solid.makeCylinder(25, 8.5, cq.Vector(0, 16, -70.5))
     return [tessellate(shell, HEAD_COLOUR, 0.15), tessellate(screen, SCREEN_COLOUR),
-            *[tessellate(e, FACE_COLOUR) for e in eyes], tessellate(mouth, FACE_COLOUR),
-            tessellate(neck, (178, 182, 188), 0.2), tessellate(base, (120, 124, 130), 0.2)]
+            *[tessellate(e, FACE_COLOUR) for e in eyes], tessellate(mouth, FACE_COLOUR)]
+
+
+def body_proxy() -> list[Mesh]:
+    """Body below the head and the base, from the measured bands and profile."""
+    z0, _, y0, y1, half = head.BODY_BANDS[0]
+    neck = cq.Solid.makeBox(2 * half, y1 - y0, -head.HEAD_HEIGHT - z0,
+                            cq.Vector(-half, y0, z0))
+    top = head.BASE_PROFILE[1][1]
+    base = (cq.Workplane("XY", origin=(0, head.YAW_AXIS_Y + 4.75, head.DESK))
+            .sketch().rect(48.0, 56.0).vertices().fillet(8.0).finalize()
+            .extrude(top - head.DESK).val())
+    return [tessellate(neck, (178, 182, 188), 0.2), tessellate(base, (120, 124, 130), 0.2)]
+
+
+def pitched(meshes: list[Mesh], degrees: float) -> list[Mesh]:
+    """Rotate head-fixed meshes about the pitch axis."""
+    result = []
+    for mesh in meshes:
+        flat = head.pitch(mesh.triangles.reshape(-1, 3), degrees)
+        result.append(Mesh(flat.reshape(mesh.triangles.shape), mesh.colour))
+    return result
 
 
 def camera(direction: tuple[float, float, float]) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -156,9 +175,16 @@ def worn_meshes(topper: toppers.TopperSet, colour: tuple[int, int, int],
     return meshes
 
 
+SMALL_ROWS = ("front", "rear")
+
+
+def small_sets() -> list[toppers.TopperSet]:
+    return [t for t in toppers.SETS if t.pieces[0].row in SMALL_ROWS]
+
+
 def render_catalogue(proxy: list[Mesh], cap_solid: cq.Shape) -> None:
     columns, size = 5, 320
-    rows = -(-len(toppers.SETS) // columns)
+    rows = -(-len(small_sets()) // columns)
     canvas = Image.new("RGB", (columns * (size + 12) + 12, rows * (size + 12) + 12),
                        BACKGROUND)
     view = (0.42, -1.0, 0.32)
@@ -168,7 +194,7 @@ def render_catalogue(proxy: list[Mesh], cap_solid: cq.Shape) -> None:
     corners = np.array([[x, y, z] for x in (-40, 40) for y in (-16, 50) for z in (-60, 44)])
     bounds = (np.array([corners @ right, corners @ up]).min(1),
               np.array([corners @ right, corners @ up]).max(1))
-    for index, topper in enumerate(toppers.SETS):
+    for index, topper in enumerate(small_sets()):
         colour = PALETTE[index % len(PALETTE)]
         meshes = proxy + worn_meshes(topper, colour, cap_mesh)
         x = 12 + (index % columns) * (size + 12)
@@ -213,15 +239,70 @@ def render_parts() -> None:
     canvas.save(IMAGES / "parts.png", optimize=True)
 
 
+def render_large(proxy: list[Mesh], cap_solid: cq.Shape) -> None:
+    """Integral variants and the large plug-in sets, worn."""
+    items: list[tuple[str, list[Mesh]]] = []
+    for index, variant in enumerate(integral.VARIANTS):
+        colour = PALETTE[(index + 2) % len(PALETTE)]
+        items.append((variant.title, [tessellate(integral.build(variant), colour)]))
+    large = [t for t in toppers.SETS if t.pieces[0].row not in SMALL_ROWS]
+    cap_mesh = tessellate(cap_solid, PALETTE[0])
+    for index, topper in enumerate(large):
+        colour = PALETTE[(index + 4) % len(PALETTE)]
+        items.append((topper.title, worn_meshes(topper, colour, cap_mesh)))
+    columns, size = 5, 360
+    rows = -(-len(items) // columns)
+    canvas = Image.new("RGB", (columns * (size + 12) + 12, rows * (size + 12) + 12),
+                       BACKGROUND)
+    view = (0.95, -0.8, 0.45)
+    right, up, _ = camera(view)
+    corners = np.array([[x, y, z] for x in (-80, 80) for y in (-20, 52)
+                        for z in (-72, 60)])
+    bounds = (np.array([corners @ right, corners @ up]).min(1),
+              np.array([corners @ right, corners @ up]).max(1))
+    for index, (title, meshes) in enumerate(items):
+        x = 12 + (index % columns) * (size + 12)
+        y = 12 + (index // columns) * (size + 12)
+        draw(canvas, proxy + meshes, (x, y, size, size), view, title, bounds, 12)
+    canvas.save(IMAGES / "large.png", optimize=True)
+
+
+def render_motion(head_meshes: list[Mesh], body: list[Mesh], cap_solid: cq.Shape) -> None:
+    """Side views over the pitch range with large pieces worn."""
+    colour = PALETTE[4]
+    worn = [tessellate(cap_solid, colour)]
+    for key in ("dragon-wings", "dragon-tail"):
+        topper = next(t for t in toppers.SETS if t.key == key)
+        worn += [tessellate(full.moved(toppers.placement(piece)), colour)
+                 for piece, full, _ in toppers.build_set(topper)]
+    angles = (0.0, 45.0, head.PITCH_RANGE_DEG[1])
+    size = 420
+    canvas = Image.new("RGB", (len(angles) * (size + 12) + 12, size + 24), BACKGROUND)
+    view = (1.0, 0.0, 0.0)
+    right, up, _ = camera(view)
+    corners = np.array([[0, y, z] for y in (-60, 90) for z in (-75, 75)])
+    bounds = (np.array([corners @ right, corners @ up]).min(1),
+              np.array([corners @ right, corners @ up]).max(1))
+    for index, angle in enumerate(angles):
+        meshes = body + pitched(head_meshes + worn, angle)
+        draw(canvas, meshes, (12 + index * (size + 12), 12, size, size), view,
+             f"PITCH {angle:.0f} DEG", bounds, 12)
+    canvas.save(IMAGES / "motion.png", optimize=True)
+
+
 def main() -> None:
     IMAGES.mkdir(exist_ok=True)
     for stale in IMAGES.glob("*.png"):
         stale.unlink()
-    proxy = head_proxy()
+    head_meshes = head_proxy()
+    body = body_proxy()
+    proxy = head_meshes + body
     cap_solid = cap.make_cap()
     render_cap(proxy, cap_solid)
     render_parts()
     render_catalogue(proxy, cap_solid)
+    render_large(proxy, cap_solid)
+    render_motion(head_meshes, body, cap_solid)
 
 
 if __name__ == "__main__":

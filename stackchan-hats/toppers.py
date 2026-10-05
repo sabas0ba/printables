@@ -34,7 +34,7 @@ FOOT_HEIGHT = 1.2            # body must cover the tab up to this height
 BUMP = 0.25                  # crush bump on each tab end
 # Outer face of the cap skirt and the gap kept to it, in slot-relative u for
 # the side slots: pieces that hang over the edge stay outside this line.
-SIDE_CLEAR_U = cap.OUTER_HALF + 1.2 - cap.SLOT_X["right"]
+SIDE_CLEAR_U = cap.OUTER_HALF + 1.2 - cap.SLOTS[("front", "right")][0]
 
 
 Point = tuple[float, float]
@@ -154,6 +154,11 @@ class Shape2D:
         """Low oval base that covers the tab; the cut at v = 0 meets its flank."""
         return self.ellipse((u, -1.2), width / 2 + 1.0, height + 1.2)
 
+    def add_face(self, face: cq.Face, mode: str = "a") -> "Shape2D":
+        """Add a precomputed planar face, e.g. a region built separately."""
+        self.ops.append((mode, "face", (face,)))
+        return self
+
     def bar(self, start: Point, end: Point, width: float, mode: str = "a") -> "Shape2D":
         """Rectangle of the given width from start to end."""
         dx, dy = end[0] - start[0], end[1] - start[1]
@@ -169,6 +174,8 @@ class Shape2D:
                 sketch = sketch.push([centre]).circle(radius, mode=mode).reset()
             elif kind == "ellipse":
                 sketch = sketch.face(oval(*args), mode=mode).reset()
+            elif kind == "face":
+                sketch = sketch.face(args[0], mode=mode).reset()
             elif kind == "rect":
                 centre, width, height, angle = args
                 sketch = sketch.push([centre]).rect(width, height, angle,
@@ -195,6 +202,7 @@ class Piece:
     fillet: float = OUTLINE_RADIUS
     hangs: bool = False            # may extend below v = 0 outside the skirt
     blend: float = 2.0             # concave corner radius
+    thickness: float = THICKNESS   # plate thickness; the tab stays 3.2 mm
 
 
 @dataclass
@@ -237,16 +245,16 @@ def build_body(piece: Piece) -> cq.Shape:
     # pieces that hang down beside the head.
     limit = SIDE_CLEAR_U if piece.hangs else 200.0
     outline.rect((limit - 200, -50), 400, 100, mode="s")
-    body = extrude(outline, THICKNESS, fillet=piece.fillet, single=True,
-                   blend=piece.blend)
+    t = piece.thickness
+    body = extrude(outline, t, fillet=piece.fillet, single=True, blend=piece.blend)
     body = body.faces(">Z").edges().fillet(EDGE_RADIUS)
     if piece.raised:
-        relief = extrude(piece.raised(), DETAIL + 0.5, THICKNESS - 0.5,
+        relief = extrude(piece.raised(), DETAIL + 0.5, t - 0.5,
                          fillet=DETAIL_OUTLINE_RADIUS)
         relief = relief.faces(">Z").edges().fillet(DETAIL_RADIUS)
         body = body.union(relief)
     if piece.engraved:
-        cut = extrude(piece.engraved(), DETAIL + 2, THICKNESS - DETAIL, fillet=None)
+        cut = extrude(piece.engraved(), DETAIL + 2, t - DETAIL, fillet=None)
         body = body.cut(cut)
     return body.val()
 
@@ -587,18 +595,172 @@ def halo() -> Shape2D:
 
 
 # --------------------------------------------------------------------------
+# Large pieces. Wings use the wing slots at the rear edge of the cap top
+# (y = 44): further back, the head lays its rear onto the base when looking
+# up. Tails use the slot along y at x = 0; u runs rearwards, so they rise at
+# the back and curl forwards over the head.
+
+def scallops(shape: Shape2D, tips: list[Point], bite: float, side: float = -1.0
+             ) -> Shape2D:
+    """Bite circular scallops into the edge between consecutive tips.
+
+    side = -1 bites from the right-hand side of the tip sequence.
+    """
+    for (u0, v0), (u1, v1) in zip(tips, tips[1:]):
+        length = math.hypot(u1 - u0, v1 - v0)
+        nu, nv = side * (v1 - v0) / length, -side * (u1 - u0) / length
+        radius = 0.42 * length
+        shape.circle(((u0 + u1) / 2 + nu * (radius - bite),
+                      (v0 + v1) / 2 + nv * (radius - bite)), radius, mode="s")
+    return shape
+
+
+def angel_wing_large() -> Shape2D:
+    s = Shape2D().circle((4.0, 6.0), 6.0)
+    s.ellipse((22.0, 22.0), 22.0, 10.0, 35.0)
+    s.ellipse((36.0, 18.0), 16.0, 5.6, 15.0)
+    s.ellipse((34.0, 8.0), 16.0, 5.2, -5.0)
+    s.ellipse((30.0, -1.0), 14.0, 4.8, -22.0)
+    s.ellipse((25.0, -9.0), 11.0, 4.4, -40.0)
+    return s
+
+
+def angel_wing_large_lines() -> Shape2D:
+    s = Shape2D()
+    s.bar((12.0, 14.0), (36.0, 30.0), 0.9)
+    s.bar((16.0, 10.0), (44.0, 14.0), 0.9)
+    s.bar((16.0, 6.0), (42.0, 3.0), 0.9)
+    s.bar((17.0, 2.0), (34.0, -7.0), 0.9)
+    return s
+
+
+DRAGON_WING_TIPS = [(52.0, 34.0), (49.0, 18.0), (40.0, 4.0), (28.0, -7.0), (16.0, -12.0)]
+
+
+def dragon_wing() -> Shape2D:
+    s = Shape2D().polygon([(1.0, 0.0), (2.0, 7.0), (20.0, 26.0), *DRAGON_WING_TIPS,
+                           (13.0, -2.0)])
+    scallops(s, DRAGON_WING_TIPS, 3.5)
+    s.bar((3.0, 5.0), (20.0, 26.0), 4.4)
+    s.bar((20.0, 26.0), (52.0, 34.0), 3.6)
+    s.polygon([(17.5, 27.0), (22.5, 27.5), (18.5, 34.5)])
+    return s
+
+
+def dragon_wing_fingers() -> Shape2D:
+    s = Shape2D()
+    for tip in DRAGON_WING_TIPS[1:4]:
+        s.bar((21.0, 24.0), (tip[0] - 2.5, tip[1] + 1.5), 0.9)
+    return s
+
+
+def ring_sector(shape: Shape2D, centre: Point, radius: float, width: float,
+                start: float, end: float) -> Shape2D:
+    """Add an annular sector from start to end degrees (counter-clockwise)."""
+    piece = Shape2D().circle(centre, radius + width / 2)
+    piece.circle(centre, radius - width / 2, mode="s")
+    # Keep only the sector by removing the complement with a fan polygon.
+    far = 3 * (radius + width)
+    sweep = (end - start) % 360
+    gap = [centre]
+    steps = 12
+    for k in range(steps + 1):
+        a = math.radians(end + (360 - sweep) * k / steps)
+        gap.append((centre[0] + far * math.cos(a), centre[1] + far * math.sin(a)))
+    piece.polygon(gap, mode="s")
+    for face in piece.faces(None):
+        shape.add_face(face)
+    return shape
+
+
+def polar(centre: Point, radius: float, degrees: float) -> Point:
+    a = math.radians(degrees)
+    return (centre[0] + radius * math.cos(a), centre[1] + radius * math.sin(a))
+
+
+def cat_tail() -> Shape2D:
+    s = Shape2D().mound(16, 3.4)
+    s.bar((0.5, 0.0), (3.0, 19.0), 5.0)
+    ring_sector(s, (-7.0, 19.0), 10.0, 5.0, 0.0, 165.0)
+    return s.circle(polar((-7.0, 19.0), 10.0, 165.0), 2.8)
+
+
+def cat_tail_stripes() -> Shape2D:
+    s = Shape2D()
+    for angle in (30.0, 75.0, 120.0):
+        s.bar(polar((-7.0, 19.0), 7.0, angle), polar((-7.0, 19.0), 13.0, angle), 1.0)
+    return s
+
+
+def fox_tail() -> Shape2D:
+    s = Shape2D().mound(16, 3.4)
+    s.ellipse((-3.0, 21.0), 9.5, 21.5, 20.0)
+    return s.ellipse((-1.0, 9.0), 6.0, 9.0, 10.0)
+
+
+def fox_tail_tip() -> Shape2D:
+    s = Shape2D().circle((-10.5, 37.5), 7.6)
+    return s.circle((-10.5, 37.5), 6.6, mode="s")
+
+
+DEVIL_CENTRE = (-8.0, 20.0)
+
+
+def devil_tail() -> Shape2D:
+    s = Shape2D().mound(14, 3.0)
+    s.bar((0.0, 0.0), (2.0, 20.0), 3.4)
+    ring_sector(s, DEVIL_CENTRE, 10.0, 3.4, 0.0, 120.0)
+    end = polar(DEVIL_CENTRE, 10.0, 120.0)
+    tip = (end[0] - 0.866 * 3.0, end[1] - 0.5 * 3.0)
+    return add_heart(s, tip, 5.2, -60.0)
+
+
+DRAGON_TAIL_CENTRE = (-10.0, 15.0)
+
+
+def dragon_tail() -> Shape2D:
+    """Tapered tail rising and curling forwards, spikes on the outer edge."""
+    s = Shape2D().mound(18, 3.6)
+    path = [(1.0, 0.0), (2.0, 7.5), (2.0, 15.0)]
+    for angle in range(0, 151, 15):
+        path.append(polar(DRAGON_TAIL_CENTRE, 12.0, float(angle)))
+    widths = [9.0 - 6.0 * k / (len(path) - 1) for k in range(len(path))]
+    outer, inner = [], []
+    for k, (u, v) in enumerate(path):
+        a = path[max(k - 1, 0)]
+        b = path[min(k + 1, len(path) - 1)]
+        du, dv = b[0] - a[0], b[1] - a[1]
+        n = math.hypot(du, dv)
+        ou, ov = dv / n, -du / n          # right-hand normal: the outer side
+        outer.append((u + ou * widths[k] / 2, v + ov * widths[k] / 2))
+        inner.append((u - ou * widths[k] / 2, v - ov * widths[k] / 2))
+    s.polygon(outer + inner[::-1])
+    for k in range(3, len(path) - 1, 2):
+        (u, v), (pu, pv) = outer[k], path[k]
+        du, dv = u - pu, v - pv
+        n = math.hypot(du, dv)
+        tip = (u + du / n * 3.4, v + dv / n * 3.4)
+        base = (u - du / n * 1.0, v - dv / n * 1.0)
+        side = (-dv / n * 1.8, du / n * 1.8)
+        s.polygon([(base[0] + side[0], base[1] + side[1]), tip,
+                   (base[0] - side[0], base[1] - side[1])])
+    return s
+
+
+# --------------------------------------------------------------------------
 
 def pair(name: str, outline, raised=None, engraved=None, row: str = "front",
          fillet: float = OUTLINE_RADIUS, hangs: bool = False,
-         blend: float = 2.0) -> list[Piece]:
+         blend: float = 2.0, thickness: float = THICKNESS) -> list[Piece]:
     return [Piece(f"{name}-{side}", outline, raised, engraved, side, row, fillet,
-                  hangs, blend) for side in ("left", "right")]
+                  hangs, blend, thickness) for side in ("left", "right")]
 
 
 def centre(name: str, outline, raised=None, engraved=None, row: str = "front",
-           fillet: float = OUTLINE_RADIUS, blend: float = 2.0) -> list[Piece]:
+           fillet: float = OUTLINE_RADIUS, blend: float = 2.0,
+           thickness: float = THICKNESS) -> list[Piece]:
     return [Piece(name, outline, raised, engraved, "centre", row, fillet,
-                  False, blend)]
+                  False, blend, thickness)]
 
 
 SETS: list[TopperSet] = [
@@ -651,14 +813,37 @@ SETS: list[TopperSet] = [
                                                      engraved=unicorn_grooves,
                                                      fillet=1.2)),
     TopperSet("halo", "Halo", centre("halo", halo, row="rear", fillet=1.0)),
+    TopperSet("large-angel-wings", "Large angel wings",
+              pair("large-wing", angel_wing_large, engraved=angel_wing_large_lines,
+                   row="wing", fillet=1.2, hangs=True, thickness=2.0)),
+    TopperSet("dragon-wings", "Dragon wings",
+              pair("dragon-wing", dragon_wing, engraved=dragon_wing_fingers,
+                   row="wing", fillet=0.8, blend=1.5, hangs=True, thickness=2.4)),
+    TopperSet("cat-tail", "Cat tail", centre("cat-tail", cat_tail,
+                                             engraved=cat_tail_stripes, row="tail",
+                                             fillet=1.2, thickness=4.8)),
+    TopperSet("fox-tail", "Fox tail", centre("fox-tail", fox_tail,
+                                             engraved=fox_tail_tip, row="tail",
+                                             fillet=1.2, thickness=4.8)),
+    TopperSet("devil-tail", "Devil tail", centre("devil-tail", devil_tail,
+                                                 row="tail", fillet=1.0,
+                                                 thickness=4.8)),
+    TopperSet("dragon-tail", "Dragon tail", centre("dragon-tail", dragon_tail,
+                                                   row="tail", fillet=0.8, blend=1.2,
+                                                   thickness=4.8)),
 ]
 
 
 def placement(piece: Piece) -> cq.Location:
-    """Location that moves a print-oriented piece into head coordinates."""
-    x = cap.SLOT_X[piece.slot]
-    y = cap.SLOT_Y[piece.row] + THICKNESS / 2
+    """Location that moves a print-oriented piece into head coordinates.
+
+    The piece is stood up with its printed upper face forwards, the tab
+    centred on the slot, then turned with the slot about the z axis.
+    """
+    x, y, angle = cap.SLOTS[(piece.row, piece.slot)]
     return (cq.Location(cq.Vector(x, y, cap.TOP))
+            * cq.Location(cq.Vector(0, 0, 0), cq.Vector(0, 0, 1), angle)
+            * cq.Location(cq.Vector(0, cap.TAB_THICKNESS / 2, 0))
             * cq.Location(cq.Vector(0, 0, 0), cq.Vector(1, 0, 0), 90))
 
 

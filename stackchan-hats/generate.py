@@ -14,6 +14,7 @@ import numpy as np
 
 import cap
 import head
+import integral
 import toppers
 
 
@@ -28,6 +29,8 @@ OVERHANG_NORMAL_Z = -0.7072        # steeper than 45 degrees from vertical
 OVERHANG_LIMIT_MM2 = 1.0
 HEAD_GAP = 0.5                     # minimum distance from decorations to head
 EPSILON_VOLUME = 0.05              # mm3, numerical contact allowance
+SAMPLE_SPACING = 1.0               # mm, surface samples for the pitch sweep
+MOMENT_LIMIT = 150.0               # g cm about the pitch axis, worn set + cap
 
 
 def box(x0: float, x1: float, y0: float, y1: float, z0: float, z1: float) -> cq.Solid:
@@ -137,15 +140,15 @@ def check_cap(solid: cq.Shape) -> dict[str, Any]:
             "detent_engagement_mm3": round(detents, 2),
             "radial_clearance_mm": cap.CLEARANCE,
             "slot_mm": [cap.SLOT_LENGTH, cap.SLOT_WIDTH, cap.PLATE],
-            "slot_x_mm": list(cap.SLOT_X.values()),
-            "slot_y_mm": list(cap.SLOT_Y.values())}
+            "slots": {f"{row}-{position}": list(xya)
+                      for (row, position), xya in cap.SLOTS.items()}}
 
 
 def check_piece(piece: toppers.Piece, full: cq.Shape, body: cq.Shape,
                 cap_solid: cq.Shape, keepout: cq.Shape) -> dict[str, Any]:
     half = cap.TAB_LENGTH / 2
     foot = box(-half, half, 0, toppers.FOOT_HEIGHT, 0,
-               toppers.THICKNESS - toppers.EDGE_RADIUS)
+               min(piece.thickness, cap.TAB_THICKNESS) - toppers.EDGE_RADIUS)
     covered = body.intersect(foot).Volume() / foot.Volume()
     if covered < 0.995:
         raise SystemExit(f"{piece.name}: body does not cover the tab ({covered:.3f})")
@@ -164,19 +167,101 @@ def check_piece(piece: toppers.Piece, full: cq.Shape, body: cq.Shape,
             "tab_press_fit_mm3": round(tab_overlap, 2)}
 
 
-def compatibility(built: dict[str, list[tuple[toppers.Piece, cq.Shape, cq.Shape]]]
-                  ) -> dict[str, list[str]]:
-    """Centre pieces that can be worn together with each pair set."""
-    worn = {key: [body.moved(toppers.placement(piece)) for piece, _, body in items]
-            for key, items in built.items()}
-    centres = [s.key for s in toppers.SETS if s.pieces[0].slot == "centre"]
-    pairs = [s.key for s in toppers.SETS if s.pieces[0].slot != "centre"]
-    result = {}
-    for pair_key in pairs:
-        result[pair_key] = [
-            centre_key for centre_key in centres
-            if all(a.intersect(b).Volume() <= EPSILON_VOLUME
-                   for a in worn[pair_key] for b in worn[centre_key])]
+def surface_samples(shape: cq.Shape) -> np.ndarray:
+    """Points on the surface no further apart than SAMPLE_SPACING."""
+    vertices, faces = shape.tessellate(0.2, 0.3)
+    points = np.array([v.toTuple() for v in vertices], dtype=np.float64)
+    triangles = points[np.array(faces, dtype=np.int64)]
+    result = [points]
+    for tri in triangles:
+        longest = max(np.linalg.norm(tri[1] - tri[0]), np.linalg.norm(tri[2] - tri[1]),
+                      np.linalg.norm(tri[0] - tri[2]))
+        n = int(np.ceil(longest / SAMPLE_SPACING))
+        if n > 1:
+            a, b = np.meshgrid(np.arange(n + 1), np.arange(n + 1))
+            keep = a + b <= n
+            result.append(tri[0] + np.outer(a[keep] / n, tri[1] - tri[0])
+                          + np.outer(b[keep] / n, tri[2] - tri[0]))
+    return np.concatenate(result)
+
+
+def pitch_moment(shapes: list[cq.Shape]) -> tuple[float, float]:
+    """Mass in g and the largest gravity moment about the pitch axis in g cm."""
+    volume = sum(s.Volume() for s in shapes)
+    mass = volume / 1000 * PLA_DENSITY
+    centre = sum((s.Center() * s.Volume() for s in shapes), cq.Vector()) / volume
+    com = np.array([[centre.x, centre.y, centre.z]])
+    arms = [abs(head.pitch(com, a)[0, 1] - head.PITCH_AXIS[0]) / 10
+            for a in np.arange(head.PITCH_RANGE_DEG[0], head.PITCH_RANGE_DEG[1] + 1e-9)]
+    return mass, mass * max(arms)
+
+
+def motion_facts(name: str, shapes: list[cq.Shape], own: list[cq.Shape]) -> dict[str, Any]:
+    """Pitch sweep clearance and gravity moments for shapes worn on the head.
+
+    ``own`` are the item's own parts, without the cap it is worn on.
+    """
+    sweep = head.sweep_clearance(np.concatenate([surface_samples(s) for s in shapes]))
+    if sweep["colliding_samples"]:
+        raise SystemExit(f"{name}: meets the body, base or desk at "
+                         f"{sweep['first_collision_deg']} deg pitch")
+    mass, moment = pitch_moment(shapes)
+    if moment > MOMENT_LIMIT:
+        raise SystemExit(f"{name}: {moment:.0f} g cm exceeds {MOMENT_LIMIT:.0f} g cm")
+    return {"lowest_z_in_motion_mm": sweep["lowest_z_mm"],
+            "worn_mass_g": round(mass, 1),
+            "max_pitch_moment_g_cm": round(moment, 1),
+            "own_pitch_moment_g_cm": round(pitch_moment(own)[1], 1)}
+
+
+def worst_combination(report: dict[str, Any], groups: dict[str, str]) -> dict[str, Any]:
+    """Upper bound for any combination: one cap and one set per slot group.
+
+    The moment of a sum never exceeds the sum of the parts' largest moments.
+    """
+    caps = ["cap"] + [v.key for v in integral.VARIANTS]
+    heaviest_cap = max(caps, key=lambda k: report[k]["own_pitch_moment_g_cm"])
+    chosen: dict[str, str] = {}
+    for key, group in groups.items():
+        best = chosen.get(group)
+        if best is None or (report[key]["own_pitch_moment_g_cm"]
+                            > report[best]["own_pitch_moment_g_cm"]):
+            chosen[group] = key
+    bound = report[heaviest_cap]["own_pitch_moment_g_cm"] + sum(
+        report[k]["own_pitch_moment_g_cm"] for k in chosen.values())
+    if bound > MOMENT_LIMIT:
+        raise SystemExit(f"worst combination bound {bound:.0f} g cm exceeds the limit")
+    return {"items": [heaviest_cap, *sorted(chosen.values())],
+            "moment_bound_g_cm": round(bound, 1), "limit_g_cm": MOMENT_LIMIT}
+
+
+def conflicts(worn: dict[str, list[cq.Shape]],
+              slots: dict[str, set[str]]) -> list[list[str]]:
+    """Pairs of items in different slots whose parts overlap when worn.
+
+    Items sharing a slot are exclusive anyway and are not listed.
+    """
+    keys = list(worn)
+    boxes = {k: [s.BoundingBox() for s in worn[k]] for k in keys}
+    result = []
+    for i, a in enumerate(keys):
+        for b in keys[i + 1:]:
+            if slots[a] & slots[b]:
+                continue
+            hit = False
+            for sa, ba in zip(worn[a], boxes[a]):
+                for sb, bb in zip(worn[b], boxes[b]):
+                    if (ba.xmin > bb.xmax or bb.xmin > ba.xmax or ba.ymin > bb.ymax
+                            or bb.ymin > ba.ymax or ba.zmin > bb.zmax
+                            or bb.zmin > ba.zmax):
+                        continue
+                    if sa.intersect(sb).Volume() > EPSILON_VOLUME:
+                        hit = True
+                        break
+                if hit:
+                    break
+            if hit:
+                result.append([a, b])
     return result
 
 
@@ -189,13 +274,24 @@ def main() -> None:
     cap_solid = cap.make_cap()
     report: dict[str, Any] = {"cap": check_cap(cap_solid)}
     report["cap"] |= export(cap.to_print(cap_solid), "cap")
+    report["cap"] |= motion_facts("cap", [cap_solid], [cap_solid])
     print("cap: ok")
 
+    # Integral parts of a variant, for overlap checks with plug-in sets.
+    worn: dict[str, list[cq.Shape]] = {}
+    slots: dict[str, set[str]] = {}
+    for variant in integral.VARIANTS:
+        solid = integral.build(variant)
+        facts = check_cap(solid) | export(cap.to_print(solid), variant.key)
+        report[variant.key] = {"title": variant.title} | facts | motion_facts(
+            variant.key, [solid], [solid])
+        worn[variant.key] = [solid.cut(cap_solid)]
+        slots[variant.key] = {"variant"}
+        print(f"{variant.key}: ok")
+
     keepout = head.envelope(HEAD_GAP, holes=False)
-    built = {}
     for topper in toppers.SETS:
         items = toppers.build_set(topper)
-        built[topper.key] = items
         pieces = {piece.name: check_piece(piece, full, body, cap_solid, keepout)
                   for piece, full, body in items}
         plate = layout([full for _, full, _ in items])
@@ -203,10 +299,18 @@ def main() -> None:
         facts = export(compound, topper.key)
         if facts["solids"] != len(items) or not facts["valid"]:
             raise SystemExit(f"{topper.key}: invalid plate")
-        report[topper.key] = {"title": topper.title, "pieces": pieces} | facts
+        placed = [full.moved(toppers.placement(piece)) for piece, full, _ in items]
+        motion = motion_facts(topper.key, [cap_solid, *placed], placed)
+        report[topper.key] = {"title": topper.title, "pieces": pieces} | facts | motion
+        worn[topper.key] = [body.moved(toppers.placement(piece))
+                            for piece, _, body in items]
+        slots[topper.key] = {f"{piece.row}-{piece.slot}" for piece, _, _ in items}
         print(f"{topper.key}: ok")
 
-    report["compatible_centre_pieces"] = compatibility(built)
+    report["conflicting_pairs"] = conflicts(worn, slots)
+    groups = {t.key: "-".join(sorted({p.row for p in t.pieces})) + (
+        "-centre" if t.pieces[0].slot == "centre" else "-pair") for t in toppers.SETS}
+    report["worst_combination"] = worst_combination(report, groups)
     REPORT.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
 
 
