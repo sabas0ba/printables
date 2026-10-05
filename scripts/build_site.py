@@ -13,17 +13,12 @@ from html.parser import HTMLParser
 import json
 from pathlib import Path, PurePosixPath
 import posixpath
-import re
 import shutil
 import sys
 import tomllib
 from urllib.parse import urlsplit
-import xml.etree.ElementTree as ET
 
-import markdown
-from markdown.extensions import Extension
-from markdown.treeprocessors import Treeprocessor
-
+import markdown_subset
 import vendor_three
 
 
@@ -148,53 +143,12 @@ class LinkContext:
         return f"{REPOSITORY_URL}/{kind}/main/{repo_path}{fragment}"
 
 
-# A source line break between two CJK characters is not a word boundary; browsers
-# would otherwise render it as a space inside Japanese text.
-CJK = "\u3000-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff00-\uffef"
-CJK_LINE_BREAK = re.compile(f"(?<=[{CJK}])\n(?=[{CJK}])")
-
-
-def join_cjk_lines(text: str | None) -> str | None:
-    return CJK_LINE_BREAK.sub("", text) if text else text
-
-
-class PageTreeprocessor(Treeprocessor):
-    def __init__(self, md: markdown.Markdown, context: LinkContext, drop_title: bool):
-        super().__init__(md)
-        self.context = context
-        self.drop_title = drop_title
-
-    def run(self, root: ET.Element) -> None:
-        if self.drop_title and len(root) and root[0].tag == "h1":
-            root.remove(root[0])
-        for element in root.iter():
-            for attribute in ("href", "src"):
-                value = element.get(attribute)
-                if value is not None:
-                    element.set(attribute, self.context.rewrite(value))
-            if element.tag == "img":
-                element.set("loading", "lazy")
-            if element.tag == "table":
-                element.set("class", "table")
-            if element.tag not in ("pre", "code"):
-                element.text = join_cjk_lines(element.text)
-            element.tail = join_cjk_lines(element.tail)
-
-
-class PageExtension(Extension):
-    def __init__(self, context: LinkContext, drop_title: bool):
-        super().__init__()
-        self.context = context
-        self.drop_title = drop_title
-
-    def extendMarkdown(self, md: markdown.Markdown) -> None:
-        md.treeprocessors.register(PageTreeprocessor(md, self.context, self.drop_title),
-                                   "printables_page", 0)
-
-
 def render_markdown(text: str, context: LinkContext, drop_title: bool) -> str:
-    extensions = ["tables", "fenced_code", "sane_lists", PageExtension(context, drop_title)]
-    return markdown.markdown(text, extensions=extensions, output_format="html")
+    try:
+        return markdown_subset.render(text, context.rewrite, drop_title,
+                                      name=f"{context.slug}/{context.doc}")
+    except markdown_subset.MarkdownError as error:
+        raise SiteError(str(error)) from error
 
 
 def markdown_title(text: str, fallback: str) -> str:

@@ -4,7 +4,6 @@ version = "0.1.0"
 requires-python = "==3.12.*"
 dependencies = [
   "cadquery==2.7.0",
-  "markdown==3.11",
   "numpy==2.3.5",
   "pillow==12.3.0",
 ]

@@ -56,7 +56,7 @@ nix develop --command uv lock
 
 ## GitHub Pages site
 
-`scripts/build_site.py` builds the static site from each design's `design.toml` (title, summary, status, cover image and parts list) and its `README.md`. The design table above is generated from the same files. To build and check the site into `.work/site`:
+`scripts/build_site.py` builds the static site from each design's `design.toml` (title, summary, status, cover image and parts list) and its `README.md`. The design table above is generated from the same files. The notes are converted by `scripts/markdown_subset.py`, which supports only the Markdown used in this repository (headings, paragraphs, flat `-` and numbered lists, pipe tables, fenced code, code spans, `**strong**`, links and images) and fails the build on anything else. To build and check the site into `.work/site`:
 
 ```sh
 nix develop --command .venv/bin/python -m unittest discover -s tests
