@@ -1,0 +1,17 @@
+title = "PICO 4 wall hangers"
+summary = "Hangs on two wall hooks per panel: headset on a strap arm with an anti-swing rib, two controllers and up to five Motion Trackers on lift-off pegs"
+prototype = true
+added = 2026-10-05
+lang = "en"
+source = "CadQuery"
+cover = "preview.png"
+
+[[parts]]
+file = "headset.stl"
+quantity = 1
+description = "Headset module: hook slots, strap arm and visor rib"
+
+[[parts]]
+file = "accessories.stl"
+quantity = 1
+description = "Accessory module: hook slots, 2 controller pegs and 5 tracker pegs"

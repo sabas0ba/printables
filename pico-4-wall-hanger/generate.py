@@ -1,6 +1,11 @@
-"""Shelf-edge hangers for PICO 4, its controllers and PICO Motion Trackers, millimetres.
+"""Wall hangers for PICO 4, its controllers and PICO Motion Trackers, millimetres.
 
-Two independent modules clamp onto the front edge of a shelf board:
+Two independent panels hang on a pair of L- or J-shaped wall hooks each. The
+up-turned tip of each hook passes through a tall slot near the top of the
+panel; the panel then drops so that the upper edge of the slot rests on the
+hook shank. Around each slot the panel is thinned to SLOT_WEB from the front,
+so that hooks with a short shank still reach through, and the hook tip sits
+in the recess.
 
 - headset: an arm with a raised tip that passes through the strap ring and
   carries the rear battery pack, and a rib lower on the panel that the
@@ -8,10 +13,10 @@ Two independent modules clamp onto the front edge of a shelf board:
 - accessories: two pegs for the controller tracking rings and five short
   pegs for the Motion Tracker straps.
 
-Use-orientation axes: x along the shelf edge, y from the shelf front face
-toward the user (y=0 is the back face of the panel), z up (z=0 is the top of
-the shelf board). Each module is exported lying on its left end (x pointing
-up), so the C-shaped clamp and the panel stand as vertical walls. Every
+Use-orientation axes: x along the wall, y from the wall toward the user
+(y=0 is the back face of the panel, flat against the wall), z up (z=0 is the
+top edge of the panel). Each module is exported lying on its left end (x
+pointing up), so that the layers run along the pegs and the arm. Every
 feature that starts above the bed has a downward face of at most 45 degrees
 from vertical, so the parts print without supports.
 """
@@ -24,16 +29,21 @@ import cadquery as cq
 
 DIRECTORY = Path(__file__).resolve().parent
 
-# Shelf board: the clamp gap fits boards up to SHELF_GAP thick.
-SHELF_GAP = 21.0
-TOP_LEG_DEPTH = 45.0     # behind the panel, resting on the shelf top
-TOP_LEG_THICKNESS = 5.0
-LOWER_LIP_DEPTH = 25.0   # behind the panel, under the shelf board
-LOWER_LIP_THICKNESS = 5.0
-
 PANEL_THICKNESS = 6.0
 PANEL_BOTTOM = -230.0
 CORNER_CHAMFER = 10.0
+
+# Hook slots, the same on both modules. The hooks are 5-6 mm thick. The
+# left slot locates the panel; the wider right slot absorbs errors in the
+# hook spacing. SLOT_HEIGHT admits an up-turned hook tip of up to
+# SLOT_HEIGHT - hook diameter - 1 mm.
+HOOK_SPACING = 160.0
+SLOT_TOP = -24.0         # the hook shank rests here
+SLOT_HEIGHT = 22.0
+SLOT_WIDTHS = (8.0, 14.0)
+SLOT_WEB = 3.0           # panel thickness at the slot
+RECESS_MARGIN = 4.0      # around the slot, to the sides and below
+RECESS_ABOVE = 16.0      # above the slot, for the hook tip
 
 # Headset module.
 HEADSET_WIDTH = 200.0
@@ -53,7 +63,7 @@ BUMPER_DEPTH = 16.0      # from the panel front face
 # Accessories module.
 ACCESSORY_WIDTH = 220.0
 CONTROLLER_PEG_X = (-55.0, 55.0)
-CONTROLLER_PEG_Z = -45.0
+CONTROLLER_PEG_Z = -70.0     # below the hook-slot recesses
 CONTROLLER_PEG_RADIUS = 7.0
 CONTROLLER_PEG_LENGTH = 55.0
 TRACKER_PEG_X = (-88.0, -44.0, 0.0, 44.0, 88.0)
@@ -77,25 +87,46 @@ def yz_prism(points, x_min, x_max, fillet=0.0):
     return solid.val()
 
 
-def clamp_and_panel(width):
-    """Panel with the C-shaped clamp around the shelf front edge."""
+def xy_prism(points, z_min, z_max):
+    """Extrude a closed (x, y) polygon along z from z_min to z_max."""
+    return (cq.Workplane("XY", origin=(0, 0, z_min))
+            .polyline(points).close().extrude(z_max - z_min).val())
+
+
+def hook_slot_cutters(x_center, slot_width):
+    """Slot through the web and the recess in front of it.
+
+    The +x walls, which face downward in print orientation, slope at 45
+    degrees toward the front instead of bridging the slot and the recess.
+    """
+    x_lo, x_hi = x_center - slot_width / 2, x_center + slot_width / 2
+    slot_bottom = SLOT_TOP - SLOT_HEIGHT
+    slot = xy_prism([(x_lo, -1.0), (x_hi, -1.0), (x_hi, 0.0),
+                     (x_hi + SLOT_WEB + 1, SLOT_WEB + 1), (x_lo, SLOT_WEB + 1)],
+                    slot_bottom, SLOT_TOP)
+    depth = PANEL_THICKNESS - SLOT_WEB
+    r_lo = x_lo - RECESS_MARGIN
+    r_hi = x_hi + SLOT_WEB + RECESS_MARGIN
+    recess = xy_prism([(r_lo, SLOT_WEB), (r_hi, SLOT_WEB),
+                       (r_hi + depth, PANEL_THICKNESS),
+                       (r_hi + depth, PANEL_THICKNESS + 1),
+                       (r_lo, PANEL_THICKNESS + 1)],
+                      slot_bottom - RECESS_MARGIN, SLOT_TOP + RECESS_ABOVE)
+    return slot.fuse(recess)
+
+
+def panel(width):
+    """Flat panel with chamfered corners and the two hook slots."""
     x_min, x_max = -width / 2, width / 2
-    top = TOP_LEG_THICKNESS
-    lip_top = -SHELF_GAP
-    lip_bottom = lip_top - LOWER_LIP_THICKNESS
-    profile = [
-        (-TOP_LEG_DEPTH, 0.0), (0.0, 0.0), (0.0, lip_top),
-        (-LOWER_LIP_DEPTH, lip_top), (-LOWER_LIP_DEPTH, lip_bottom),
-        (0.0, lip_bottom), (0.0, PANEL_BOTTOM),
-        (PANEL_THICKNESS, PANEL_BOTTOM), (PANEL_THICKNESS, top),
-        (-TOP_LEG_DEPTH, top),
-    ]
-    body = yz_prism(profile, x_min, x_max)
-    body = (cq.Workplane().add(body)
-            .edges("|Y").edges(cq.selectors.BoxSelector(
-                (x_min - 1, -1, PANEL_BOTTOM - 1),
-                (x_max + 1, PANEL_THICKNESS + 1, PANEL_BOTTOM + 1)))
-            .chamfer(CORNER_CHAMFER).val())
+    c = CORNER_CHAMFER
+    outline = [(x_min + c, PANEL_BOTTOM), (x_max - c, PANEL_BOTTOM),
+               (x_max, PANEL_BOTTOM + c), (x_max, -c), (x_max - c, 0.0),
+               (x_min + c, 0.0), (x_min, -c), (x_min, PANEL_BOTTOM + c)]
+    body = (cq.Workplane("XZ", origin=(0, PANEL_THICKNESS, 0))
+            .polyline(outline).close().extrude(PANEL_THICKNESS).val())
+    for x_center, slot_width in zip((-HOOK_SPACING / 2, HOOK_SPACING / 2),
+                                    SLOT_WIDTHS):
+        body = body.cut(hook_slot_cutters(x_center, slot_width))
     return body
 
 
@@ -168,12 +199,12 @@ def peg(x, z, radius, length):
 
 
 def make_headset_module():
-    body = clamp_and_panel(HEADSET_WIDTH)
+    body = panel(HEADSET_WIDTH)
     return finish(body.fuse(headset_arm()).fuse(visor_bumper()))
 
 
 def make_accessory_module():
-    body = clamp_and_panel(ACCESSORY_WIDTH)
+    body = panel(ACCESSORY_WIDTH)
     for x in CONTROLLER_PEG_X:
         body = body.fuse(peg(x, CONTROLLER_PEG_Z, CONTROLLER_PEG_RADIUS,
                              CONTROLLER_PEG_LENGTH))

@@ -1,8 +1,9 @@
 """Render the generated binary STLs into orthographic views and a preview.
 
 The STLs are stored in print orientation. They are turned back into the use
-orientation of generate.py (x along the shelf edge, y toward the user, z up,
-shelf top at z=0, panel back face at y=0) and shown on a shelf board.
+orientation of generate.py (x along the wall, y toward the user, z up,
+panel top edge at z=0, panel back face at y=0) and shown on a wall with
+schematic L-shaped hooks.
 """
 
 from pathlib import Path
@@ -16,14 +17,19 @@ DIRECTORY = Path(__file__).resolve().parent
 LIGHT = np.array([-0.30, 0.55, 0.78])
 LIGHT /= np.linalg.norm(LIGHT)
 PART_COLOR = (213, 227, 231)
-SHELF_COLOR = (222, 196, 160)
+WALL_COLOR = (236, 230, 220)
+HOOK_COLOR = (120, 128, 134)
 
-# Use-orientation position of the print bed corner: the top of the clamp is
-# at z=TOP_LEG_THICKNESS and the rear end of its top leg at y=-TOP_LEG_DEPTH.
-TOP_LEG_THICKNESS = 5.0
-TOP_LEG_DEPTH = 45.0
-SHELF_THICKNESS = 20.0
-SHELF_DEPTH = 120.0
+# Must match generate.py.
+HOOK_SPACING = 160.0
+SLOT_TOP = -24.0
+SLOT_WIDTHS = (8.0, 14.0)
+# Schematic hook: 6 mm square shank and an up-turned tip.
+HOOK_SIZE = 6.0
+HOOK_SHANK = 10.0
+HOOK_TIP = 12.0
+WALL_THICKNESS = 12.0
+WALL_MARGIN = 60.0
 MODULE_GAP = 40.0
 
 
@@ -49,8 +55,7 @@ def to_use_orientation(vertices, normals):
     def turn(points):
         return np.stack([points[..., 2], points[..., 1], -points[..., 0]], axis=-1)
 
-    use = turn(vertices)
-    use += np.array([-width / 2, -TOP_LEG_DEPTH, TOP_LEG_THICKNESS])
+    use = turn(vertices) + np.array([-width / 2, 0.0, 0.0])
     return use, turn(normals), width
 
 
@@ -131,9 +136,23 @@ def part_mesh(vertices, normals, x_offset=0.0):
     return (vertices + np.array([x_offset, 0.0, 0.0]), normals, np.array(PART_COLOR))
 
 
-def shelf_mesh(x0, x1):
-    triangles, normals = box_mesh(x0, x1, -SHELF_DEPTH, 0.0, -SHELF_THICKNESS, 0.0)
-    return triangles, normals, np.array(SHELF_COLOR)
+def wall_mesh(x0, x1, z0, z1):
+    triangles, normals = box_mesh(x0, x1, -WALL_THICKNESS, 0.0, z0, z1)
+    return triangles, normals, np.array(WALL_COLOR)
+
+
+def hook_meshes(x_offset):
+    """Two hooks resting at the top of the slots, as in use."""
+    meshes = []
+    for x_slot, slot_width in zip((-HOOK_SPACING / 2, HOOK_SPACING / 2), SLOT_WIDTHS):
+        x0 = x_offset + x_slot - slot_width / 2
+        x1 = x0 + HOOK_SIZE
+        z1 = SLOT_TOP
+        z0 = z1 - HOOK_SIZE
+        for box in (box_mesh(x0, x1, 0.0, HOOK_SHANK, z0, z1),
+                    box_mesh(x0, x1, HOOK_SHANK - HOOK_SIZE, HOOK_SHANK, z1, z1 + HOOK_TIP)):
+            meshes.append((box[0], box[1], np.array(HOOK_COLOR)))
+    return meshes
 
 
 def size_label(vertices, axes):
@@ -172,11 +191,14 @@ def render_preview(headset, accessories):
     meshes = [
         part_mesh(headset[0], headset[1], left_center),
         part_mesh(accessories[0], accessories[1], right_center),
-        shelf_mesh(left_center - left_width / 2 - 40, right_center + right_width / 2 + 40),
+        wall_mesh(left_center - left_width / 2 - WALL_MARGIN,
+                  right_center + right_width / 2 + WALL_MARGIN,
+                  headset[0][..., 2].min() - WALL_MARGIN, WALL_MARGIN),
+        *hook_meshes(left_center), *hook_meshes(right_center),
     ]
     canvas = Image.new("RGB", (1600, 1000), "#e9eef0")
     draw_view(canvas, meshes, (25, 25, 1550, 950), *oblique((-0.45, 0.80, 0.50)),
-              "PICO 4  ·  SHELF-EDGE HANGERS", padding=80)
+              "PICO 4  ·  WALL HANGERS", padding=80)
     canvas.save(DIRECTORY / "preview.png", optimize=True)
 
 
