@@ -9,7 +9,7 @@ Browse the designs, with an interactive 3D view of each STL file, at
 | Design | Files | Notes |
 | --- | --- | --- |
 | [ThinkPad E14 stand](thinkpad-e14-stand/README.md) | 1 STL (1 print), CadQuery source | One reclined slot for closed storage or display-only open use; trays for the AC adapter and a mouse |
-| [M5Stack StackChan hats](stackchan-hats/README.md) | 1 STL (1 print) + 35 optional or reference, CadQuery source | Push-on cap for the K151 head, 31 plug-in decoration sets and 4 one-piece cap variants; support-free; clear of body and base over the full pitch range; prototype |
+| [M5Stack StackChan hats](stackchan-hats/README.md) | 1 STL (1 print) + 46 optional or reference, CadQuery source | Push-on cap for the K151 head, 32 plug-in decoration sets, 4 one-piece cap variants and 10 house and food shells; support-free; clear of body and base over the full pitch range (shells: up to a per-shell look-up angle); prototype |
 | [Raspberry Pi 5 NVMe case](raspberry-pi-5-nvme-case/README.md) | 2 STL (2 prints) + 1 optional or reference, CadQuery source | Pi 5 + M.2 HAT+ + 2280 SSD; snap-fit lid without extra screws; passive cooling; port, button and microSD access; prototype |
 | [Tool-free slipper stand](slipper-stand/README.md) | 10 STL (43 prints) + 2 optional or reference, OpenSCAD source | Holds four pairs with the soles facing inward; rounded edges and printed locking pins; prototype |
 | [Stackable chili drying basket](chili-drying-rack/README.md) | 7 STL (20 prints), CadQuery source | Sliding baskets, V supports, harvest-date wheels and a removable drip tray; all parts printed |

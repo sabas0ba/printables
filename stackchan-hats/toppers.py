@@ -781,6 +781,45 @@ def dragon_tail() -> Shape2D:
     return s
 
 
+PALM_CROWN = (3.6, 29.0)
+PALM_FRONDS = (-25.0, 12.0, 46.0, 80.0, 114.0, 148.0, 205.0)
+PALM_FROND_REACH = 11.0               # crown to frond centre
+PALM_FROND_HALF = (10.5, 3.2)         # frond semi-axes
+PALM_NUTS = (3.6, 24.6)               # backing of the coconut cluster
+PALM_THICKNESS = 2.0                  # thinner plate for the pitch moment budget
+
+
+def palm_tree() -> Shape2D:
+    """Leaning trunk and a crown of fronds on the front centre slot."""
+    s = Shape2D().mound(16, 3.4)
+    s.polygon([(-3.5, 0.0), (3.5, 0.0), (4.8, 10.0), (5.6, 20.0), (5.6, 29.0),
+               (1.6, 29.0), (1.0, 20.0), (-0.6, 10.0)])
+    s.circle(PALM_CROWN, 3.6)
+    s.circle(PALM_NUTS, 5.2)
+    for angle in PALM_FRONDS:
+        s.ellipse(polar(PALM_CROWN, PALM_FROND_REACH, angle), *PALM_FROND_HALF, angle)
+    return s
+
+
+def palm_coconuts() -> Shape2D:
+    """Three coconuts, at least EDGE_RADIUS inside the backing circle."""
+    u, v = PALM_NUTS
+    return (Shape2D().circle((u - 1.9, v + 0.7), 2.0).circle((u + 1.9, v + 0.7), 2.0)
+            .circle((u, v - 2.0), 2.0))
+
+
+def palm_grooves() -> Shape2D:
+    """Frond midribs and trunk rings, kept inside the rounded outline."""
+    s = Shape2D()
+    for angle in PALM_FRONDS:
+        s.bar(polar(PALM_CROWN, 5.5, angle), polar(PALM_CROWN, 18.0, angle), 0.8)
+    # Points on the trunk centre line.
+    for u, v in ((0.9, 5.0), (2.1, 10.0), (2.8, 15.0)):
+        s.bar((u - 0.7, v - 0.5), (u, v), 0.8)
+        s.bar((u, v), (u + 0.7, v - 0.5), 0.8)
+    return s
+
+
 # --------------------------------------------------------------------------
 
 def pair(name: str, outline, raised=None, engraved=None, row: str = "front",
@@ -847,6 +886,10 @@ SETS: list[TopperSet] = [
                                                      engraved=unicorn_grooves,
                                                      fillet=1.2)),
     TopperSet("halo", "Halo", centre("halo", halo, row="rear", fillet=1.0)),
+    TopperSet("palm-tree", "Palm tree", centre("palm-tree", palm_tree,
+                                               raised=palm_coconuts,
+                                               engraved=palm_grooves, fillet=1.0,
+                                               blend=1.5, thickness=PALM_THICKNESS)),
     TopperSet("large-angel-wings", "Large angel wings",
               pair("large-wing", angel_wing_large, engraved=angel_wing_large_lines,
                    row="wing", fillet=1.2, hangs=True, thickness=2.0)),

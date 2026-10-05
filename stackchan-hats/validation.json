@@ -1079,6 +1079,32 @@
     "max_pitch_moment_g_cm": 38.5,
     "own_pitch_moment_g_cm": 4.4
   },
+  "palm-tree": {
+    "title": "Palm tree",
+    "pieces": {
+      "palm-tree": {
+        "slot": "front-centre",
+        "tab_press_fit_mm3": 0.15
+      }
+    },
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 1.73,
+    "mass_g": 2.1,
+    "triangles": 11499,
+    "size_mm": [
+      40.65,
+      52.89,
+      3.2
+    ],
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 875.6,
+    "overhang_mm2": 0.0,
+    "lowest_z_in_motion_mm": -55.93,
+    "worn_mass_g": 14.7,
+    "max_pitch_moment_g_cm": 46.2,
+    "own_pitch_moment_g_cm": 12.0
+  },
   "large-angel-wings": {
     "title": "Large angel wings",
     "pieces": {
@@ -1243,6 +1269,236 @@
     "max_pitch_moment_g_cm": 43.9,
     "own_pitch_moment_g_cm": 10.3
   },
+  "shell-house": {
+    "title": "House",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.22,
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 142.45,
+    "mass_g": 176.6,
+    "triangles": 4586,
+    "size_mm": [
+      76.34,
+      57.17,
+      65.2
+    ],
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 2453.8,
+    "overhang_mm2": 0.07,
+    "allowed_pitch_deg": 66.0,
+    "pitch_limited_by": "moment",
+    "printed_mass_g": 40.5,
+    "max_pitch_moment_g_cm": 149.3,
+    "lowest_z_in_motion_mm": -49.26
+  },
+  "shell-tofu": {
+    "title": "Tofu with soy sauce",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.22,
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 131.93,
+    "mass_g": 163.6,
+    "triangles": 4492,
+    "size_mm": [
+      72.0,
+      39.0,
+      65.2
+    ],
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 2285.2,
+    "overhang_mm2": 0.07,
+    "allowed_pitch_deg": 87.0,
+    "pitch_limited_by": "full range",
+    "printed_mass_g": 37.4,
+    "max_pitch_moment_g_cm": 136.8,
+    "lowest_z_in_motion_mm": -56.83
+  },
+  "shell-pudding": {
+    "title": "Pudding",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.22,
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 153.95,
+    "mass_g": 190.9,
+    "triangles": 5594,
+    "size_mm": [
+      92.0,
+      52.08,
+      65.2
+    ],
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 2630.3,
+    "overhang_mm2": 0.07,
+    "allowed_pitch_deg": 70.0,
+    "pitch_limited_by": "moment",
+    "printed_mass_g": 43.3,
+    "max_pitch_moment_g_cm": 149.9,
+    "lowest_z_in_motion_mm": -50.97
+  },
+  "shell-norimaki": {
+    "title": "Norimaki",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.22,
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 156.37,
+    "mass_g": 193.9,
+    "triangles": 4070,
+    "size_mm": [
+      83.77,
+      47.0,
+      65.2
+    ],
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 2658.3,
+    "overhang_mm2": 0.07,
+    "allowed_pitch_deg": 82.0,
+    "pitch_limited_by": "moment",
+    "printed_mass_g": 41.5,
+    "max_pitch_moment_g_cm": 149.8,
+    "lowest_z_in_motion_mm": -55.35
+  },
+  "shell-sakuramochi": {
+    "title": "Sakuramochi",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.22,
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 156.81,
+    "mass_g": 194.4,
+    "triangles": 1782,
+    "size_mm": [
+      79.98,
+      50.0,
+      65.2
+    ],
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 2664.0,
+    "overhang_mm2": 0.07,
+    "allowed_pitch_deg": 74.0,
+    "pitch_limited_by": "moment",
+    "printed_mass_g": 41.4,
+    "max_pitch_moment_g_cm": 149.9,
+    "lowest_z_in_motion_mm": -52.56
+  },
+  "shell-omurice": {
+    "title": "Omurice",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.22,
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 154.78,
+    "mass_g": 191.9,
+    "triangles": 2934,
+    "size_mm": [
+      94.59,
+      41.0,
+      65.2
+    ],
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 2634.8,
+    "overhang_mm2": 0.07,
+    "allowed_pitch_deg": 87.0,
+    "pitch_limited_by": "full range",
+    "printed_mass_g": 41.8,
+    "max_pitch_moment_g_cm": 141.7,
+    "lowest_z_in_motion_mm": -56.83
+  },
+  "shell-onigiri-triangle": {
+    "title": "Triangle onigiri",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.22,
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 137.24,
+    "mass_g": 170.2,
+    "triangles": 1704,
+    "size_mm": [
+      88.12,
+      61.6,
+      65.2
+    ],
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 2370.0,
+    "overhang_mm2": 0.07,
+    "allowed_pitch_deg": 87.0,
+    "pitch_limited_by": "full range",
+    "printed_mass_g": 39.3,
+    "max_pitch_moment_g_cm": 148.0,
+    "lowest_z_in_motion_mm": -56.83
+  },
+  "shell-onigiri-round": {
+    "title": "Round onigiri",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.22,
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 197.85,
+    "mass_g": 245.3,
+    "triangles": 1652,
+    "size_mm": [
+      79.96,
+      56.89,
+      65.2
+    ],
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 3299.9,
+    "overhang_mm2": 0.07,
+    "allowed_pitch_deg": 49.0,
+    "pitch_limited_by": "moment",
+    "printed_mass_g": 48.2,
+    "max_pitch_moment_g_cm": 149.1,
+    "lowest_z_in_motion_mm": -40.91
+  },
+  "shell-shumai": {
+    "title": "Shumai",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.22,
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 117.95,
+    "mass_g": 146.3,
+    "triangles": 5820,
+    "size_mm": [
+      72.0,
+      44.98,
+      64.4
+    ],
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 2077.6,
+    "overhang_mm2": 0.07,
+    "allowed_pitch_deg": 87.0,
+    "pitch_limited_by": "full range",
+    "printed_mass_g": 35.5,
+    "max_pitch_moment_g_cm": 126.8,
+    "lowest_z_in_motion_mm": -56.83
+  },
+  "shell-bread": {
+    "title": "Sliced bread",
+    "head_interference_mm3": 0.0,
+    "detent_engagement_mm3": 1.22,
+    "solids": 1,
+    "valid": true,
+    "volume_cm3": 207.18,
+    "mass_g": 256.9,
+    "triangles": 2746,
+    "size_mm": [
+      76.0,
+      56.0,
+      65.2
+    ],
+    "min_z_mm": 0.0,
+    "bed_contact_mm2": 3455.0,
+    "overhang_mm2": 0.07,
+    "allowed_pitch_deg": 44.0,
+    "pitch_limited_by": "moment",
+    "printed_mass_g": 50.9,
+    "max_pitch_moment_g_cm": 148.3,
+    "lowest_z_in_motion_mm": -38.19
+  },
   "conflicting_pairs": [
     [
       "cap-bat-wings",
@@ -1281,6 +1537,10 @@
       "chick"
     ],
     [
+      "cat-ears",
+      "palm-tree"
+    ],
+    [
       "dog-ears",
       "ribbon"
     ],
@@ -1335,6 +1595,10 @@
     [
       "rabbit-ears",
       "chick"
+    ],
+    [
+      "rabbit-ears",
+      "palm-tree"
     ],
     [
       "bear-ears",
@@ -1393,6 +1657,10 @@
       "chick"
     ],
     [
+      "fox-ears",
+      "palm-tree"
+    ],
+    [
       "mouse-ears",
       "ribbon"
     ],
@@ -1423,6 +1691,10 @@
     [
       "mouse-ears",
       "chick"
+    ],
+    [
+      "mouse-ears",
+      "palm-tree"
     ],
     [
       "panda-ears",
@@ -1485,6 +1757,10 @@
       "chick"
     ],
     [
+      "frog-eyes",
+      "palm-tree"
+    ],
+    [
       "pig-ears",
       "ribbon"
     ],
@@ -1581,6 +1857,10 @@
       "chick"
     ],
     [
+      "heart-antennae",
+      "palm-tree"
+    ],
+    [
       "ball-antennae",
       "ribbon"
     ],
@@ -1603,6 +1883,10 @@
     [
       "ball-antennae",
       "chick"
+    ],
+    [
+      "ball-antennae",
+      "palm-tree"
     ],
     [
       "halo",
@@ -1628,10 +1912,10 @@
       "fox-tail",
       "halo",
       "large-angel-wings",
-      "rabbit-ears",
-      "santa-hat"
+      "palm-tree",
+      "rabbit-ears"
     ],
-    "moment_bound_g_cm": 144.4,
+    "moment_bound_g_cm": 146.9,
     "limit_g_cm": 150.0
   }
 }

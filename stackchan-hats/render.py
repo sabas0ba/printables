@@ -5,6 +5,7 @@ z-buffer and Pillow, with no GPU or windowing system.
 """
 
 from dataclasses import dataclass
+import json
 from pathlib import Path
 
 import cadquery as cq
@@ -15,6 +16,7 @@ from PIL import Image, ImageDraw, ImageFont
 import cap
 import head
 import integral
+import shells
 import toppers
 
 
@@ -181,10 +183,32 @@ def worn_meshes(topper: toppers.TopperSet, colour: tuple[int, int, int],
 
 
 SMALL_ROWS = ("front", "rear")
+LARGE_KEYS = ("palm-tree",)         # front-row sets too tall for the catalogue grid
+SHELL_COLOURS = {
+    "shell-house": (232, 190, 168), "shell-tofu": (246, 244, 236),
+    "shell-pudding": (247, 222, 150), "shell-norimaki": (96, 104, 96),
+    "shell-sakuramochi": (244, 190, 204), "shell-omurice": (248, 214, 110),
+    "shell-onigiri-triangle": (244, 244, 240), "shell-onigiri-round": (244, 244, 240),
+    "shell-shumai": (240, 226, 196), "shell-bread": (240, 212, 160),
+}
+# Preview colour of the raised front details; the parts print in one colour.
+RELIEF_COLOURS = {
+    "shell-house": (150, 96, 80), "shell-tofu": (120, 72, 40),
+    "shell-pudding": (150, 90, 40), "shell-norimaki": (60, 66, 60),
+    "shell-sakuramochi": (120, 170, 110), "shell-omurice": (210, 60, 50),
+    "shell-onigiri-triangle": (52, 60, 56), "shell-onigiri-round": (52, 60, 56),
+    "shell-bread": (196, 140, 80),
+}
+RELIEF_SHIFT = cq.Vector(0, -0.05, 0)   # in front of the coincident shell faces
 
 
 def small_sets() -> list[toppers.TopperSet]:
-    return [t for t in toppers.SETS if t.pieces[0].row in SMALL_ROWS]
+    return [t for t in toppers.SETS
+            if t.pieces[0].row in SMALL_ROWS and t.key not in LARGE_KEYS]
+
+
+def large_sets() -> list[toppers.TopperSet]:
+    return [t for t in toppers.SETS if t not in small_sets()]
 
 
 def render_catalogue(proxy: list[Mesh], cap_solid: cq.Shape) -> None:
@@ -250,7 +274,7 @@ def render_large(proxy: list[Mesh], cap_solid: cq.Shape) -> None:
     for index, variant in enumerate(integral.VARIANTS):
         colour = PALETTE[(index + 2) % len(PALETTE)]
         items.append((variant.title, [tessellate(integral.build(variant), colour)]))
-    large = [t for t in toppers.SETS if t.pieces[0].row not in SMALL_ROWS]
+    large = large_sets()
     cap_mesh = tessellate(cap_solid, PALETTE[0])
     for index, topper in enumerate(large):
         colour = PALETTE[(index + 4) % len(PALETTE)]
@@ -270,6 +294,36 @@ def render_large(proxy: list[Mesh], cap_solid: cq.Shape) -> None:
         y = 12 + (index // columns) * (size + 12)
         draw(canvas, proxy + meshes, (x, y, size, size), view, title, bounds, 12)
     canvas.save(IMAGES / "large.png", optimize=True)
+
+
+def render_shells(proxy: list[Mesh]) -> None:
+    """Head-covering shells, worn, titled with their allowed look-up angle."""
+    report = json.loads((DIRECTORY / "validation.json").read_text())
+    columns, size = 5, 360
+    rows = -(-len(shells.SHELLS) // columns)
+    canvas = Image.new("RGB", (columns * (size + 12) + 12, rows * (size + 12) + 12),
+                       BACKGROUND)
+    view = (0.42, -1.0, 0.32)
+    right, up, _ = camera(view)
+    corners = np.array([[x, y, z] for x in (-50, 50) for y in (-16, 50)
+                        for z in (-60, 52)])
+    bounds = (np.array([corners @ right, corners @ up]).min(1),
+              np.array([corners @ right, corners @ up]).max(1))
+    for index, shell in enumerate(shells.SHELLS):
+        meshes = [tessellate(shells.build(shell), SHELL_COLOURS[shell.key])]
+        outline = shells.outline_face(shell.silhouette())
+        cutters = shells.engravings(shell, outline)
+        for relief in shells.reliefs(shell, outline):
+            for cutter in cutters:
+                relief = relief.cut(cutter)
+            meshes.append(tessellate(relief.translate(RELIEF_SHIFT),
+                                     RELIEF_COLOURS[shell.key]))
+        angle = report[shell.key]["allowed_pitch_deg"]
+        x = 12 + (index % columns) * (size + 12)
+        y = 12 + (index // columns) * (size + 12)
+        draw(canvas, proxy + meshes, (x, y, size, size), view,
+             f"{shell.title}, up to {angle:.0f} deg", bounds, 12)
+    canvas.save(IMAGES / "shells.png", optimize=True)
 
 
 def render_motion(head_meshes: list[Mesh], body: list[Mesh], cap_solid: cq.Shape) -> None:
@@ -307,6 +361,7 @@ def main() -> None:
     render_parts()
     render_catalogue(proxy, cap_solid)
     render_large(proxy, cap_solid)
+    render_shells(proxy)
     render_motion(head_meshes, body, cap_solid)
 
 

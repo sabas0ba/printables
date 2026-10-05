@@ -16,6 +16,7 @@ import numpy as np
 import cap
 import head
 import integral
+import shells
 import toppers
 
 
@@ -36,6 +37,9 @@ HEAD_GAP = 0.5                     # minimum distance from decorations to head
 EPSILON_VOLUME = 0.05              # mm3, numerical contact allowance
 SAMPLE_SPACING = 1.0               # mm, surface samples for the pitch sweep
 MOMENT_LIMIT = 150.0               # g cm about the pitch axis, worn set + cap
+SHELL_SKIN = 0.9                   # mm, two 0.45 mm perimeters and skin layers
+SHELL_INFILL = 0.10                # sparse infill fraction inside the skin
+SHELL_MIN_PITCH_DEG = 30.0         # smallest acceptable look-up range for a shell
 
 
 def box(x0: float, x1: float, y0: float, y1: float, z0: float, z1: float) -> cq.Solid:
@@ -221,6 +225,68 @@ def motion_facts(name: str, shapes: list[cq.Shape], own: list[cq.Shape]) -> dict
             "own_pitch_moment_g_cm": round(pitch_moment(own)[1], 1)}
 
 
+def printed_mass(shape: cq.Shape) -> tuple[float, np.ndarray]:
+    """Mass in g and centre of mass for a print with skin and sparse infill.
+
+    The skin is the surface area times SHELL_SKIN, placed at the surface
+    centroid; the rest of the volume is filled to SHELL_INFILL.
+    """
+    volume = shape.Volume()
+    faces = shape.Faces()
+    area = sum(f.Area() for f in faces)
+    skin_centre = sum((f.Center() * f.Area() for f in faces), cq.Vector()) / area
+    skin = min(volume, area * SHELL_SKIN)
+    core = (volume - skin) * SHELL_INFILL
+    if volume - skin > 1e-9:
+        core_centre = (shape.Center() * volume - skin_centre * skin) / (volume - skin)
+    else:
+        core_centre = skin_centre
+    centre = (skin_centre * skin + core_centre * core) / (skin + core)
+    return (skin + core) / 1000 * PLA_DENSITY, np.array(centre.toTuple())
+
+
+def check_shell(name: str, solid: cq.Shape) -> dict[str, Any]:
+    if not solid.isValid() or len(solid.Solids()) != 1:
+        raise SystemExit(f"{name}: not a valid single solid")
+    interference = solid.intersect(head.envelope(0.0)).Volume()
+    detents = solid.intersect(head.envelope(0.0, holes=False)).Volume()
+    if interference > EPSILON_VOLUME:
+        raise SystemExit(f"{name}: {interference:.3f} mm3 interference with the head")
+    if detents < 0.1:
+        raise SystemExit(f"{name}: detents do not reach into the side holes")
+    return {"head_interference_mm3": round(interference, 3),
+            "detent_engagement_mm3": round(detents, 2)}
+
+
+def shell_motion(name: str, solid: cq.Shape) -> dict[str, Any]:
+    """Largest look-up angle with clearance and the moment within the limit.
+
+    Shells cover the head's rear, so instead of the full pitch range the
+    angle up to which both conditions hold from 0 degrees is reported.
+    """
+    points = surface_samples(solid)
+    exposed = ~head.shielded(points)
+    mass, centre = printed_mass(solid)
+    allowed, moment, lowest, reason = None, 0.0, np.inf, "full range"
+    for angle in np.arange(head.PITCH_RANGE_DEG[0], head.PITCH_RANGE_DEG[1] + 1e-9):
+        moved = head.pitch(points, angle)
+        arm = abs(head.pitch(centre[None], angle)[0, 1] - head.PITCH_AXIS[0]) / 10
+        if head.collisions(moved, exposed).any():
+            reason = "clearance"
+            break
+        if mass * arm > MOMENT_LIMIT:
+            reason = "moment"
+            break
+        allowed, moment = float(angle), max(moment, mass * arm)
+        lowest = min(lowest, float(moved[:, 2].min()))
+    if allowed is None or allowed < SHELL_MIN_PITCH_DEG:
+        raise SystemExit(f"{name}: looks up only to {allowed} deg ({reason})")
+    return {"allowed_pitch_deg": allowed, "pitch_limited_by": reason,
+            "printed_mass_g": round(mass, 1),
+            "max_pitch_moment_g_cm": round(float(moment), 1),
+            "lowest_z_in_motion_mm": round(lowest, 2)}
+
+
 def worst_combination(report: dict[str, Any], groups: dict[str, str]) -> dict[str, Any]:
     """Upper bound for any combination: one cap and one set per slot group.
 
@@ -313,6 +379,13 @@ def main() -> None:
                             for piece, _, body in items]
         slots[topper.key] = {f"{piece.row}-{piece.slot}" for piece, _, _ in items}
         print(f"{topper.key}: ok")
+
+    for shell in shells.SHELLS:
+        solid = shells.build(shell)
+        facts = check_shell(shell.key, solid) | export(shells.to_print(solid), shell.key)
+        report[shell.key] = ({"title": shell.title} | facts
+                             | shell_motion(shell.key, solid))
+        print(f"{shell.key}: ok")
 
     report["conflicting_pairs"] = conflicts(worn, slots)
     groups = {t.key: "-".join(sorted({p.row for p in t.pieces})) + (

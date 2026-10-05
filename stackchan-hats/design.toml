@@ -1,5 +1,5 @@
 title = "M5Stack StackChan hats"
-summary = "Push-on cap for the K151 head, 31 plug-in decoration sets and 4 one-piece cap variants; support-free; clear of body and base over the full pitch range."
+summary = "Push-on cap for the K151 head, 32 plug-in decoration sets, 4 one-piece cap variants and 10 house and food shells; support-free; clear of body and base over the full pitch range (shells: up to a per-shell look-up angle)."
 prototype = true
 added = 2026-10-04
 lang = "ja"
@@ -159,6 +159,11 @@ quantity = 0
 description = "Decoration: Halo"
 
 [[parts]]
+file = "stl/palm-tree.stl"
+quantity = 0
+description = "Decoration: Palm tree"
+
+[[parts]]
 file = "stl/large-angel-wings.stl"
 quantity = 0
 description = "Decoration: Large angel wings, 2 pieces"
@@ -187,3 +192,53 @@ description = "Decoration: Devil tail"
 file = "stl/dragon-tail.stl"
 quantity = 0
 description = "Decoration: Dragon tail"
+
+[[parts]]
+file = "stl/shell-house.stl"
+quantity = 0
+description = "Shell: House; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-tofu.stl"
+quantity = 0
+description = "Shell: Tofu with soy sauce; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-pudding.stl"
+quantity = 0
+description = "Shell: Pudding; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-norimaki.stl"
+quantity = 0
+description = "Shell: Norimaki; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-sakuramochi.stl"
+quantity = 0
+description = "Shell: Sakuramochi; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-omurice.stl"
+quantity = 0
+description = "Shell: Omurice; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-onigiri-triangle.stl"
+quantity = 0
+description = "Shell: Triangle onigiri; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-onigiri-round.stl"
+quantity = 0
+description = "Shell: Round onigiri; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-shumai.stl"
+quantity = 0
+description = "Shell: Shumai; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-bread.stl"
+quantity = 0
+description = "Shell: Sliced bread; replaces the cap, no decorations"
