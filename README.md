@@ -7,6 +7,7 @@
 | [Mi Vacuum Cleaner Mini holder](mi-vacuum-cleaner-mini/README.md) | STL, CadQuery source, three views and preview | Horizontal cradle with nozzle and charging-port access |
 | [Stackable chili drying basket](chili-drying-rack/README.md) | STL, CadQuery source, dimensioned views and assembly preview | Sliding baskets, V supports, harvest-date wheels and removable drip tray; all printed |
 | [Raspberry Pi 5 NVMe case](raspberry-pi-5-nvme-case/README.md) | STL, CadQuery source, views, section and assembly preview | Pi 5 + M.2 HAT+ + 2280 SSD; snap-fit lid, no extra screws; passive; port, button and microSD access; prototype |
+| [ThinkPad E14 stand](thinkpad-e14-stand/README.md) | STL, CadQuery source, three views, preview and usage views | One reclined slot for closed storage or display-only open use; trays for the AC adapter and a mouse |
 | [Tool-free slipper stand](slipper-stand/README.md) | STL, OpenSCAD source, assembly and joint previews | Four pairs; inward-facing soles; rounded edges and printed locking pins; prototype |
 | [M5Stack StackChan hats](stackchan-hats/README.md) | STL, CadQuery source, catalogue, part and motion previews | Push-on cap for the K151 head, 31 plug-in decoration sets (animal ears, horns, hats, large wings, tails) and 4 one-piece cap variants; support-free; clear of body and base over the full pitch range; not yet test-printed |
 

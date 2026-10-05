@@ -17,6 +17,7 @@ MODELS = {
     "raspberry-pi-5-nvme-case": ("tray.stl", "lid.stl", "reference-assembly.stl",
                                  "views.png", "preview.png", "section.png"),
     "stackchan-hats": ("validation.json", "images/*.png", "stl/*.stl"),
+    "thinkpad-e14-stand": ("stand.stl", "views.png", "preview.png", "usage.png"),
 }
 
 
