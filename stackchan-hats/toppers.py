@@ -224,36 +224,53 @@ def extrude(shape: Shape2D, height: float, z: float = 0.0,
                                   if len(solids) > 1 else solids[0])
 
 
-def tab() -> cq.Solid:
-    """Tab below v = 0 with crush bumps on both ends and a lead-in."""
+def tab_points() -> list[Point]:
+    """Tab outline below v = 0 with crush bumps on both ends and a lead-in."""
     half = cap.TAB_LENGTH / 2
     depth = cap.TAB_DEPTH
     lead = 0.4
     mid = -depth / 2
-    points = [(-half, 0.5), (-half, mid + 0.6), (-half - BUMP, mid),
-              (-half, mid - 0.6), (-half, -depth + lead), (-half + lead, -depth),
-              (half - lead, -depth), (half, -depth + lead), (half, mid - 0.6),
-              (half + BUMP, mid), (half, mid + 0.6), (half, 0.5)]
-    return (cq.Workplane("XY").polyline(points).close()
+    return [(-half, 0.5), (-half, mid + 0.6), (-half - BUMP, mid),
+            (-half, mid - 0.6), (-half, -depth + lead), (-half + lead, -depth),
+            (half - lead, -depth), (half, -depth + lead), (half, mid - 0.6),
+            (half + BUMP, mid), (half, mid + 0.6), (half, 0.5)]
+
+
+def tab() -> cq.Solid:
+    return (cq.Workplane("XY").polyline(tab_points()).close()
             .extrude(THICKNESS).val())
 
 
-def build_body(piece: Piece) -> cq.Shape:
-    """Decoration plate without tab, upper face rounded, details applied."""
+def build_body(piece: Piece, with_tab: bool = False) -> cq.Shape:
+    """Decoration plate, upper face rounded, details applied.
+
+    With ``with_tab`` and a plate as thick as the tab, the tab is merged
+    into the 2D outline before the single extrusion: a 3D boolean between
+    coplanar tab and plate faces gave triangulations that varied between
+    runs and machines.
+    """
     outline = piece.outline().mound(cap.TAB_LENGTH + 6, 3.6)
     # Nothing may extend below the cap top, except outside the skirt for
     # pieces that hang down beside the head.
     limit = SIDE_CLEAR_U if piece.hangs else 200.0
     outline.rect((limit - 200, -50), 400, 100, mode="s")
     t = piece.thickness
-    body = extrude(outline, t, fillet=piece.fillet, single=True, blend=piece.blend)
-    # Round the upper face outline except the straight base edge on v = 0:
-    # the tab joins there, and a rounded edge would leave the tab corners
+    merged = with_tab and abs(t - cap.TAB_THICKNESS) < 1e-9
+    faces = outline.faces(piece.fillet, piece.blend)
+    if len(faces) != 1:
+        raise ValueError(f"{piece.name}: outline must be one region, got {len(faces)}")
+    if merged:
+        joined = Shape2D().add_face(faces[0]).polygon(tab_points()).faces(None)
+        faces = joined
+    body = cq.Workplane("XY").add(
+        cq.Solid.extrudeLinear(faces[0], cq.Vector(0, 0, t)))
+    # Round the upper face outline except the straight base edge on v = 0
+    # and the tab below it: a rounded base edge would leave the tab corners
     # poking through it as slivers whose meshing is not reproducible.
     solid = body.val()
     top = body.faces(">Z").edges().vals()
-    rounded = [e for e in top
-               if not (abs(e.startPoint().y) < 1e-6 and abs(e.endPoint().y) < 1e-6)]
+    rounded = [e for e in top if max(e.startPoint().y, e.endPoint().y,
+                                     e.Center().y) > 1e-6]
     body = cq.Workplane("XY").add(solid.fillet(EDGE_RADIUS, rounded))
     if piece.raised:
         relief = extrude(piece.raised(), DETAIL + 0.5, t - 0.5,
@@ -263,16 +280,15 @@ def build_body(piece: Piece) -> cq.Shape:
     if piece.engraved:
         cut = extrude(piece.engraved(), DETAIL + 2, t - DETAIL, fillet=None)
         body = body.cut(cut)
+    if with_tab and not merged:
+        body = cq.Workplane("XY").add(body.val().fuse(tab()).clean())
     return body.val()
 
 
 def build_piece(piece: Piece) -> tuple[cq.Shape, cq.Shape]:
     """Return (piece with tab, body only) in print orientation."""
     body = build_body(piece)
-    # The tab shares the plate's top and bottom planes; unifying those faces
-    # makes the topology, and so the exported mesh, independent of the order
-    # in which the boolean happened to split them.
-    full = body.fuse(tab()).clean()
+    full = build_body(piece, with_tab=True)
     if not full.isValid() or len(full.Solids()) != 1:
         raise ValueError(f"{piece.name}: not a valid single solid")
     return full, body
@@ -286,7 +302,7 @@ def mirrored(shape: cq.Shape) -> cq.Shape:
 # Animal ears and other pairs, outlines for the right-hand slot.
 
 def cat_ear() -> Shape2D:
-    return Shape2D().polygon([(-8, 0), (9, 0), (4.5, 17)])
+    return Shape2D().polygon([(-10, 0), (10.5, 0), (4.5, 17)])
 
 
 def cat_inner() -> Shape2D:
@@ -589,10 +605,18 @@ def unicorn_horn() -> Shape2D:
 
 
 def unicorn_grooves() -> Shape2D:
+    """Spiral grooves ending clear of the rounded outline edge.
+
+    Grooves that run out inside the edge rounding leave sliver faces whose
+    triangulation is not reproducible across machines.
+    """
     s = Shape2D()
-    for k, v in enumerate((5.0, 9.5, 14.0, 18.5)):
-        half = 4.6 * (1 - (v - 1) / 24) - 0.8
-        s.bar((-half, v - 1.2), (half, v + 1.2), 0.8)
+    inset = EDGE_RADIUS + OUTLINE_RADIUS + 0.1
+    for v in (5.0, 9.5, 14.0):
+        v0, v1 = v - 1.2, v + 1.2
+        left = -5.2 + 6.0 * (v0 - 1) / 24 + inset
+        right = 5.2 - 4.4 * (v1 - 1) / 24 - inset
+        s.bar((left, v0), (right, v1), 0.8)
     return s
 
 
