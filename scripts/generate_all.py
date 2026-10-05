@@ -14,6 +14,8 @@ MODELS = {
                          "month-dial.stl", "day-dial.stl", "dial-clip.stl",
                          "basket-detail.png", "views.png",
                          "preview.png", "assembly.png", "drawer.png", "accessories.png"),
+    "raspberry-pi-5-nvme-case": ("tray.stl", "lid.stl", "reference-assembly.stl",
+                                 "views.png", "preview.png", "section.png"),
     "stackchan-hats": ("validation.json", "images/*.png", "stl/*.stl"),
 }
 
