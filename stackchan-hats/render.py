@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import cadquery as cq
+from OCP.OSD import OSD_ThreadPool
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
@@ -16,6 +17,10 @@ import head
 import integral
 import toppers
 
+
+# Parallel booleans and meshing in OCC can split faces differently from run
+# to run. One worker thread keeps the outputs byte-for-byte reproducible.
+OSD_ThreadPool.DefaultPool_s(1)
 
 DIRECTORY = Path(__file__).resolve().parent
 IMAGES = DIRECTORY / "images"

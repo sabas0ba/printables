@@ -10,6 +10,7 @@ import struct
 from typing import Any
 
 import cadquery as cq
+from OCP.OSD import OSD_ThreadPool
 import numpy as np
 
 import cap
@@ -17,6 +18,10 @@ import head
 import integral
 import toppers
 
+
+# Parallel booleans and meshing in OCC can split faces differently from run
+# to run. One worker thread keeps the outputs byte-for-byte reproducible.
+OSD_ThreadPool.DefaultPool_s(1)
 
 DIRECTORY = Path(__file__).resolve().parent
 OUTPUT = DIRECTORY / "stl"
@@ -116,8 +121,10 @@ def solid_facts(shape: cq.Shape) -> dict[str, Any]:
 
 def export(shape: cq.Shape, name: str) -> dict[str, Any]:
     path = OUTPUT / f"{name}.stl"
-    cq.exporters.export(shape, str(path), tolerance=TOLERANCE,
-                        angularTolerance=ANGULAR_TOLERANCE)
+    # Serial meshing: the parallel mesher can triangulate a face differently
+    # from run to run, which reordering alone cannot make reproducible.
+    shape.exportStl(str(path), tolerance=TOLERANCE, angularTolerance=ANGULAR_TOLERANCE,
+                    ascii=False, relative=True, parallel=False)
     normalise_stl(path)
     facts = solid_facts(shape) | inspect_mesh(path)
     if facts["min_z_mm"] != 0.0 or facts["bed_contact_mm2"] <= 0:
