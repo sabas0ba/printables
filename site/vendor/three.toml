@@ -1,0 +1,33 @@
+# Vendored three.js files for the STL viewer on the GitHub Pages site.
+# Fetched from the upstream Git tag, not from the npm registry.
+# `scripts/vendor_three.py` fetches the files; `--check` verifies the hashes offline.
+
+repository = "https://github.com/mrdoob/three.js"
+tag = "r186"
+commit = "9b4a2ac29c63ccb43fd51c5661f2f873ac2c39b8"
+license = "MIT"
+
+[[files]]
+source = "LICENSE"
+target = "LICENSE"
+sha256 = "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc"
+
+[[files]]
+source = "build/three.core.js"
+target = "three.core.js"
+sha256 = "9edde002b066a9a05676a6127f67735b62baf399bdea529f2f7e31657da769e6"
+
+[[files]]
+source = "build/three.module.js"
+target = "three.module.js"
+sha256 = "9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea"
+
+[[files]]
+source = "examples/jsm/controls/OrbitControls.js"
+target = "addons/controls/OrbitControls.js"
+sha256 = "3d79d07ecb686b4e5d93232eedab255331c1beef711e13164eaa1f68655a5f2b"
+
+[[files]]
+source = "examples/jsm/loaders/STLLoader.js"
+target = "addons/loaders/STLLoader.js"
+sha256 = "023ed97f848b633d8bcd53d4db3b996d29d0c644088700691297c552257d480b"

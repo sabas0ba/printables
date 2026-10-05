@@ -1,0 +1,12 @@
+title = "ThinkPad E14 stand"
+summary = "One reclined slot for closed storage or display-only open use; trays for the AC adapter and a mouse."
+prototype = false
+added = 2026-10-04
+lang = "en"
+source = "CadQuery"
+cover = "preview.png"
+
+[[parts]]
+file = "stand.stl"
+quantity = 1
+description = "Stand, one piece"
