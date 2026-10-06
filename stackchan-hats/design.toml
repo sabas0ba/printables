@@ -1,0 +1,294 @@
+title = "M5Stack StackChan hats"
+summary = "Push-on cap for the K151 head, 35 plug-in decoration sets, 4 one-piece cap variants, 6 food drapes that dress the head itself as tofu, pudding or onigiri, and 11 house and food shells; support-free; clear of body and base over the full pitch range (shells: up to a per-shell look-up angle)."
+prototype = true
+added = 2026-10-04
+lang = "ja"
+source = "CadQuery"
+cover = "images/catalogue.png"
+
+# The cap is required; cap variants replace it, and decoration sets are
+# chosen freely, so they are listed with quantity 0 (optional).
+[[parts]]
+file = "stl/cap.stl"
+quantity = 1
+description = "Push-on cap with decoration slots"
+
+[[parts]]
+file = "stl/cap-bat-wings.stl"
+quantity = 0
+description = "Cap variant: folded bat wings; replaces the cap"
+
+[[parts]]
+file = "stl/cap-lop-ears.stl"
+quantity = 0
+description = "Cap variant: lop ears; replaces the cap"
+
+[[parts]]
+file = "stl/cap-lion-mane.stl"
+quantity = 0
+description = "Cap variant: lion mane; replaces the cap"
+
+[[parts]]
+file = "stl/cap-petal-frame.stl"
+quantity = 0
+description = "Cap variant: petal frame; replaces the cap"
+
+[[parts]]
+file = "stl/drape-soy-sauce.stl"
+quantity = 0
+description = "Drape: Soy sauce, head as tofu; replaces the cap"
+
+[[parts]]
+file = "stl/drape-caramel.stl"
+quantity = 0
+description = "Drape: Caramel, head as pudding; replaces the cap"
+
+[[parts]]
+file = "stl/drape-nori-band.stl"
+quantity = 0
+description = "Drape: Nori band, head as onigiri; replaces the cap"
+
+[[parts]]
+file = "stl/drape-nori-wrap.stl"
+quantity = 0
+description = "Drape: Nori wrap, head as norimaki; replaces the cap"
+
+[[parts]]
+file = "stl/drape-sakura-leaf.stl"
+quantity = 0
+description = "Drape: Cherry leaf, head as sakuramochi; replaces the cap"
+
+[[parts]]
+file = "stl/drape-crust.stl"
+quantity = 0
+description = "Drape: Crust, head as sliced bread; replaces the cap"
+
+[[parts]]
+file = "stl/cat-ears.stl"
+quantity = 0
+description = "Decoration: Cat ears, 2 pieces"
+
+[[parts]]
+file = "stl/dog-ears.stl"
+quantity = 0
+description = "Decoration: Dog ears (drooping), 2 pieces"
+
+[[parts]]
+file = "stl/rabbit-ears.stl"
+quantity = 0
+description = "Decoration: Rabbit ears, 2 pieces"
+
+[[parts]]
+file = "stl/bear-ears.stl"
+quantity = 0
+description = "Decoration: Bear ears, 2 pieces"
+
+[[parts]]
+file = "stl/fox-ears.stl"
+quantity = 0
+description = "Decoration: Fox ears, 2 pieces"
+
+[[parts]]
+file = "stl/mouse-ears.stl"
+quantity = 0
+description = "Decoration: Mouse ears, 2 pieces"
+
+[[parts]]
+file = "stl/panda-ears.stl"
+quantity = 0
+description = "Decoration: Panda ears, 2 pieces"
+
+[[parts]]
+file = "stl/frog-eyes.stl"
+quantity = 0
+description = "Decoration: Frog eyes, 2 pieces"
+
+[[parts]]
+file = "stl/pig-ears.stl"
+quantity = 0
+description = "Decoration: Pig ears, 2 pieces"
+
+[[parts]]
+file = "stl/sheep-horns.stl"
+quantity = 0
+description = "Decoration: Sheep horns, 2 pieces"
+
+[[parts]]
+file = "stl/devil-horns.stl"
+quantity = 0
+description = "Decoration: Devil horns, 2 pieces"
+
+[[parts]]
+file = "stl/heart-antennae.stl"
+quantity = 0
+description = "Decoration: Heart antennae, 2 pieces"
+
+[[parts]]
+file = "stl/ball-antennae.stl"
+quantity = 0
+description = "Decoration: Ball antennae, 2 pieces"
+
+[[parts]]
+file = "stl/angel-wings.stl"
+quantity = 0
+description = "Decoration: Angel wings, 2 pieces"
+
+[[parts]]
+file = "stl/ribbon.stl"
+quantity = 0
+description = "Decoration: Ribbon"
+
+[[parts]]
+file = "stl/crown.stl"
+quantity = 0
+description = "Decoration: Crown"
+
+[[parts]]
+file = "stl/flower.stl"
+quantity = 0
+description = "Decoration: Flower"
+
+[[parts]]
+file = "stl/sprout.stl"
+quantity = 0
+description = "Decoration: Sprout"
+
+[[parts]]
+file = "stl/ahoge.stl"
+quantity = 0
+description = "Decoration: Ahoge (single hair strand)"
+
+[[parts]]
+file = "stl/star-wand.stl"
+quantity = 0
+description = "Decoration: Star antenna"
+
+[[parts]]
+file = "stl/witch-hat.stl"
+quantity = 0
+description = "Decoration: Witch hat"
+
+[[parts]]
+file = "stl/santa-hat.stl"
+quantity = 0
+description = "Decoration: Santa hat"
+
+[[parts]]
+file = "stl/chick.stl"
+quantity = 0
+description = "Decoration: Chick"
+
+[[parts]]
+file = "stl/unicorn-horn.stl"
+quantity = 0
+description = "Decoration: Unicorn horn"
+
+[[parts]]
+file = "stl/halo.stl"
+quantity = 0
+description = "Decoration: Halo"
+
+[[parts]]
+file = "stl/yakumi.stl"
+quantity = 0
+description = "Decoration: Ginger and spring onion"
+
+[[parts]]
+file = "stl/cherry.stl"
+quantity = 0
+description = "Decoration: Cherry"
+
+[[parts]]
+file = "stl/umeboshi.stl"
+quantity = 0
+description = "Decoration: Umeboshi"
+
+[[parts]]
+file = "stl/palm-tree.stl"
+quantity = 0
+description = "Decoration: Palm tree"
+
+[[parts]]
+file = "stl/large-angel-wings.stl"
+quantity = 0
+description = "Decoration: Large angel wings, 2 pieces"
+
+[[parts]]
+file = "stl/dragon-wings.stl"
+quantity = 0
+description = "Decoration: Dragon wings, 2 pieces"
+
+[[parts]]
+file = "stl/cat-tail.stl"
+quantity = 0
+description = "Decoration: Cat tail"
+
+[[parts]]
+file = "stl/fox-tail.stl"
+quantity = 0
+description = "Decoration: Fox tail"
+
+[[parts]]
+file = "stl/devil-tail.stl"
+quantity = 0
+description = "Decoration: Devil tail"
+
+[[parts]]
+file = "stl/dragon-tail.stl"
+quantity = 0
+description = "Decoration: Dragon tail"
+
+[[parts]]
+file = "stl/shell-house.stl"
+quantity = 0
+description = "Shell: House; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-house-roof.stl"
+quantity = 0
+description = "Shell: House roof, head as house; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-tofu.stl"
+quantity = 0
+description = "Shell: Tofu with soy sauce; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-pudding.stl"
+quantity = 0
+description = "Shell: Pudding; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-norimaki.stl"
+quantity = 0
+description = "Shell: Norimaki; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-sakuramochi.stl"
+quantity = 0
+description = "Shell: Sakuramochi; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-omurice.stl"
+quantity = 0
+description = "Shell: Omurice; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-onigiri-triangle.stl"
+quantity = 0
+description = "Shell: Triangle onigiri; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-onigiri-round.stl"
+quantity = 0
+description = "Shell: Round onigiri; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-shumai.stl"
+quantity = 0
+description = "Shell: Shumai; replaces the cap, no decorations"
+
+[[parts]]
+file = "stl/shell-bread.stl"
+quantity = 0
+description = "Shell: Sliced bread; replaces the cap, no decorations"

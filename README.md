@@ -9,8 +9,9 @@ Browse the designs, with an interactive 3D view of each STL file, at
 | Design | Files | Notes |
 | --- | --- | --- |
 | [ThinkPad E14 stand](thinkpad-e14-stand/README.md) | 1 STL (1 print), CadQuery source | One reclined slot for closed storage or display-only open use; trays for the AC adapter and a mouse |
-| [Raspberry Pi 5 NVMe case](raspberry-pi-5-nvme-case/README.md) | 2 STL (2 prints), CadQuery source | Pi 5 + M.2 HAT+ + 2280 SSD; snap-fit lid without extra screws; passive cooling; port, button and microSD access; prototype |
-| [Tool-free slipper stand](slipper-stand/README.md) | 10 STL (43 prints), OpenSCAD source | Holds four pairs with the soles facing inward; rounded edges and printed locking pins; prototype |
+| [M5Stack StackChan hats](stackchan-hats/README.md) | 1 STL (1 print) + 56 optional or reference, CadQuery source | Push-on cap for the K151 head, 35 plug-in decoration sets, 4 one-piece cap variants, 6 food drapes that dress the head itself as tofu, pudding or onigiri, and 11 house and food shells; support-free; clear of body and base over the full pitch range (shells: up to a per-shell look-up angle); prototype |
+| [Raspberry Pi 5 NVMe case](raspberry-pi-5-nvme-case/README.md) | 2 STL (2 prints) + 1 optional or reference, CadQuery source | Pi 5 + M.2 HAT+ + 2280 SSD; snap-fit lid without extra screws; passive cooling; port, button and microSD access; prototype |
+| [Tool-free slipper stand](slipper-stand/README.md) | 10 STL (43 prints) + 2 optional or reference, OpenSCAD source | Holds four pairs with the soles facing inward; rounded edges and printed locking pins; prototype |
 | [Stackable chili drying basket](chili-drying-rack/README.md) | 7 STL (20 prints), CadQuery source | Sliding baskets, V supports, harvest-date wheels and a removable drip tray; all parts printed |
 | [Mi Vacuum Cleaner Mini holder](mi-vacuum-cleaner-mini/README.md) | 1 STL (1 print), CadQuery source | Horizontal cradle with nozzle and charging-port access |
 <!-- designs:end -->
@@ -42,8 +43,9 @@ docker run --rm -v "$PWD:/workspace" printables-check \
   nix develop --offline --command /opt/printables-venv/bin/python scripts/generate_all.py
 ```
 
-For the CadQuery designs, `--check` compares STL and PNG files byte-for-byte
-with the committed artifacts. CI performs that check inside the container with
+For the CadQuery designs, `--check` compares STL, PNG and report files
+byte-for-byte with the committed artifacts, and fails if files are added or
+missing. CI performs that check inside the container with
 networking disabled. The OpenSCAD slipper stand is a v0.3 snapshot: the same
 command validates its committed printable meshes and report, without regenerating
 its geometry or previews. See its README for separate regeneration commands.

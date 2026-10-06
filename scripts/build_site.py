@@ -66,6 +66,11 @@ class Design:
     def printed_files(self) -> int:
         return sum(1 for part in self.parts if part.quantity > 0)
 
+    @property
+    def optional_files(self) -> int:
+        """STL files with quantity 0: optional alternatives or reference-only geometry."""
+        return len(self.parts) - self.printed_files
+
 
 def load_design(directory: Path) -> Design:
     path = directory / "design.toml"
@@ -202,8 +207,11 @@ def plural(count: int, noun: str) -> str:
 
 
 def parts_summary(design: Design) -> str:
-    return (f"{plural(design.printed_parts, 'printed part')} from "
-            f"{plural(design.printed_files, 'STL file')}")
+    summary = (f"{plural(design.printed_parts, 'printed part')} from "
+               f"{plural(design.printed_files, 'STL file')}")
+    if design.optional_files:
+        summary += f", {design.optional_files} optional or reference"
+    return summary
 
 
 def index_page(designs: list[Design]) -> str:
@@ -373,7 +381,10 @@ def readme_table(designs: list[Design]) -> str:
         if design.prototype:
             notes += "; prototype"
         prints = plural(design.printed_parts, "print")
-        files = f"{design.printed_files} STL ({prints}), {design.source} source"
+        files = f"{design.printed_files} STL ({prints})"
+        if design.optional_files:
+            files += f" + {design.optional_files} optional or reference"
+        files += f", {design.source} source"
         lines.append(f"| [{design.title}]({design.slug}/README.md) | {files} | {notes} |")
     lines.append(README_END)
     return "\n".join(lines)
