@@ -3,11 +3,11 @@
 Two independent panels that hang on L- or J-shaped wall hooks, two hooks per panel. Every item is removed by lifting it off, and each panel is removed by lifting it off its hooks.
 
 - [`headset.stl`](headset.stl): headset module, 200 × 71 × 230 mm (width × depth × height). The arm passes through the strap ring and carries the rear battery pack; its raised tip keeps the strap from sliding off. The headset hangs below the arm and the visor leans on the rib near the bottom of the panel, which stops it from swinging.
-- [`accessories.stl`](accessories.stl): accessory module, 220 × 61 × 230 mm. Two pegs hold the controllers by their tracking rings. Five shorter pegs below them hold PICO Motion Trackers by their straps. All pegs rise 12° toward the tip and end in a small stop.
+- [`accessories.stl`](accessories.stl): accessory module, 220 × 86 × 230 mm. Two long pegs hold the controllers by their tracking rings. A stop on top of each controller peg keeps the ring 50 mm or more in front of the panel, so the controllers hang in front of the tracker row. Five shorter pegs near the bottom hold PICO Motion Trackers by their straps; to take a tracker, reach behind the controllers or lift the controllers off first. All pegs rise 12° toward the tip and end in a small stop.
 - [`generate.py`](generate.py): parametric CadQuery source, dimensions in mm.
 - [`views.png`](views.png): front and side views in use, and each part in print orientation.
 - [`preview.png`](preview.png): both modules on a wall, with schematic hooks.
-- [`usage.png`](usage.png): both modules with simplified stand-ins for the headset, the controllers and five trackers, in an oblique view and side views. The stand-ins are boxes, ellipsoids and tori sized from the sources and assumptions below; they show the intended placement, not the product shapes.
+- [`usage.png`](usage.png): both modules with simplified stand-ins for the headset, the controllers and five trackers, in an oblique view and side views. The stand-ins are bands, boxes, ellipsoids and tubes. Their overall layout follows the official product images (a rigid head ring with the battery pack at the rear; a controller ring that loops around the hand with the grip as one side), and their sizes follow the sources and assumptions below. They show the intended placement, not the product shapes.
 - [`render.py`](render.py): deterministic offline rendering script.
 
 ![Both modules hanging on wall hooks](preview.png)
@@ -44,7 +44,7 @@ The following are design choices, not published PICO dimensions, and have not be
 
 - The arm top is 70 mm below the panel top edge, which leaves room above the arm for the battery pack. The arm reaches 65 mm from the panel; its full length is 50 mm wide.
 - The rib is 16 mm deep and lies 195–219 mm below the panel top edge. Whether the visor leans on it depends on the strap length setting and on how far out the battery pack sits on the arm.
-- Controller pegs: 14 mm wide, 55 mm long, 110 mm apart, 70 mm below the panel top edge. This assumes that the opening of the tracking ring is larger than the peg and that the two controllers, hanging side by side, do not touch.
+- Controller pegs: 14 mm wide, 80 mm long, 130 mm apart, 70 mm below the panel top edge, with an 8 mm stop 50 mm from the panel front. The official images show a tracking ring that loops around the hand, so the peg passes through the loop and the controller hangs from the upper inside of the ring. The loop size, about 96 × 122 mm outside, is estimated from the images; with 130 mm spacing the two controllers are expected to hang about 30 mm apart. The ring is assumed to be thinner than the 24 mm between the two stops.
 - Tracker pegs: 10 mm wide, 30 mm long, 44 mm apart. This assumes each tracker is narrower than 44 mm and is stored with its strap attached; a tracker without a strap cannot be hung.
 
 Print one module first and check the fit on the hooks, the strap ring on the arm, the controller rings and the tracker straps before printing the other.

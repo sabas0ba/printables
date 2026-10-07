@@ -10,8 +10,10 @@ in the recess.
 - headset: an arm with a raised tip that passes through the strap ring and
   carries the rear battery pack, and a rib lower on the panel that the
   hanging visor leans on, so the headset does not swing;
-- accessories: two pegs for the controller tracking rings and five short
-  pegs for the Motion Tracker straps.
+- accessories: two long pegs for the controller tracking rings and five
+  short pegs for the Motion Tracker straps. A stop on each controller peg
+  holds the ring out in front of the tracker row, so that the controllers
+  hang in front of the trackers instead of on them.
 
 Use-orientation axes: x along the wall, y from the wall toward the user
 (y=0 is the back face of the panel, flat against the wall), z up (z=0 is the
@@ -62,10 +64,15 @@ BUMPER_DEPTH = 16.0      # from the panel front face
 
 # Accessories module.
 ACCESSORY_WIDTH = 220.0
-CONTROLLER_PEG_X = (-55.0, 55.0)
+# The tracking ring is a loop of roughly 100 mm across, so the pegs are far
+# enough apart for two hanging controllers.
+CONTROLLER_PEG_X = (-65.0, 65.0)
 CONTROLLER_PEG_Z = -70.0     # below the hook-slot recesses
 CONTROLLER_PEG_RADIUS = 7.0
-CONTROLLER_PEG_LENGTH = 55.0
+CONTROLLER_PEG_LENGTH = 80.0
+CONTROLLER_STOP_AT = 50.0    # from the panel front face; the ring rests in front
+CONTROLLER_STOP_HEIGHT = 8.0
+CONTROLLER_STOP_LENGTH = 6.0
 TRACKER_PEG_X = (-88.0, -44.0, 0.0, 44.0, 88.0)
 TRACKER_PEG_Z = -205.0
 TRACKER_PEG_RADIUS = 5.0
@@ -174,11 +181,13 @@ def visor_bumper():
     return print_taper(bumper, -BUMPER_WIDTH / 2, BUMPER_WIDTH / 2)
 
 
-def peg(x, z, radius, length):
+def peg(x, z, radius, length, stop_at=None):
     """Upward-tilted peg with a small stop at the tip.
 
     The cross-section in the x-z plane is a square with a 45-degree point
-    toward -x, which is downward in print orientation.
+    toward -x, which is downward in print orientation. An optional second
+    stop on the upper side at stop_at keeps a hanging ring from sliding back
+    toward the panel; its -x side slopes at 45 degrees so it needs no support.
     """
     r, h = radius, PEG_TAB_HEIGHT
     section = [(r, -r), (r, r), (-r, r), (-2 * r, 0.0), (-r, -r)]
@@ -192,7 +201,14 @@ def peg(x, z, radius, length):
 
     shaft = prism(section, -EMBED, length + EMBED)
     tab = prism(tab_section, length - PEG_TAB_LENGTH, PEG_TAB_LENGTH)
-    body = shaft.fuse(tab).clean()
+    body = shaft.fuse(tab)
+    if stop_at is not None:
+        hs = CONTROLLER_STOP_HEIGHT
+        stop_section = [(r, r - 1.0), (r, r + hs), (-r + hs, r + hs),
+                        (-r, r), (-r, r - 1.0)]
+        body = body.fuse(prism(stop_section, stop_at - CONTROLLER_STOP_LENGTH,
+                               CONTROLLER_STOP_LENGTH))
+    body = body.clean()
     body = body.rotate(cq.Vector(0, 0, 0), cq.Vector(1, 0, 0),
                        math.degrees(PEG_TILT))
     return body.translate(cq.Vector(x, PANEL_THICKNESS, z))
@@ -207,7 +223,7 @@ def make_accessory_module():
     body = panel(ACCESSORY_WIDTH)
     for x in CONTROLLER_PEG_X:
         body = body.fuse(peg(x, CONTROLLER_PEG_Z, CONTROLLER_PEG_RADIUS,
-                             CONTROLLER_PEG_LENGTH))
+                             CONTROLLER_PEG_LENGTH, stop_at=CONTROLLER_STOP_AT))
     for x in TRACKER_PEG_X:
         body = body.fuse(peg(x, TRACKER_PEG_Z, TRACKER_PEG_RADIUS,
                              TRACKER_PEG_LENGTH))

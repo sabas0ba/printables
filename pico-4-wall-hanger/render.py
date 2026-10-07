@@ -32,14 +32,16 @@ HOOK_SHANK = 10.0
 HOOK_TIP = 12.0
 # Must match generate.py: arm top, controller and tracker pegs.
 ARM_TOP = -70.0
-CONTROLLER_PEG_X = (-55.0, 55.0)
+CONTROLLER_PEG_X = (-65.0, 65.0)
 CONTROLLER_PEG_TOP = -63.0
+CONTROLLER_STOP_AT = 50.0
 TRACKER_PEG_X = (-88.0, -44.0, 0.0, 44.0, 88.0)
 TRACKER_PEG_TOP = -200.0
 PEG_SLOPE = np.tan(np.radians(12.0))
 PANEL_THICKNESS = 6.0
 DEVICE_COLOR = (64, 69, 76)
-VISOR_COLOR = (238, 240, 242)
+WHITE_COLOR = (240, 241, 243)
+LENS_COLOR = (40, 44, 50)
 STRAP_COLOR = (96, 102, 110)
 WALL_THICKNESS = 12.0
 WALL_MARGIN = 60.0
@@ -167,39 +169,100 @@ def strap(start, end, width, thickness, across, color):
                         (along, across * width / 2, through * thickness / 2), color)
 
 
-def headset_stand_in(x_offset):
-    """Battery pack on the arm, side straps and the visor leaning on the rib.
+def rotate_about(mesh, pivot, axis, angle):
+    """Rotate a (triangles, normals, color) mesh about an axis through pivot."""
+    axis = np.asarray(axis, dtype=np.float64) / np.linalg.norm(axis)
+    k = np.array([[0, -axis[2], axis[1]], [axis[2], 0, -axis[0]], [-axis[1], axis[0], 0]])
+    rotation = np.eye(3) + np.sin(angle) * k + (1 - np.cos(angle)) * k @ k
+    pivot = np.asarray(pivot, dtype=np.float64)
+    triangles, normals, color = mesh
+    return (triangles - pivot) @ rotation.T + pivot, normals @ rotation.T, color
 
-    The visor is 195 mm wide (PICO 4 Enterprise specification); the strap
-    run from the battery pack to the visor is assumed to be 150 mm.
-    """
-    x = x_offset
-    battery = ellipsoid((x, 38.0, ARM_TOP + 18.0), (45.0, 20.0, 18.0), DEVICE_COLOR)
-    visor = oriented_box((x, 71.0, -250.0),
-                         ((97.5, 0, 0), (0, 49.0, 0), (0, 0, 50.0)), VISOR_COLOR)
-    meshes = [battery, visor]
-    for side in (-1.0, 1.0):
-        meshes.append(strap((x + side * 40.0, 38.0, ARM_TOP + 14.0),
-                            (x + side * 88.0, 60.0, -200.0),
-                            30.0, 4.0, (0, 1, 0), STRAP_COLOR))
+
+def elliptic_band(center, a, b, width, thickness, color, segments=40):
+    """Flat band along an ellipse in the x-z plane; width runs along y."""
+    center = np.asarray(center, dtype=np.float64)
+    meshes = []
+    for i in range(segments):
+        u0, u1 = 2 * np.pi * i / segments, 2 * np.pi * (i + 1) / segments
+        p0 = center + np.array([a * np.cos(u0), 0, b * np.sin(u0)])
+        p1 = center + np.array([a * np.cos(u1), 0, b * np.sin(u1)])
+        meshes.append(strap(p0, p1, width, thickness, (0, 1, 0), color))
     return meshes
 
 
+def elliptic_tube(center, a, b, radius, color):
+    """Round tube along an ellipse in the x-z plane."""
+    center = np.asarray(center, dtype=np.float64)
+    y_axis = np.array([0.0, 1.0, 0.0])
+
+    def outward(u):
+        n = np.array([b * np.cos(u), 0.0, a * np.sin(u)])
+        return n / np.linalg.norm(n)
+
+    def point(u, v):
+        curve = center + np.array([a * np.cos(u), 0.0, b * np.sin(u)])
+        return curve + radius * (np.cos(v) * outward(u) + np.sin(v) * y_axis)
+
+    def normal(u, v):
+        return np.cos(v) * outward(u) + np.sin(v) * y_axis
+
+    return parametric_mesh(point, normal, (0, 2 * np.pi), (0, 2 * np.pi), color, 48, 12)
+
+
+def headset_stand_in(x_offset):
+    """Rigid head ring hanging from the arm, battery pack on top, visor below.
+
+    PICO 4 has a rigid rear band with the battery pack at the back and a
+    visor 195 mm wide and 106 mm high (PICO 4 Enterprise specification,
+    255-310 mm long with the strap). Hanging on the arm, the head ring lies
+    roughly parallel to the wall with the visor at the bottom; it is tilted
+    here so that the visor rests against the rib. The top strap is omitted.
+    """
+    x = x_offset
+    contact = np.array([x, 38.0, ARM_TOP])
+    ring_top = ARM_TOP + 6.0
+    ring_bottom = -205.0
+    ring_center = (x, 38.0, (ring_top + ring_bottom) / 2)
+    meshes = elliptic_band(ring_center, 82.0, (ring_top - ring_bottom) / 2,
+                           32.0, 10.0, WHITE_COLOR)
+    meshes.append(ellipsoid((x, 38.0, ring_top + 20.0), (48.0, 20.0, 16.0), WHITE_COLOR))
+    meshes.append(oriented_box((x, 38.0, -250.0),
+                               ((97.5, 0, 0), (0, 53.0, 0), (0, 0, 42.0)), WHITE_COLOR))
+    meshes.append(oriented_box((x, 38.0, -293.0),
+                               ((88.0, 0, 0), (0, 44.0, 0), (0, 0, 1.5)), LENS_COLOR))
+    # About 15 degrees brings the wall side of the visor to the front of the rib.
+    tilt = np.radians(15.0)
+    return [rotate_about(mesh, contact, (1, 0, 0), tilt) for mesh in meshes]
+
+
 def controller_stand_ins(x_offset):
-    """Tracking ring hanging on each peg, grip below; 134.7 mm tall in total."""
+    """Tracking ring as a loop around the grip, hung from its upper inside.
+
+    From the official images, the ring of a PICO 4 controller runs from the
+    top of the grip around the hand and back to its lower end, so the grip is
+    one side of the loop. The loop size (about 96 x 122 mm outside) is an
+    estimate; the overall height of about 134.7 mm is published. The
+    controller is turned so that the grip, which carries most of the weight,
+    hangs below the peg.
+    """
     meshes = []
-    ring_y = 30.0
+    ring_y = PANEL_THICKNESS + CONTROLLER_STOP_AT + 7.0
     peg_top = CONTROLLER_PEG_TOP + (ring_y - PANEL_THICKNESS) * PEG_SLOPE
-    major, minor = 32.0, 4.5
+    a, b, tube = 42.0, 55.0, 6.0
     for x_peg in CONTROLLER_PEG_X:
+        side = -np.sign(x_peg)  # grip on the side toward the module centre
         x = x_offset + x_peg
-        ring_z = peg_top - (major - minor)
-        meshes.append(torus((x, ring_y, ring_z), major, minor, DEVICE_COLOR))
-        top = ring_z + major + minor
-        grip_semi = (134.7 - (top - (ring_z - major))) / 2 + 10.0
-        grip_z = top - 134.7 + grip_semi
-        meshes.append(ellipsoid((x, ring_y + 4.0, grip_z), (20.0, 22.0, grip_semi),
-                                DEVICE_COLOR))
+        center = np.array([x, ring_y, peg_top - (b - tube)])
+        ring = elliptic_tube(center, a, b, tube, WHITE_COLOR)
+        grip_center = center + np.array([side * (a - 6.0), 4.0, -8.0])
+        grip = ellipsoid(grip_center, (17.0, 20.0, 52.0), WHITE_COLOR)
+        weighted = 0.7 * grip_center + 0.3 * center
+        contact = np.array([x, ring_y, peg_top])
+        offset = weighted - contact
+        angle = np.arctan2(offset[0], -offset[2])
+        for mesh in (ring, grip):
+            meshes.append(rotate_about(mesh, contact, (0, 1, 0), angle))
     return meshes
 
 
