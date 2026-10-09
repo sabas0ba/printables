@@ -18,6 +18,8 @@ MODELS = {
                                  "views.png", "preview.png", "section.png"),
     "stackchan-hats": ("validation.json", "images/*.png", "stl/*.stl"),
     "thinkpad-e14-stand": ("stand.stl", "views.png", "preview.png", "usage.png"),
+    "pico-4-wall-hanger": ("headset.stl", "accessories.stl", "views.png", "preview.png",
+                           "usage.png"),
 }
 
 
