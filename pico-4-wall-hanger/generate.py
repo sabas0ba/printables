@@ -68,7 +68,7 @@ ACCESSORY_WIDTH = 220.0
 # enough apart for two hanging controllers.
 CONTROLLER_PEG_X = (-65.0, 65.0)
 CONTROLLER_PEG_Z = -70.0     # below the hook-slot recesses
-CONTROLLER_PEG_RADIUS = 7.0
+CONTROLLER_PEG_RADIUS = 8.0    # 16 mm square, for margin against knocks
 CONTROLLER_PEG_LENGTH = 80.0
 CONTROLLER_STOP_AT = 50.0    # from the panel front face; the ring rests in front
 CONTROLLER_STOP_HEIGHT = 8.0

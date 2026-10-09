@@ -33,7 +33,7 @@ HOOK_TIP = 12.0
 # Must match generate.py: arm top, controller and tracker pegs.
 ARM_TOP = -70.0
 CONTROLLER_PEG_X = (-65.0, 65.0)
-CONTROLLER_PEG_TOP = -63.0
+CONTROLLER_PEG_TOP = -62.0
 CONTROLLER_STOP_AT = 50.0
 TRACKER_PEG_X = (-88.0, -44.0, 0.0, 44.0, 88.0)
 TRACKER_PEG_TOP = -200.0
