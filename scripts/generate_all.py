@@ -21,6 +21,9 @@ MODELS = {
     "pico-4-wall-hanger": ("headset.stl", "accessories.stl", "views.png", "preview.png",
                            "usage.png"),
     "tang-nano-9k-lcd-case": ("stl/*/*.stl", "output/*/images/*.png", "output/*/pdf/*.pdf"),
+    "tang-primer-20k-lcd-case": ("stl/*.stl", "stl/manifest.json", "output/*.png",
+                                 "output/*.pdf", "output/*.3mf",
+                                 "output/verification_report.json"),
 }
 
 

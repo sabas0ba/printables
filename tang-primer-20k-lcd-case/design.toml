@@ -1,0 +1,65 @@
+title = "Tang Primer 20K Dock LCD case"
+summary = "Case for the Tang Primer 20K Dock with a 4.3-inch or 5-inch RGB LCD; printed snap pins, four M2.5 screws for the Dock, and a tool-less rear service cap for SODIMM and PMOD access."
+prototype = true
+added = 2026-10-12
+lang = "ja"
+source = "Python"
+cover = "output/assembly_43.png"
+pages = ["DESIGN_R4.md"]
+
+# The quantities describe the 4.3-inch LCD; the 5-inch front shell and
+# retainer replace the 4.3-inch ones (quantity 0).
+[[parts]]
+file = "stl/front_shell_43_snap.stl"
+quantity = 1
+description = "Front shell for the 4.3-inch LCD"
+
+[[parts]]
+file = "stl/lcd_retainer_43_snap.stl"
+quantity = 1
+description = "LCD retainer for the 4.3-inch LCD"
+
+[[parts]]
+file = "stl/front_shell_50_snap.stl"
+quantity = 0
+description = "Front shell for the 5-inch LCD; replaces the 4.3-inch one"
+
+[[parts]]
+file = "stl/lcd_retainer_50_snap.stl"
+quantity = 0
+description = "LCD retainer for the 5-inch LCD; replaces the 4.3-inch one"
+
+[[parts]]
+file = "stl/dock_tray_screw_common.stl"
+quantity = 1
+description = "Dock tray with four M2.5 screw bosses"
+
+[[parts]]
+file = "stl/rear_access_frame_common.stl"
+quantity = 1
+description = "Rear access frame with the 120 x 92 mm service opening"
+
+[[parts]]
+file = "stl/rear_service_cap_common.stl"
+quantity = 1
+description = "Removable rear service cap, 20 mm deep, with PMOD cable exits"
+
+[[parts]]
+file = "stl/case_snap_pin.stl"
+quantity = 4
+description = "Case snap pin"
+
+[[parts]]
+file = "stl/fit_coupon.stl"
+quantity = 1
+description = "Fit test coupon; print first with one snap pin"
+
+[[parts]]
+file = "stl/Tang_Primer_20K_Case_R4_Complete_Assembly_43.stl"
+quantity = 0
+description = "Complete 4.3-inch assembly with the Dock as an envelope box; view only, not for printing"
+
+[[parts]]
+file = "stl/Tang_Primer_20K_Case_R4_Complete_Assembly_50.stl"
+quantity = 0
+description = "Complete 5-inch assembly with the Dock as an envelope box; view only, not for printing"
