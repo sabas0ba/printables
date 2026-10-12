@@ -40,6 +40,8 @@
             pkgs.zlib
             pkgs.stdenv.cc.cc.lib
           ];
+          # Font embedded in the PDF drawings; see tools/font_paths.py of the Tang cases.
+          DEJAVU_FONT_PATH = "${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf";
         };
       });
     };
