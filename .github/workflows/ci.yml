@@ -22,6 +22,16 @@ jobs:
           docker run --rm --network none printables-check
           nix develop --offline --command
           /opt/printables-venv/bin/python -m unittest discover -s tests
+      - name: Run the Tang Nano 9K case tests without network access
+        run: >-
+          docker run --rm --network none printables-check
+          nix develop --offline --command
+          /opt/printables-venv/bin/python -m unittest discover -s tang-nano-9k-lcd-case/tests
+      - name: Run the Tang Primer 20K case tests without network access
+        run: >-
+          docker run --rm --network none printables-check
+          nix develop --offline --command
+          /opt/printables-venv/bin/python -m unittest discover -s tang-primer-20k-lcd-case/tests
       - name: Build and check the site without network access
         run: >-
           docker run --rm --network none -v "$RUNNER_TEMP/pages:/pages" printables-check

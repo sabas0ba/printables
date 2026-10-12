@@ -242,10 +242,12 @@ def format_size(size: int) -> str:
 
 def design_page(design: Design, readme_html: str, root: Path) -> str:
     rows, buttons = [], []
+    names = [PurePosixPath(part.file).name for part in design.parts]
     for index, part in enumerate(design.parts):
         size = (root / design.slug / part.file).stat().st_size
         quantity = str(part.quantity) if part.quantity else "–"
-        name = PurePosixPath(part.file).name
+        # Variants in separate directories may share a file name; show the path then.
+        name = names[index] if names.count(names[index]) == 1 else part.file
         rows.append(f"""<tr><td><a href="{escape(part.file)}" download>{escape(name)}</a></td>
 <td class="num">{quantity}</td><td>{escape(part.description)}</td>
 <td class="num">{format_size(size)}</td></tr>""")

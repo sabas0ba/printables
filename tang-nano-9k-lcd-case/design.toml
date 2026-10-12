@@ -1,0 +1,102 @@
+title = "Tang Nano 9K LCD panel case"
+summary = "Panel-mount case for the Tang Nano 9K with a 4.3-inch or 5-inch 40-pin RGB LCD; snap-fit LCD retainer and rear cover; USB-C, HDMI and microSD access."
+prototype = true
+added = 2026-10-12
+lang = "ja"
+source = "Python"
+cover = "output/4p3in/images/assembly_render.png"
+pages = ["docs/retention-design.md", "docs/development.md"]
+
+# One set is a front chassis for the panel thickness, the LCD retainer and one
+# rear cover. The quantities describe the 4.3-inch LCD in a 2.0 mm panel with
+# the standard rear cover; every other file is an alternative (quantity 0).
+
+[[parts]]
+file = "stl/4p3in/front_chassis_panel_1p5mm.stl"
+quantity = 0
+description = "4.3-inch LCD: front chassis for a 1.5 mm panel"
+
+[[parts]]
+file = "stl/4p3in/front_chassis_panel_2p0mm.stl"
+quantity = 1
+description = "4.3-inch LCD: front chassis for a 2.0 mm panel"
+
+[[parts]]
+file = "stl/4p3in/front_chassis_panel_3p0mm.stl"
+quantity = 0
+description = "4.3-inch LCD: front chassis for a 3.0 mm panel"
+
+[[parts]]
+file = "stl/4p3in/lcd_retainer.stl"
+quantity = 1
+description = "4.3-inch LCD: LCD retainer"
+
+[[parts]]
+file = "stl/4p3in/rear_cover.stl"
+quantity = 1
+description = "4.3-inch LCD: rear cover with the PCB carrier"
+
+[[parts]]
+file = "stl/4p3in/rear_cover_clearance_20mm.stl"
+quantity = 0
+description = "4.3-inch LCD: rear cover with 20 mm of space behind the PCB"
+
+[[parts]]
+file = "stl/4p3in/rear_cover_clearance_30mm.stl"
+quantity = 0
+description = "4.3-inch LCD: rear cover with 30 mm of space behind the PCB"
+
+[[parts]]
+file = "stl/4p3in/assembly_reference_clearance_20mm.stl"
+quantity = 0
+description = "4.3-inch LCD: assembled 20 mm variant; reference only, not for printing"
+
+[[parts]]
+file = "stl/4p3in/assembly_reference_clearance_30mm.stl"
+quantity = 0
+description = "4.3-inch LCD: assembled 30 mm variant; reference only, not for printing"
+
+[[parts]]
+file = "stl/5p0in/front_chassis_panel_1p5mm.stl"
+quantity = 0
+description = "5-inch LCD: front chassis for a 1.5 mm panel"
+
+[[parts]]
+file = "stl/5p0in/front_chassis_panel_2p0mm.stl"
+quantity = 0
+description = "5-inch LCD: front chassis for a 2.0 mm panel"
+
+[[parts]]
+file = "stl/5p0in/front_chassis_panel_3p0mm.stl"
+quantity = 0
+description = "5-inch LCD: front chassis for a 3.0 mm panel"
+
+[[parts]]
+file = "stl/5p0in/lcd_retainer.stl"
+quantity = 0
+description = "5-inch LCD: LCD retainer"
+
+[[parts]]
+file = "stl/5p0in/rear_cover.stl"
+quantity = 0
+description = "5-inch LCD: rear cover with the PCB carrier"
+
+[[parts]]
+file = "stl/5p0in/rear_cover_clearance_20mm.stl"
+quantity = 0
+description = "5-inch LCD: rear cover with 20 mm of space behind the PCB"
+
+[[parts]]
+file = "stl/5p0in/rear_cover_clearance_30mm.stl"
+quantity = 0
+description = "5-inch LCD: rear cover with 30 mm of space behind the PCB"
+
+[[parts]]
+file = "stl/5p0in/assembly_reference_clearance_20mm.stl"
+quantity = 0
+description = "5-inch LCD: assembled 20 mm variant; reference only, not for printing"
+
+[[parts]]
+file = "stl/5p0in/assembly_reference_clearance_30mm.stl"
+quantity = 0
+description = "5-inch LCD: assembled 30 mm variant; reference only, not for printing"

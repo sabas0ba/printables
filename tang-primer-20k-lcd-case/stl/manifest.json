@@ -1,0 +1,227 @@
+{
+  "design": "Tang Primer 20K integrated LCD enclosure release R4",
+  "version": "1.0.3",
+  "units": "mm",
+  "status": "prototype - physical fit required before production use",
+  "case": {
+    "width": 140.0,
+    "height": 112.0,
+    "structural_depth": 33.8,
+    "service_extension_depth": 20.0,
+    "assembled_depth_nominal": 53.8
+  },
+  "retention": {
+    "lcd": "pocket plus six PETG cantilever hooks and edge retainer",
+    "dock": "four M2.5 x 6 screws through official corner holes into printed blind pilots",
+    "core": "Dock SODIMM connector latches",
+    "fpc": "open 50 mm guide with removable polyimide tape strain relief",
+    "case": "four removable printed split snap pins to the structural access frame",
+    "rear_service": "two rigid upper hooks plus two push-release lower PETG tabs"
+  },
+  "print_quantities": {
+    "case_snap_pin.stl": 4,
+    "selected_front_shell": 1,
+    "selected_lcd_retainer": 1,
+    "dock_tray_screw_common.stl": 1,
+    "rear_access_frame_common.stl": 1,
+    "rear_service_cap_common.stl": 1,
+    "fit_coupon.stl": 1
+  },
+  "snap_fit": {
+    "case_hole": 4.3,
+    "case_pin_shaft": 3.5,
+    "case_pin_head": 7.5,
+    "case_latch_shoulder": 33.8,
+    "dock_board_thickness_step": 1.59,
+    "dock_screw": "M2.5 x 6 pan head",
+    "dock_pilot_square": 2.0,
+    "dock_pilot_depth": 4.8
+  },
+  "dock": {
+    "pcb": [
+      95.0,
+      73.0
+    ],
+    "hole_pitch": [
+      87.0,
+      65.0
+    ],
+    "origin_in_case": [
+      22.5,
+      14.5
+    ]
+  },
+  "printability": {
+    "orientation": "all STL files are delivered in intended print orientation",
+    "support": "none",
+    "rear_access_frame": "open rear flange on bed; vertical walls and no roof",
+    "rear_service_cap": "rear lattice face on bed; vertical walls and two 40-degree detents",
+    "dock_tray": "flat tray face on bed; open FPC guide has no roof",
+    "maximum_designed_bridge": 0.0
+  },
+  "viewer_references": {
+    "complete_assembly_43": "Tang_Primer_20K_Case_R4_Complete_Assembly_43.stl",
+    "complete_assembly_50": "Tang_Primer_20K_Case_R4_Complete_Assembly_50.stl",
+    "printable": false,
+    "note": "contains LCD, Dock/Core envelope, screws, access frame and service cap; FPC omitted"
+  },
+  "lcd": {
+    "43": {
+      "key": "43",
+      "module_w": 105.4,
+      "module_h": 67.1,
+      "module_t": 2.9,
+      "window_w": 97.0,
+      "window_h": 55.0,
+      "window_offset_y": 2.45,
+      "retainer_t": 4.0
+    },
+    "50": {
+      "key": "50",
+      "module_w": 120.7,
+      "module_h": 75.9,
+      "module_t": 3.05,
+      "window_w": 110.0,
+      "window_h": 66.0,
+      "window_offset_y": 2.2,
+      "retainer_t": 3.85
+    }
+  },
+  "files": [
+    {
+      "file": "front_shell_43_snap.stl",
+      "triangles": 972,
+      "size_bytes": 48684,
+      "min_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_mm": [
+        140.0,
+        112.0,
+        9.4
+      ]
+    },
+    {
+      "file": "lcd_retainer_43_snap.stl",
+      "triangles": 816,
+      "size_bytes": 40884,
+      "min_mm": [
+        4.0,
+        4.0,
+        0.0
+      ],
+      "max_mm": [
+        136.0,
+        108.0,
+        4.0
+      ]
+    },
+    {
+      "file": "front_shell_50_snap.stl",
+      "triangles": 972,
+      "size_bytes": 48684,
+      "min_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_mm": [
+        140.0,
+        112.0,
+        9.4
+      ]
+    },
+    {
+      "file": "lcd_retainer_50_snap.stl",
+      "triangles": 816,
+      "size_bytes": 40884,
+      "min_mm": [
+        4.0,
+        4.0,
+        0.0
+      ],
+      "max_mm": [
+        136.0,
+        108.0,
+        3.85
+      ]
+    },
+    {
+      "file": "dock_tray_screw_common.stl",
+      "triangles": 816,
+      "size_bytes": 40884,
+      "min_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_mm": [
+        140.0,
+        112.0,
+        5.6
+      ]
+    },
+    {
+      "file": "rear_access_frame_common.stl",
+      "triangles": 1500,
+      "size_bytes": 75084,
+      "min_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_mm": [
+        140.0,
+        112.0,
+        22.0
+      ]
+    },
+    {
+      "file": "rear_service_cap_common.stl",
+      "triangles": 248,
+      "size_bytes": 12484,
+      "min_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_mm": [
+        140.0,
+        112.0,
+        23.0
+      ]
+    },
+    {
+      "file": "case_snap_pin.stl",
+      "triangles": 64,
+      "size_bytes": 3284,
+      "min_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_mm": [
+        37.0,
+        7.5,
+        7.5
+      ]
+    },
+    {
+      "file": "fit_coupon.stl",
+      "triangles": 168,
+      "size_bytes": 8484,
+      "min_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_mm": [
+        50.0,
+        20.0,
+        5.6
+      ]
+    }
+  ]
+}

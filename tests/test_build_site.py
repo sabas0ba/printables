@@ -135,6 +135,18 @@ class DesignTest(FixtureRepository):
         with self.assertRaises(build_site.SiteError):
             build_site.load_design(self.root / "example")
 
+    def test_parts_sharing_a_file_name_are_listed_by_path(self) -> None:
+        directory = self.root / "example"
+        (directory / "variant").mkdir()
+        (directory / "variant/part.stl").write_bytes(b"x")
+        with (directory / "design.toml").open("a", encoding="utf-8") as stream:
+            stream.write('\n[[parts]]\nfile = "variant/part.stl"\nquantity = 0\n'
+                         'description = "Variant"\n')
+        html = build_site.design_page(build_site.load_design(directory), "", self.root)
+        self.assertIn("download>part.stl</a>", html)
+        self.assertIn("download>variant/part.stl</a>", html)
+        self.assertIn("download>reference.stl</a>", html)
+
     def test_readme_table(self) -> None:
         design = build_site.load_design(self.root / "example")
         table = build_site.readme_table([design])
