@@ -41,7 +41,7 @@ class ReleaseGeometryTest(unittest.TestCase):
             self.assertIn("rear_access_frame_common.stl", names)
             self.assertIn("rear_service_cap_common.stl", names)
             self.assertIn("fit_coupon.stl", names)
-            self.assertEqual(r4.PROJECT_VERSION, "1.0.2")
+            self.assertEqual(r4.PROJECT_VERSION, "1.0.3")
 
     def test_retention_count_and_clearance(self):
         self.assertEqual(r4.RETAINER_CLIP_COUNT, 6)
@@ -138,6 +138,21 @@ class ReleaseGeometryTest(unittest.TestCase):
         lower, upper = assembly.bounds(cap)
         self.assertAlmostEqual(lower[2], 30.80)
         self.assertAlmostEqual(upper[2], 53.80)
+
+    def test_service_cap_stays_clear_of_the_frame_top_wall(self):
+        # The frame top wall spans Y >= CASE_H - WALL in front of the frame
+        # plate; nothing on the seated cap may enter that volume.
+        cap = assembly.transform(
+            r4.build_rear_service_cap().triangles,
+            lambda p: (p[0], p[1], r4.CASE_DEPTH - p[2]),
+            reflected=True,
+        )
+        wall_inner_y = r4.CASE_H - r4.WALL
+        plate_inner_z = r4.STRUCTURAL_DEPTH - r4.WALL
+        for triangle in cap:
+            for point in triangle:
+                if point[1] > wall_inner_y + 1e-6:
+                    self.assertGreaterEqual(point[2], plate_inner_z - 1e-6)
 
     def test_service_opening_and_cable_exits(self):
         self.assertEqual(r4.ACCESS_OPENING, (10.0, 10.0, 120.0, 92.0))

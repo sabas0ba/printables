@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-from assembly_r4 import CASE_DEPTH, Part, assembled_parts, bounds, exploded_parts
+from assembly_r4 import CASE_DEPTH, CASE_H, Part, assembled_parts, bounds, exploded_parts
 
 
 def display_triangles(part: Part):
@@ -35,9 +35,9 @@ def render_axis(ax, parts: list[Part], title: str, exploded: bool) -> None:
     all_triangles = [tri for part in parts for tri in part.triangles[::max(1, len(part.triangles)//20000)] ]
     lower, upper = bounds(all_triangles)
     ax.set_xlim(-8, 148)
-    ax.set_ylim(-4, 98)
+    ax.set_ylim(-4, CASE_H + 6)
     ax.set_zlim(lower[2] - 4, upper[2] + 5)
-    ax.set_box_aspect((156, 102, max(48, upper[2] - lower[2] + 9)))
+    ax.set_box_aspect((156, CASE_H + 10, max(48, upper[2] - lower[2] + 9)))
     ax.view_init(elev=27, azim=-55)
     ax.set_title(title, fontsize=13, fontweight="bold", pad=4)
     ax.set_xlabel("X  width", fontsize=8)
@@ -46,7 +46,7 @@ def render_axis(ax, parts: list[Part], title: str, exploded: bool) -> None:
     ax.tick_params(labelsize=6, pad=0)
     ax.grid(True, linewidth=0.25, alpha=0.35)
     if not exploded:
-        ax.text(72, 95, CASE_DEPTH + 1.0, f"assembled depth {CASE_DEPTH:.2f} mm", fontsize=8)
+        ax.text(72, CASE_H + 3, CASE_DEPTH + 1.0, f"assembled depth {CASE_DEPTH:.2f} mm", fontsize=8)
 
 
 def render(input_dir: Path, dock_step_stl: Path | None, spec_key: str, output: Path) -> None:

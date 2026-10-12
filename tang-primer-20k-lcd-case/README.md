@@ -1,6 +1,6 @@
 # Tang Primer 20K Dock + 4.3/5.0-inch LCD case R4
 
-Tang Primer 20K Core装着済み公式Dockと、公式4.3インチまたは5.0インチRGB LCDを一体化するFDMケースです。現行バージョンはv1.0.2です。R4は外形を140.00 x 112.00 x 53.80 mmへ拡張し、固定されたリアアクセスフレームと、工具なしで着脱できる20 mmサービスキャップを追加しました。
+Tang Primer 20K Core装着済み公式Dockと、公式4.3インチまたは5.0インチRGB LCDを一体化するFDMケースです。現行バージョンはv1.0.3です。R4は外形を140.00 x 112.00 x 53.80 mmへ拡張し、固定されたリアアクセスフレームと、工具なしで着脱できる20 mmサービスキャップを追加しました。
 
 ![4.3インチ版の組立と分解](output/assembly_43.png)
 ![印刷部品](output/printed_parts.png)
@@ -83,9 +83,10 @@ nix develop --command .venv/bin/python -m unittest discover -s tang-primer-20k-l
 
 ## 由来
 
-この設計は[sabas0ba/tang_primer_20k_case](https://github.com/sabas0ba/tang_primer_20k_case)のcommit `9c9b73ae1fb763cf07efadfae853230ef7e7d9c9`（v1.0.2）から取り込みました。印刷部品の形状定義とテストは同じです。次の点を変更しています。
+この設計は[sabas0ba/tang_primer_20k_case](https://github.com/sabas0ba/tang_primer_20k_case)のcommit `9c9b73ae1fb763cf07efadfae853230ef7e7d9c9`（v1.0.2）から取り込みました。次の変更点を除き、印刷部品の形状定義とテストは同じです。
 
 - Sipeedの公式STEPから変換したDock参照メッシュを含めず、外形境界の直方体で代替した
 - 生成環境、CI、成果物の配布方法を本リポジトリのものへ置き換えた
 - 3MFとPDFから生成時刻を除き、バイト単位で再現できるようにした
 - ライセンスをApache-2.0からCC BY-SA 4.0へ変更した
+- v1.0.3: サービスキャップ上フックの舌片を0.60 mm短縮した。v1.0.2では舌片の先端がリアアクセスフレーム上壁と0.80 x 0.60 mmの断面で干渉し、キャップが公称位置まで入らなかった。係止突起の形状と位置は同じである

@@ -52,6 +52,7 @@ SERVICE_HOOK_W = 14.0
 SERVICE_TONGUE_T = 1.20
 SERVICE_SLOT_CLEARANCE = 0.60
 SERVICE_HOOK_REACH = 23.00
+SERVICE_UPPER_TONGUE_REACH = SERVICE_CAP_DEPTH + WALL
 SERVICE_DETENT = 1.00
 SERVICE_CABLE_EXITS = ((35.0, 20.0), (85.0, 20.0))
 SERVICE_HOOK_COUNT = 2
@@ -360,8 +361,11 @@ def build_rear_service_cap() -> Mesh:
     mesh.box(cursor, 0, z, CASE_W - WALL - cursor, WALL, wall_depth)
     for x in SERVICE_HOOK_X:
         # Rigid upper insertion tongue, supported by the top wall below it.
+        # It ends at the inner face of the frame plate: the frame top wall
+        # starts there and overlaps the tongue in Y. Only the detent, which
+        # lies below the wall, reaches SERVICE_HOOK_REACH.
         mesh.box(x, 109.20, z, SERVICE_HOOK_W, SERVICE_TONGUE_T,
-                 SERVICE_HOOK_REACH - z)
+                 SERVICE_UPPER_TONGUE_REACH - z)
         tri_prism_x(mesh, (
             (109.20, 20.00),
             (109.20 - SERVICE_DETENT, 22.60),
