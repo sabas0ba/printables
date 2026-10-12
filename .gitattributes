@@ -1,0 +1,6 @@
+# Generated artifacts are compared byte-for-byte; never convert their line endings.
+# An uncompressed PDF can otherwise be detected as text.
+*.3mf binary
+*.pdf binary
+*.png binary
+*.stl binary
