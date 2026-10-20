@@ -24,8 +24,8 @@ MODELS = {
     "tang-primer-20k-lcd-case": ("stl/*.stl", "stl/manifest.json", "output/*.png",
                                  "output/*.pdf", "output/*.3mf",
                                  "output/verification_report.json"),
-    "cmf-watch-3-pro-charging-dock": ("dock.stl", "coupon.stl", "views.png", "preview.png",
-                                      "usage.png"),
+    "cmf-watch-3-pro-charging-dock": ("dock.stl", "coupon.stl", "views.png", "sections.png",
+                                      "preview.png", "usage.png"),
 }
 
 

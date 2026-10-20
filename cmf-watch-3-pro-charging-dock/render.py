@@ -1,4 +1,4 @@
-"""Render dock.stl into orthographic views, a preview and a usage image.
+"""Render dock.stl into orthographic views, sections, a preview and a usage image.
 
 The STL is stored in its use orientation (z up). usage.png adds simplified
 stand-ins for the watch, its straps, the charging head and the cable, built
@@ -12,9 +12,9 @@ import struct
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
-from generate import (CABLE_DIAMETER, CASE_DIAMETER, CASE_THICKNESS, FOOT_X,
-                      PAD_OFFSET, POCKET_FLOOR_Z, PUCK_ANGLE, PUCK_HEIGHT,
-                      PUCK_LENGTH, PUCK_WIDTH, SEAT_Z, STRAP_WIDTH)
+from generate import (CABLE_DIAMETER, CASE_DIAMETER, CASE_THICKNESS, CHANNEL_WIDTH,
+                      FOOT_X, LIP_POSITIONS, PAD_OFFSET, POCKET_FLOOR_Z, PUCK_ANGLE,
+                      PUCK_HEIGHT, PUCK_LENGTH, PUCK_WIDTH, SEAT_Z, STRAP_WIDTH)
 
 
 DIRECTORY = Path(__file__).resolve().parent
@@ -190,6 +190,72 @@ def draw_scene(image, parts, region, u, v, depth, label, padding=60):
     ImageDraw.Draw(image).text((x0 + 22, y0 + 16), label, fill="#25333c", font=font(21))
 
 
+def section_segments(vertices, axis, value):
+    """Line segments where the plane axis = value cuts the mesh, as (u, v) pairs."""
+    others = [i for i in range(3) if i != axis]
+    segments = []
+    for triangle in vertices:
+        side = triangle[:, axis] - value
+        points = []
+        for i in range(3):
+            a, b = triangle[i], triangle[(i + 1) % 3]
+            sa, sb = side[i], side[(i + 1) % 3]
+            if (sa < 0) != (sb < 0):
+                t = sa / (sa - sb)
+                point = a + t * (b - a)
+                points.append((point[others[0]], point[others[1]]))
+        if len(points) == 2:
+            segments.append(points)
+    return segments
+
+
+def draw_section(image, segments, circles, region, label, padding=70):
+    """Draw section segments and reference circles, scaled to fit the region."""
+    x0, y0, width, height = region
+    flat = np.array([p for segment in segments for p in segment])
+    lo, hi = flat.min(axis=0), flat.max(axis=0)
+    scale = min((width - 2 * padding) / (hi[0] - lo[0]),
+                (height - 2 * padding - 24) / (hi[1] - lo[1]))
+    centre = (lo + hi) / 2
+
+    def to_pixel(point):
+        return (x0 + width / 2 + (point[0] - centre[0]) * scale,
+                y0 + height / 2 + 12 - (point[1] - centre[1]) * scale)
+
+    draw = ImageDraw.Draw(image)
+    draw.rounded_rectangle((x0, y0, x0 + width, y0 + height), radius=18, fill="#ffffff")
+    for a, b in segments:
+        draw.line([to_pixel(a), to_pixel(b)], fill="#25333c", width=3)
+    for (cx, cy), radius, color in circles:
+        px, py = to_pixel((cx, cy))
+        r = radius * scale
+        draw.ellipse((px - r, py - r, px + r, py + r), outline=color, width=3)
+    draw.text((x0 + 22, y0 + 16), label, fill="#25333c", font=font(21))
+
+
+def render_sections(vertices):
+    """Cross-section at the middle lip and a longitudinal section along the channel."""
+    if PUCK_ANGLE != 0.0:
+        raise ValueError("The section views assume the cable runs along +x")
+    middle, _ = LIP_POSITIONS[len(LIP_POSITIONS) // 2]
+    cable = ((PAD_OFFSET[1], POCKET_FLOOR_Z + CABLE_DIAMETER / 2), CABLE_DIAMETER / 2,
+             "#e27030")
+    across = section_segments(vertices, 0, PAD_OFFSET[0] + middle)
+    window = 1.5 * CHANNEL_WIDTH
+    across = [segment for segment in across
+              if all(abs(p[0] - PAD_OFFSET[1]) <= window * 2 for p in segment)]
+    # Off the centre line, through the lips that grow from the 6 o'clock wall.
+    offset = -0.75
+    along = section_segments(vertices, 1, PAD_OFFSET[1] + offset)
+
+    canvas = Image.new("RGB", (1600, 760), "#e9eef0")
+    draw_section(canvas, across, [cable], (24, 24, 560, 712),
+                 f"ACROSS THE CHANNEL  ·  LIP AT {middle:.1f} mm")
+    draw_section(canvas, along, [], (608, 24, 968, 712),
+                 f"ALONG THE CHANNEL  ·  {abs(offset):.2f} mm OFF CENTRE, THROUGH TWO LIPS")
+    canvas.save(DIRECTORY / "sections.png", optimize=True)
+
+
 def camera(viewer):
     """Screen axes (right, up, toward viewer) for a viewer at the given direction."""
     toward = np.asarray(viewer, dtype=np.float64)
@@ -217,6 +283,7 @@ def main():
     draw_scene(views, coupon, (1048, 518, 528, 468), *camera((0.45, -0.60, 0.66)),
                "COUPON  ·  POCKET AND CHANNEL")
     views.save(DIRECTORY / "views.png", optimize=True)
+    render_sections(vertices)
 
     oblique = camera((0.45, -0.60, 0.66))
     preview = Image.new("RGB", (1600, 950), "#e9eef0")
