@@ -1,0 +1,17 @@
+title = "CMF Watch 3 Pro charging dock"
+summary = "Flat desk dock: the watch lies face up on an annular seat instead of balancing on the magnetic charging head; head pocket, cable channel with alternating retaining lips, straps stay on; head dimensions are placeholders until measured"
+prototype = true
+added = 2026-10-20
+lang = "ja"
+source = "CadQuery"
+cover = "preview.png"
+
+[[parts]]
+file = "dock.stl"
+quantity = 1
+description = "Dock, one piece"
+
+[[parts]]
+file = "coupon.stl"
+quantity = 0
+description = "Fit coupon: window of the dock from the pocket to the cable exit, with the lips; print before the dock to check the charging-head fit, the cable under the lips and the seat height"
