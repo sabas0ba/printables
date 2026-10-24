@@ -11,7 +11,7 @@ so the cable jacket is not cut.
 
 The body is shorter than the case along the strap axis, and the top is cut
 down to the seat across the strap width, so both strap halves hang over the
-ends without being removed.
+ends without being removed. The seat wall is also cut down at the crown.
 
 Coordinates: z up, the dock stands on z = 0 in its print orientation. The
 strap runs along y (12 o'clock toward +y), the cable leaves toward +x.
@@ -40,11 +40,13 @@ CASE_CLEARANCE = 0.5           # diametral clearance of the seat wall
 SEAT_INNER_RADIUS = 13.0       # sensor dome radius (about 12) plus clearance
 SENSOR_CLEARANCE = 3.0         # drop inside the seat for the sensor dome
 PAD_OFFSET = (0.0, -16.7)      # centre of the charging pads from the case centre
+CROWN_ANGLE = 27.0             # crown position, degrees from 3 o'clock toward 12 o'clock
+CROWN_RELIEF = 12.0            # width of the gap in the seat wall: crown about 6 mm plus position error
 
 # Charging head and cable, scaled from photographs: measure on the physical parts.
 PUCK_LENGTH = 20.0             # stadium body along the cable, without the cable boot
 PUCK_WIDTH = 8.5
-PUCK_HEIGHT = 5.0              # housing only, without the spring pins
+PUCK_HEIGHT = 9.0              # housing only, without the spring pins; r2 print: 5 left it 4 mm proud
 PUCK_CLEARANCE = 0.3           # added to length and width of the pocket
 PUCK_PROUD = 0.0               # head top above the seat; negative sinks it
 PUCK_ANGLE = 0.0               # degrees about z; 0 sends the cable toward +x, 180 toward -x
@@ -58,7 +60,7 @@ EXIT_FILLET = 1.0              # rounding of the channel floor at the body side
 # Body.
 FOOT_X = 64.0
 FOOT_Y = 46.0                  # shorter than the case: the straps hang over the ends
-HEIGHT = 14.0
+HEIGHT = 15.0                  # leaves MIN_FLOOR under the 9 mm head pocket
 CORNER_RADIUS = 3.0            # keeps the cable exit on the flat side
 TOP_FILLET = 1.0
 SEAT_WALL = 3.0                # wall height around the case above the seat
@@ -122,11 +124,14 @@ def cable_direction():
 
 
 def seat_level(z, height):
-    """Region whose top is the seat: the case seat and the strap relief band."""
+    """Region whose top is the seat: case seat, strap relief band and crown gap."""
     seat = cq.Workplane("XY", origin=(0, 0, z)).circle(SEAT_RADIUS).extrude(height)
     band = (cq.Workplane("XY", origin=(0, 0, z))
             .rect(STRAP_RELIEF, 2 * FOOT_Y).extrude(height))
-    return seat.union(band)
+    crown = (cq.Workplane("XY", origin=(0, 0, z))
+             .center(FOOT_X / 2, 0).rect(FOOT_X, CROWN_RELIEF).extrude(height)
+             .rotate((0, 0, 0), (0, 0, 1), CROWN_ANGLE))
+    return seat.union(band).union(crown)
 
 
 def inner_level(z, height):
