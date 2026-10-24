@@ -52,7 +52,7 @@ PDF, 3MF and report files byte-for-byte with the committed artifacts, and fails
 if files are added or missing. CI performs that check inside the container with
 networking disabled. The Tang cases also have their own mesh, interference and
 drawing tests in `tang-nano-9k-lcd-case/tests` and
-`tang-primer-20k-lcd-case/tests`, which CI runs in the same container. The OpenSCAD slipper stand is a v0.3 snapshot: the same
+`tang-primer-20k-lcd-case/tests`, which CI runs in the same container. The OpenSCAD slipper stand is a v0.4 snapshot: the same
 command validates its committed printable meshes and report, without regenerating
 its geometry or previews. See its README for separate regeneration commands.
 

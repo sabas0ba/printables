@@ -3,6 +3,11 @@ part = "assembly";
 $fn = 24;
 pitch = 310;
 clearance = 0.6; // 角軸8 mmに対する穴の全幅方向余裕。
+// 支持具の縦板と差し込み板の間の溝幅。縦板と同じ高さにpin26の先端が6 mm突き出す。
+// 靴底の包絡厚30、反り5、余裕10、ピン先端6の計51を切り上げた値。v0.3は22。
+sole_slot = 52;
+sole_thickness = 30; // 表示・干渉検査用の靴底包絡厚。
+shoe_shift = sole_slot - 22; // v0.3に対する差し込み板とスリッパの外向き移動量。
 
 // 面は平面を残し、全ての外縁を球面でつなぐ。
 module round_box(size, r=2) {
@@ -67,8 +72,9 @@ module holder() {
     difference() {
         union() {
             translate([-25,-34,0]) round_box([50,10,188],2);
-            translate([-25,-25,0]) round_box([50,47,8],2);
-            translate([0,10,0]) rotate([90,0,0]) soft_extrude(12,2)
+            // 底板は縦板から差し込み板の外側12 mmまで延ばす。
+            translate([-25,-25,0]) round_box([50,sole_slot+25,8],2);
+            translate([0,sole_slot-12,0]) rotate([90,0,0]) soft_extrude(12,2)
                 hull() {
                     translate([-25,0]) square([50,250]);
                     translate([0,255]) circle(r=25,$fn=48);
@@ -101,7 +107,7 @@ module coupon(gap=0.6) {
     }
 }
 module sole() {
-    translate([0,5,0]) rotate([90,0,0]) linear_extrude(height=10)
+    translate([0,5,0]) rotate([90,0,0]) linear_extrude(height=sole_thickness)
         hull() { translate([0,60]) circle(r=60); translate([0,240]) circle(r=60); }
 }
 module shoe() {
@@ -116,7 +122,7 @@ module side(back=false) {
 }
 module shoe_array(sole_only=false) {
     for(i=[0:1]) for(back=[false,true]) for(x=[-65,65])
-        side(back) translate([x,50,40+i*pitch])
+        side(back) translate([x,50+shoe_shift,40+i*pitch])
             if(sole_only) sole(); else shoe();
 }
 module hardware() {

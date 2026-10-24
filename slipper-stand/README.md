@@ -1,8 +1,11 @@
-# スリッパスタンド試作 v0.3
+# スリッパスタンド試作 v0.4
 
 前後各2足・上下2段で、成人用4足を収納。靴底は中央向き、甲は外側向き。
 印刷した抜け止めピンで組み立てる。ねじ・ナット・接着剤は使用しない。
 露出する部品の角とスリッパに触れる縁を丸めた試作モデル。
+
+v0.4では支持具の靴底用の溝を22 mmから52 mmへ広げた。変更部品はholder.stlのみで、
+v0.3で印刷済みのベース・支柱・継ぎ板・横桟・ピンはそのまま使用する。
 
 最初にpin26.stlとcoupon06.stlを各1個印刷し、差し込みと抜け止めを確認する。
 部品数・組立・検証範囲は [docs/prototype.md](docs/prototype.md) を参照。
@@ -44,9 +47,18 @@
 OpenSCADモデルの再生成は上記build.pyで別途実行します。
 render.pyはbuild.pyが生成する確認用シーンも必要です。
 
-収録STLはOpenSCAD 2021.01で生成したv0.3のスナップショットです。
+収録STLはOpenSCAD 2021.01で生成したv0.4のスナップショットです。
 CIでの検査は保存済みメッシュの検査であり、OpenSCADによる再生成や
 PNGのバイト一致を確認するものではありません。再生成にはOpenSCADが別途必要です。
-既存のNix環境にOpenSCADは含まれていません。
+既存のNix環境にOpenSCADは含まれていないため、flake.nixと同じnixpkgsリビジョンから取得します。
+
+```sh
+nix build --no-link --print-out-paths \
+  'git+https://github.com/NixOS/nixpkgs?rev=597283ad8aa0b331c788e97c4c262d58877074ef&shallow=1#openscad'
+```
+
+出力されたストアパスの`bin`を`PATH`へ加えてbuild.pyを実行します。
+v0.4ではholderのみを`--parts holder`で再生成しました。
+v0.3から変更していない部品は、同じ環境で再生成すると面の順序だけが異なる同一形状となるため、保存済みSTLを維持しています。
 
 [CC BY-SA 4.0](../LICENSE.md) / Copyright © 2026 sabas0ba.
