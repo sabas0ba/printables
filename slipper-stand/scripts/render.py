@@ -17,7 +17,7 @@ def mesh(name, color):
 
 
 fig=plt.figure(figsize=(14,8),facecolor='#f3f5f7')
-fig.suptitle('SLIPPER STAND / TOOL-FREE / V03',fontsize=23,fontweight='bold',y=.96)
+fig.suptitle('SLIPPER STAND / TOOL-FREE / V04',fontsize=23,fontweight='bold',y=.96)
 for index,loaded,angle,title in [(1,True,90,'FRONT / 2 PAIRS'),
                                (2,True,0,'SIDE / SOLES FACE INWARD'),
                                (3,False,45,'FRAME / 4 PAIRS TOTAL')]:
@@ -29,13 +29,13 @@ for index,loaded,angle,title in [(1,True,90,'FRONT / 2 PAIRS'),
     triangles=np.concatenate([item[0] for item in items])
     colors=np.concatenate([item[1] for item in items])
     ax.add_collection3d(Poly3DCollection(triangles,facecolors=colors,linewidth=0,antialiased=False))
-    ax.set(xlim=(-150,150),ylim=(-135,135),zlim=(0,675))
-    ax.set_box_aspect((300,270,675))
+    ax.set(xlim=(-150,150),ylim=(-165,165),zlim=(0,675))
+    ax.set_box_aspect((300,330,675))
     ax.set_proj_type('ortho')
     ax.view_init(elev=0 if loaded else 14,azim=angle)
     ax.set_axis_off()
     ax.set_title(title,fontsize=13,pad=10)
-fig.text(.07,.09,'Footprint: 280 x 250 mm     Frame: 636 mm     Loaded envelope: 650 mm',fontsize=14)
+fig.text(.07,.09,'Footprint: 280 x 250 mm     Frame: 640 mm     Loaded envelope: 650 mm     Sole slot: 52 mm',fontsize=14)
 fig.text(.07,.035,'Printed locking pins shown in gold. Rounded edges. Physical fit / retention / stability unverified.',fontsize=10,color='#596673')
 fig.subplots_adjust(left=.02,right=.98,top=.84,bottom=.18,wspace=.01)
 fig.savefig(OUT/'preview.png',dpi=150,facecolor=fig.get_facecolor())

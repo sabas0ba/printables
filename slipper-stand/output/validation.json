@@ -56,18 +56,32 @@
     "sha256": "d883f34d22d847ffce94585babf2197e6dfc47e3b92e57baf03e7dd8e46b5c7e"
   },
   "holder": {
-    "quantity": 8,
-    "print_z_shift_mm": -0.0,
+    "quantity": 4,
+    "print_z_shift_mm": -0.0384302,
     "size_mm": [
       279.89,
-      55.923,
+      85.923,
       49.923
     ],
-    "solid_volume_cm3": 265.6,
+    "solid_volume_cm3": 277.37,
     "triangles": 1708,
     "watertight": true,
     "components": 1,
-    "sha256": "ff1586e1d665ed92a26b27673da84b704f407a8bbc95463c14b52f702ef97b4f"
+    "sha256": "69754daefe45cc9acacf3a41186c69bfa4622624b88d6f323e512748b45a3443"
+  },
+  "holder_top": {
+    "quantity": 4,
+    "print_z_shift_mm": -0.0384302,
+    "size_mm": [
+      297.89,
+      85.923,
+      49.923
+    ],
+    "solid_volume_cm3": 287.97,
+    "triangles": 1708,
+    "watertight": true,
+    "components": 1,
+    "sha256": "ac3f2f006de25be20d78dc105b4f6089ca3fc4a2a0b8049389e734c4ed1bbbde"
   },
   "pin26": {
     "quantity": 16,
@@ -171,8 +185,11 @@
     "sole_interference": false,
     "installed_pin_interference": false,
     "nominal_hole_clearance_mm": 0.6,
+    "holder_sole_slot_mm": 52.0,
+    "top_tongue_extra_mm": 18.0,
+    "modeled_sole_thickness_mm": 30.0,
     "vertical_shoe_gap_mm": 10,
-    "sole_inner_face_separation_mm": 90,
+    "sole_inner_face_separation_mm": 110,
     "loaded_height_mm": 650
   }
 }
