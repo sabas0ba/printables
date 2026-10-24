@@ -2,7 +2,7 @@
 
 The STL is stored in its use orientation (z up). usage.png adds simplified
 stand-ins for the watch, its straps, the charging head and the cable, built
-from prisms and boxes with the placeholder dimensions of generate.py; they
+from prisms and boxes with the estimated dimensions of generate.py; they
 show the intended placement, not the product shapes.
 """
 
@@ -12,8 +12,8 @@ import struct
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
-from generate import (CABLE_DIAMETER, CASE_DIAMETER, CASE_THICKNESS, CHANNEL_WIDTH,
-                      FOOT_X, LIP_POSITIONS, PAD_OFFSET, POCKET_FLOOR_Z, PUCK_ANGLE,
+from generate import (BOOT_LENGTH, BOOT_WIDTH, CABLE_DIAMETER, CASE_DIAMETER,
+                      CASE_THICKNESS, FOOT_X, PAD_OFFSET, POCKET_FLOOR_Z, PUCK_ANGLE,
                       PUCK_HEIGHT, PUCK_LENGTH, PUCK_WIDTH, SEAT_Z, STRAP_WIDTH)
 
 
@@ -132,12 +132,16 @@ def charger_stand_in():
     centre = np.array([PAD_OFFSET[0], PAD_OFFSET[1], POCKET_FLOOR_Z + PUCK_HEIGHT / 2])
     head = oriented_box(centre, [along * PUCK_LENGTH / 2, across * PUCK_WIDTH / 2,
                                  (0, 0, PUCK_HEIGHT / 2)], CABLE_COLOR)
+    boot_centre = (np.array([PAD_OFFSET[0], PAD_OFFSET[1], POCKET_FLOOR_Z + BOOT_WIDTH / 4])
+                   + along * (PUCK_LENGTH + BOOT_LENGTH) / 2)
+    boot = oriented_box(boot_centre, [along * BOOT_LENGTH / 2, across * BOOT_WIDTH / 2,
+                                      (0, 0, BOOT_WIDTH / 4)], CABLE_COLOR)
     run = FOOT_X / 2 + CABLE_RUN
     cable_centre = (np.array([PAD_OFFSET[0], PAD_OFFSET[1], POCKET_FLOOR_Z + CABLE_DIAMETER / 2])
                     + along * run / 2)
     cable = oriented_box(cable_centre, [along * run / 2, across * CABLE_DIAMETER / 2,
                                         (0, 0, CABLE_DIAMETER / 2)], CABLE_COLOR)
-    return [head, cable]
+    return [head, boot, cable]
 
 
 def draw_scene(image, parts, region, u, v, depth, label, padding=60):
@@ -234,25 +238,19 @@ def draw_section(image, segments, circles, region, label, padding=70):
 
 
 def render_sections(vertices):
-    """Cross-section at the middle lip and a longitudinal section along the channel."""
+    """Section across the strap axis through the head, and along the channel."""
     if PUCK_ANGLE != 0.0:
         raise ValueError("The section views assume the cable runs along +x")
-    middle, _ = LIP_POSITIONS[len(LIP_POSITIONS) // 2]
-    cable = ((PAD_OFFSET[1], POCKET_FLOOR_Z + CABLE_DIAMETER / 2), CABLE_DIAMETER / 2,
+    cable = ((FOOT_X / 2 - 4.0, POCKET_FLOOR_Z + CABLE_DIAMETER / 2), CABLE_DIAMETER / 2,
              "#e27030")
-    across = section_segments(vertices, 0, PAD_OFFSET[0] + middle)
-    window = 1.5 * CHANNEL_WIDTH
-    across = [segment for segment in across
-              if all(abs(p[0] - PAD_OFFSET[1]) <= window * 2 for p in segment)]
-    # Off the centre line, through the lips that grow from the 6 o'clock wall.
-    offset = -0.75
-    along = section_segments(vertices, 1, PAD_OFFSET[1] + offset)
+    across = section_segments(vertices, 0, PAD_OFFSET[0])
+    along = section_segments(vertices, 1, PAD_OFFSET[1])
 
     canvas = Image.new("RGB", (1600, 760), "#e9eef0")
-    draw_section(canvas, across, [cable], (24, 24, 560, 712),
-                 f"ACROSS THE CHANNEL  ·  LIP AT {middle:.1f} mm")
-    draw_section(canvas, along, [], (608, 24, 968, 712),
-                 f"ALONG THE CHANNEL  ·  {abs(offset):.2f} mm OFF CENTRE, THROUGH TWO LIPS")
+    draw_section(canvas, across, [], (24, 24, 660, 712),
+                 "ACROSS  ·  THROUGH THE HEAD, 6 O'CLOCK LEFT")
+    draw_section(canvas, along, [cable], (708, 24, 868, 712),
+                 "ALONG THE CHANNEL  ·  POCKET, BOOT AND EXIT")
     canvas.save(DIRECTORY / "sections.png", optimize=True)
 
 
