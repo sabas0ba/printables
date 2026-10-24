@@ -35,7 +35,7 @@ for index,loaded,angle,title in [(1,True,90,'FRONT / 2 PAIRS'),
     ax.view_init(elev=0 if loaded else 14,azim=angle)
     ax.set_axis_off()
     ax.set_title(title,fontsize=13,pad=10)
-fig.text(.07,.09,'Footprint: 280 x 250 mm     Frame: 636 mm     Loaded envelope: 650 mm     Sole slot: 52 mm',fontsize=14)
+fig.text(.07,.09,'Footprint: 280 x 250 mm     Frame: 640 mm     Loaded envelope: 650 mm     Sole slot: 52 mm',fontsize=14)
 fig.text(.07,.035,'Printed locking pins shown in gold. Rounded edges. Physical fit / retention / stability unverified.',fontsize=10,color='#596673')
 fig.subplots_adjust(left=.02,right=.98,top=.84,bottom=.18,wspace=.01)
 fig.savefig(OUT/'preview.png',dpi=150,facecolor=fig.get_facecolor())

@@ -9,7 +9,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "output"
-PARTS = {"base": 1, "mast": 2, "splice": 1, "rail": 4, "holder": 8,
+PARTS = {"base": 1, "mast": 2, "splice": 1, "rail": 4, "holder": 4, "holder_top": 4,
          "pin26": 16, "pin28": 4, "pin40": 2, "pin52": 4,
          "coupon04": 1, "coupon06": 1, "coupon08": 1}
 
@@ -112,6 +112,7 @@ def main():
                                  "installed_pin_interference":False,
                                  "nominal_hole_clearance_mm":parameter("clearance"),
                                  "holder_sole_slot_mm":parameter("sole_slot"),
+                                 "top_tongue_extra_mm":parameter("top_tongue_extra"),
                                  "modeled_sole_thickness_mm":parameter("sole_thickness"),
                                  "vertical_shoe_gap_mm":10,
                                  "sole_inner_face_separation_mm":110,

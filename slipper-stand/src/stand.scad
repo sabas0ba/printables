@@ -8,6 +8,9 @@ clearance = 0.6; // 角軸8 mmに対する穴の全幅方向余裕。
 sole_slot = 52;
 sole_thickness = 30; // 表示・干渉検査用の靴底包絡厚。
 shoe_shift = sole_slot - 22; // v0.3に対する差し込み板とスリッパの外向き移動量。
+// 上段用支持具の差し込み板の延長量。全長300 mmのスリッパのつま先厚10 mmの内側に収める。
+// 下段は上段の底板との間をかかとが通るため延長しない。
+top_tongue_extra = 18;
 
 // 面は平面を残し、全ての外縁を球面でつなぐ。
 module round_box(size, r=2) {
@@ -68,7 +71,7 @@ module rail() {
         for(x=[-65,0,65]) for(z=[18,32]) pin_hole(x,-50,z,16);
     }
 }
-module holder() {
+module holder(extra=0) {
     difference() {
         union() {
             translate([-25,-34,0]) round_box([50,10,188],2);
@@ -76,8 +79,8 @@ module holder() {
             translate([-25,-25,0]) round_box([50,sole_slot+25,8],2);
             translate([0,sole_slot-12,0]) rotate([90,0,0]) soft_extrude(12,2)
                 hull() {
-                    translate([-25,0]) square([50,250]);
-                    translate([0,255]) circle(r=25,$fn=48);
+                    translate([-25,0]) square([50,250+extra]);
+                    translate([0,255+extra]) circle(r=25,$fn=48);
                 }
         }
         for(z=[166,180]) pin_hole(0,-34,z,10);
@@ -140,7 +143,8 @@ module frame() {
         translate([0,60,16+i*pitch]) mast();
         for(back=[false,true]) side(back) {
             translate([0,60,180+i*pitch]) rail();
-            for(x=[-65,65]) translate([x,60,32+i*pitch]) holder();
+            for(x=[-65,65]) translate([x,60,32+i*pitch])
+                holder(i==1 ? top_tongue_extra : 0);
         }
         if(i==0) translate([0,60,266]) splice();
     }
@@ -155,6 +159,7 @@ else if(part=="mast") translate([0,0,70]) rotate([90,0,0]) mast();
 else if(part=="splice") translate([0,0,78]) rotate([90,0,0]) splice();
 else if(part=="rail") translate([0,0,50]) rotate([90,0,0]) rail();
 else if(part=="holder") translate([0,0,25]) rotate([0,90,0]) holder();
+else if(part=="holder_top") translate([0,0,25]) rotate([0,90,0]) holder(top_tongue_extra);
 else if(part=="pin26") translate([0,0,4]) lock_pin(26);
 else if(part=="pin28") translate([0,0,4]) lock_pin(28);
 else if(part=="pin40") translate([0,0,4]) lock_pin(40);

@@ -4,7 +4,8 @@
 印刷した抜け止めピンで組み立てる。ねじ・ナット・接着剤は使用しない。
 露出する部品の角とスリッパに触れる縁を丸めた試作モデル。
 
-v0.4では支持具の靴底用の溝を22 mmから52 mmへ広げた。変更部品はholder.stlのみで、
+v0.4では支持具の靴底用の溝を22 mmから52 mmへ広げ、上段用支持具の差し込み板を18 mm延ばした。
+変更部品はholder.stlとholder_top.stlのみで、
 v0.3で印刷済みのベース・支柱・継ぎ板・横桟・ピンはそのまま使用する。
 
 最初にpin26.stlとcoupon06.stlを各1個印刷し、差し込みと抜け止めを確認する。
@@ -26,7 +27,8 @@ v0.3で印刷済みのベース・支柱・継ぎ板・横桟・ピンはその�
 | [mast.stl](output/mast.stl) | 2 |
 | [splice.stl](output/splice.stl) | 1 |
 | [rail.stl](output/rail.stl) | 4 |
-| [holder.stl](output/holder.stl) | 8 |
+| [holder.stl](output/holder.stl)（下段） | 4 |
+| [holder_top.stl](output/holder_top.stl)（上段） | 4 |
 | [pin26.stl](output/pin26.stl) | 16 |
 | [pin28.stl](output/pin28.stl) | 4 |
 | [pin40.stl](output/pin40.stl) | 2 |
@@ -58,7 +60,7 @@ nix build --no-link --print-out-paths \
 ```
 
 出力されたストアパスの`bin`を`PATH`へ加えてbuild.pyを実行します。
-v0.4ではholderのみを`--parts holder`で再生成しました。
+v0.4ではholderとholder_topのみを`--parts`で指定して再生成しました。
 v0.3から変更していない部品は、同じ環境で再生成すると面の順序だけが異なる同一形状となるため、保存済みSTLを維持しています。
 
 [CC BY-SA 4.0](../LICENSE.md) / Copyright © 2026 sabas0ba.
