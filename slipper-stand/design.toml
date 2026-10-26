@@ -29,8 +29,13 @@ description = "Rail"
 
 [[parts]]
 file = "output/holder.stl"
-quantity = 8
-description = "Slipper holder"
+quantity = 4
+description = "Slipper holder, lower tier"
+
+[[parts]]
+file = "output/holder_top.stl"
+quantity = 4
+description = "Slipper holder, upper tier with an 18 mm taller tongue"
 
 [[parts]]
 file = "output/pin26.stl"

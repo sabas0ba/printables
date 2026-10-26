@@ -20,11 +20,11 @@ environment = {
     "nix_environment_verified":False,
 }
 (OUT/"environment.json").write_text(json.dumps(environment,indent=2)+"\n")
-with zipfile.ZipFile(OUT/"slipper-stand-prototype-v03.zip","w",zipfile.ZIP_DEFLATED) as archive:
+with zipfile.ZipFile(OUT/"slipper-stand-prototype-v04.zip","w",zipfile.ZIP_DEFLATED) as archive:
     for folder in [ROOT/"src",ROOT/"scripts",ROOT/"docs",OUT]:
         for path in sorted(folder.rglob("*")):
             if path.is_file() and path.suffix not in [".zip",".pyc"]:
                 archive.write(path,path.relative_to(ROOT))
     archive.write(ROOT/"README.md","README.md")
     archive.write(ROOT/".gitignore",".gitignore")
-print(OUT/"slipper-stand-prototype-v03.zip")
+print(OUT/"slipper-stand-prototype-v04.zip")

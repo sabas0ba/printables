@@ -1,4 +1,4 @@
-"""Validate committed printable meshes against the v0.3 inspection report."""
+"""Validate committed printable meshes against the v0.4 inspection report."""
 import json
 from build import OUT, PARTS, inspect
 

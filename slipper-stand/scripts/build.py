@@ -9,7 +9,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "output"
-PARTS = {"base": 1, "mast": 2, "splice": 1, "rail": 4, "holder": 8,
+PARTS = {"base": 1, "mast": 2, "splice": 1, "rail": 4, "holder": 4, "holder_top": 4,
          "pin26": 16, "pin28": 4, "pin40": 2, "pin52": 4,
          "coupon04": 1, "coupon06": 1, "coupon08": 1}
 
@@ -75,6 +75,7 @@ def main():
     OUT.mkdir(exist_ok=True)
     (ROOT/".work").mkdir(exist_ok=True)
     report = {}
+    previous = json.loads((OUT/"validation.json").read_text()) if (OUT/"validation.json").exists() else {}
     for part,count in PARTS.items():
         target = OUT / f"{part}.stl"
         if part in args.parts:
@@ -82,8 +83,11 @@ def main():
                                      str(ROOT/"src/stand.scad")],capture_output=True,text=True)
             (ROOT/".work"/f"{part}.log").write_text(result.stdout+result.stderr)
             result.check_returncode()
-        shift = ground(target)
-        report[part] = {"quantity":count,"print_z_shift_mm":-shift,**inspect(target)}
+        shift = -ground(target)
+        if part not in args.parts:
+            # 保存済みSTLは補正済みのため、生成時に記録した補正量を引き継ぐ。
+            shift = previous.get(part,{}).get("print_z_shift_mm",shift)
+        report[part] = {"quantity":count,"print_z_shift_mm":shift,**inspect(target)}
         print(f"Validated: {part}",flush=True)
     for part in args.scenes:
         subprocess.run(["openscad","-o",str(OUT/f"{part}.stl"),"-D",f'part="{part}"',
@@ -101,13 +105,17 @@ def main():
                         not vertices(target) and re.search(r"Facets:\s+0\b",collision.stderr))
         assert empty or contact_only, collision.stderr
         print(f"Passed: {check}",flush=True)
+    source=(ROOT/"src/stand.scad").read_text()
+    def parameter(name):
+        return float(re.search(rf"^{name}\s*=\s*([\d.]+)",source,re.M)[1])
     report["assembly_checks"] = {"sole_interference":False,
                                  "installed_pin_interference":False,
-                                 "nominal_hole_clearance_mm":float(re.search(
-                                     r"clearance\s*=\s*([\d.]+)",
-                                     (ROOT/"src/stand.scad").read_text())[1]),
+                                 "nominal_hole_clearance_mm":parameter("clearance"),
+                                 "holder_sole_slot_mm":parameter("sole_slot"),
+                                 "top_tongue_extra_mm":parameter("top_tongue_extra"),
+                                 "modeled_sole_thickness_mm":parameter("sole_thickness"),
                                  "vertical_shoe_gap_mm":10,
-                                 "sole_inner_face_separation_mm":90,
+                                 "sole_inner_face_separation_mm":110,
                                  "loaded_height_mm":650}
     (OUT/"validation.json").write_text(json.dumps(report,indent=2)+"\n")
     print(json.dumps(report,indent=2))
